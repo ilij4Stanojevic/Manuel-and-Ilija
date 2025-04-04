@@ -35,7 +35,7 @@ class PreLoader extends Phaser.Scene{
             frameWidth: 16,
             frameHeight: 16
         });
-        this.load.spritesheet("proiettile_boss", "assets/spritesheets/proiettile_boss.png",{
+        this.load.spritesheet("proiettile", "assets/spritesheets/proiettile_boss.png",{
             frameWidth: 16,
             frameHeight: 16
         });
@@ -101,7 +101,7 @@ class PreLoader extends Phaser.Scene{
 
         this.anims.create({
             key: "proiettile_b1",
-            frames: this.anims.generateFrameNumbers("proiettile_boss", {
+            frames: this.anims.generateFrameNumbers("proiettile", {
               start: 12,
               end: 15
             }),

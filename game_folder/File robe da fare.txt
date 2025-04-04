@@ -1,9 +1,3 @@
-
-
-
-
-
-
 MANUEL 
 - Vita del boss e che subisce danni
 - Boss danni

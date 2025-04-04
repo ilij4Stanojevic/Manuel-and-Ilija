@@ -24,7 +24,7 @@ class Boss_room1 extends Phaser.Scene {
         this.camera.centerOn(this.player.x, this.player.y);
 
         // Crea il boss utilizzando la classe Boss
-        this.boss = new Boss(this, 11.5 * 64, 8.5 * 64, "boss1", Proiettile_boss);
+        this.boss = new Boss(this, 11.5 * 64, 8.5 * 64, "boss1", Proiettile, 20);
 
         // Collisioni tra il player e il boss
         this.physics.add.collider(this.player, this.boss.boss, () => {

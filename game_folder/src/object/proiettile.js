@@ -1,10 +1,10 @@
-class Proiettile_boss extends Phaser.GameObjects.Sprite {
-    constructor(scene, boss, player) {
+class Proiettile extends Phaser.GameObjects.Sprite {
+    constructor(scene, danneggiatore, danneggiato) {
         // Posizione iniziale del proiettile (boss)
-        var x = boss.x;
-        var y = boss.y;
+        var x = danneggiatore.x;
+        var y = danneggiatore.y;
         
-        super(scene, x, y, "proiettile_boss");
+        super(scene, x, y, "proiettile");
         scene.add.existing(this);
         this.setBlendMode(Phaser.BlendModes.NORMAL);
         
@@ -21,7 +21,7 @@ class Proiettile_boss extends Phaser.GameObjects.Sprite {
         this.startY = y;
 
         // Calcola la direzione normalizzata verso il giocatore
-        let direzione = new Phaser.Math.Vector2(player.x - x, player.y - y).normalize();
+        let direzione = new Phaser.Math.Vector2(danneggiato.x - x, danneggiato.y - y).normalize();
 
         // Imposta la velocità in base alla direzione
         this.body.setVelocity(direzione.x * VELOCITA, direzione.y * VELOCITA);

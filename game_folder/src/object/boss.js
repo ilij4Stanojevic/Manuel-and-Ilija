@@ -1,5 +1,5 @@
 class Boss extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, Proiettile_boss) {
+    constructor(scene, x, y, texture, Proiettile, danni) {
         super(scene, x, y, texture);
 
         // Crea il boss e lo aggiunge alla scena
@@ -29,6 +29,8 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
         // Aggiungi la gestione della collisione tra i proiettili e il player
         this.scene.physics.add.collider(this.scene.player, this.projectiles, this.handleBulletCollision, null, this);
+
+        this.vita = 100;
     }
 
     // Funzione di movimento del boss
@@ -63,7 +65,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
     // Funzione per sparare i proiettili
     shoot() {
         if (this.bossAttivo) {  // Spara solo se il boss è attivo
-            let proiettile = new Proiettile_boss(this.scene, this.boss, this.scene.player);
+            let proiettile = new Proiettile(this.scene, this.boss, this.scene.player);
             this.projectiles.add(proiettile);
         }
     }
@@ -80,6 +82,16 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         this.shootTimer.paused = true;
     }
 
+    // Funzione per gestire quando il boss viene colpito
+    bossGetHitted(){
+
+    }
+    // Funzione per gestire la vita del boss 
+    hpManagement(){
+        if(this.bossGetHitted){
+            this.vita -= danni;
+        }
+    }
     // Funzione per aggiornare il boss
     update(player) {
         if (this.bossAttivo) {
@@ -90,8 +102,6 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
     // Gestisce la collisione tra il proiettile e il player
     handleBulletCollision(player, bullet) {
         // Riduci la salute del player
-        //player.takeDamage(10); // Assicurati che il player abbia un metodo per ricevere danno
-
         // Distrugge il proiettile
         bullet.destroy();
     }
