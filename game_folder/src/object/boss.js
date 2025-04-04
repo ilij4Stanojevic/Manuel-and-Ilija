@@ -27,14 +27,14 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             paused: true  // Il timer parte in pausa
         });
 
-        // Aggiungi la gestione della collisione tra i proiettili e il player
-        this.scene.physics.add.overlap(this.scene.player, this.projectiles, Proiettile.dealDamage, null, Boss_room1);
+        // Creiamo il gestore di collisione
+        this.projectileCollisionManager = new ProjectileCollisionManager(this.scene, this.scene.player);
+        this.projectileCollisionManager.addProjectileCollision(this.projectiles, danni);
 
         this.Hp = 100;
         this.danni = danni;
     }
-
-    // Funzione di movimento del boss
+    //funzione movimeto boss
     moveToPlayer(player) {
         let speed = 300;  // Velocità di movimento del boss
 
@@ -83,27 +83,10 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         this.shootTimer.paused = true;
     }
 
-    // Funzione per gestire quando il boss viene colpito
-    bossGetHitted(){
-        
-    }
-    // Funzione per gestire la vita del boss 
-    hpManagement(){
-        if(this.bossGetHitted){
-            this.Hp -= danni;
-        }
-    }
     // Funzione per aggiornare il boss
     update(player) {
         if (this.bossAttivo) {
             this.moveToPlayer(player);  // Muove il boss verso il giocatore
         }
-    }
-
-    // Gestisce la collisione tra il proiettile e il player
-    handleBulletCollision(player, bullet) {
-        // Riduci la salute del player
-        // Distrugge il proiettile
-        bullet.destroy();
     }
 }
