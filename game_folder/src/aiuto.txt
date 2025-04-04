@@ -1,0 +1,59 @@
+Ecco i passaggi per evitare conflitti e gestirli correttamente
+Fai il fetch (o pull) per aggiornare il tuo repository locale con le ultime modifiche fatte da altri:
+
+bash
+Copia
+Modifica
+git fetch
+Questo comando recupera le ultime modifiche dal repository remoto, ma non le unisce nel tuo codice locale. Ti permette di vedere se ci sono nuove modifiche da parte di altri.
+
+Dopo il fetch, fai il git pull per unire le modifiche remote nel tuo lavoro locale:
+
+bash
+Copia
+Modifica
+git pull origin main
+Se stai usando master come branch principale, sostituisci main con master. Questo comando:
+
+Scarica le modifiche dal repository remoto.
+
+Unisce le modifiche remote con il tuo lavoro locale.
+
+🔄 Cosa succede se ci sono conflitti?
+Se entrambe le persone modificano le stesse righe di codice, Git non riuscirà ad unire automaticamente i cambiamenti, e ti segnalerà un conflitto. Ad esempio:
+
+plaintext
+Copia
+Modifica
+Auto-merging nomefile
+CONFLICT (content): Merge conflict in nomefile
+🧹 Come risolvere un conflitto:
+Apri il file con conflitto in VS Code.
+
+Git inserirà dei marcatori (del tipo <<<<<<<, =======, >>>>>>>) per segnare le aree del conflitto.
+
+Decidi come risolvere il conflitto:
+
+Puoi scegliere le tue modifiche, quelle dell'altro, o unire entrambe le parti manualmente.
+
+Rimuovi i marcatori di conflitto e salva il file.
+
+Fai un commit per risolvere il conflitto:
+
+bash
+Copia
+Modifica
+git add nomefile
+git commit -m "Risolto conflitto nel file nomefile"
+Fai il push per inviare le modifiche risolte:
+
+bash
+Copia
+Modifica
+git push origin main
+
+
+Per salvare
+git add .
+git commit -m "Descrizione delle modifiche"
+git push
