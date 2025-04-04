@@ -1,10 +1,10 @@
 class Proiettile extends Phaser.GameObjects.Sprite {
-    constructor(scene, danneggiatore, danneggiato) {
+    constructor(scene, danneggiatore, danneggiato, texture_proiettile) {
         // Posizione iniziale del proiettile (boss)
         var x = danneggiatore.x;
         var y = danneggiatore.y;
         
-        super(scene, x, y, "proiettile");
+        super(scene, x, y,);
         scene.add.existing(this);
         // this.setBlendMode(Phaser.BlendModes.NORMAL);
         
@@ -25,6 +25,8 @@ class Proiettile extends Phaser.GameObjects.Sprite {
 
         // Imposta la velocità in base alla direzione
         this.body.setVelocity(direzione.x * VELOCITA, direzione.y * VELOCITA);
+
+        this.play(texture_proiettile);
     }
 
     update() {
