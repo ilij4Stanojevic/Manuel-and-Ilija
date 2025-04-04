@@ -12,7 +12,7 @@ class BootGame extends Phaser.Scene{
 
         this.map = new Map(this, this.walls, numberMap); // Chiama la classe Map per creare la mappa
         
-        this.player = new Player(this, 100, 100, "player", this.walls, 100); // Chiama la classe Player per crealo
+        this.player = new Player(this, 13.5 *64, 100, "player", this.walls, 100); // Chiama la classe Player per crealo
 
         this.physics.world.setBounds(0, 0, widthMap, heightMap); // Mette i bordi esterni (es. quando il giocatore attraversava la porta, usciva dalla mappa)
 

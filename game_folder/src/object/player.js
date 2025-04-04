@@ -21,6 +21,7 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         this.hp = hpStart;
 
         scene.player = this;
+        this.scene.player.body.setSize(26, 40);
     }
 
     movePlayerManager(scene, cursorKeys){
@@ -96,14 +97,11 @@ class Player extends Phaser.Physics.Arcade.Sprite{
 
     gotHitted(scene, damage){
         this.hp -= damage;
-        console.log("Player HP: " + this.hp);
 
         if(this.hp <= 0){
             // scene.scene.start("GameOver");
-            console.log("Player has died");
         }
     }
-
     showBarHp(scene, camera, hpBar){
         hpBar.clear();
         let x = camera.scrollX;

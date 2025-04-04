@@ -26,7 +26,7 @@ class Boss_room1 extends Phaser.Scene {
         this.camera.centerOn(this.player.x, this.player.y);
 
         // Crea il boss utilizzando la classe Boss
-        this.boss = new Boss(this, 11.5 * 64, 8.5 * 64, "boss1", "proiettile_b1", Proiettile, 20);
+        this.boss = new Boss(this, 11.5 * 64, 8.5 * 64, "boss1_anim", "proiettile_b1", Proiettile, 20);
 
         // Collisioni tra il player e il boss
         this.physics.add.collider(this.player, this.boss.boss, () => {
@@ -35,7 +35,6 @@ class Boss_room1 extends Phaser.Scene {
         
         this.hpBar = this.add.graphics();
         this.keyB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
-        this.physics.world.createDebugGraphic();
     }
 
     update() {

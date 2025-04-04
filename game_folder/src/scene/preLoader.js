@@ -124,6 +124,16 @@ class PreLoader extends Phaser.Scene{
             frameRate: 4,
             repeat: -1
         });
+        
+        this.anims.create({
+            key: "boss1_anim",
+            frames: this.anims.generateFrameNumbers("boss1", {
+              start: 0,
+              end: 3
+            }),
+            frameRate: 4,
+            repeat: -1
+        });
 
         this.scene.start("Menu");
         // this.scene.start("BootGame");
