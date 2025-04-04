@@ -31,7 +31,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         this.scene.physics.add.overlap(this.scene.player, this.projectiles, Proiettile.dealDamage, null, Boss_room1);
 
         this.Hp = 100;
-        
+        this.danni = danni;
     }
 
     // Funzione di movimento del boss

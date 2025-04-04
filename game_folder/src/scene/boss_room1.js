@@ -32,6 +32,9 @@ class Boss_room1 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.boss.boss, () => {
             this.player.setVelocity(0, 0);  // Blocca il movimento del player al contatto
         });
+
+        this.hpBar = this.add.graphics();
+        this.keyB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
     }
 
     update() {
@@ -55,6 +58,11 @@ class Boss_room1 extends Phaser.Scene {
         // Se il boss è attivo, inizia a muoversi verso il player
         if (this.boss.bossAttivo) {
             this.boss.update(this.player);  // Muove il boss
+        }
+        this.player.showBarHp(this, this.camera, this.hpBar);
+
+        if(Phaser.Input.Keyboard.JustDown(this.keyB)){
+            this.player.gotHitted(this, 10); // Da inserire i danni del boss
         }
     }
 }

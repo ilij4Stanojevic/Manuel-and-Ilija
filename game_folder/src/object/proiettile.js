@@ -34,7 +34,7 @@ class Proiettile extends Phaser.GameObjects.Sprite {
             this.destroy();
         }
     }
-    dealDamage(danneggiato){
+    dealDamage(danneggiato, danneggiatore){
         danneggiato.Hp -= danneggiatore.danni;
         console.log(danneggiato.Hp);
     }
