@@ -34,7 +34,11 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
         this.Hp = 100;
         this.danni = danni;
+        this.boss.play(texture);
+        this.boss.body.setSize(10, 10);
+        this.boss.setDisplaySize(64,64);
     }
+
     //funzione movimeto boss
     moveToPlayer(player) {
         let speed = 300;  // Velocità di movimento del boss
