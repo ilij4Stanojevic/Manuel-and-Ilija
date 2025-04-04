@@ -61,9 +61,8 @@ class BootGame extends Phaser.Scene{
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.keyB)){
-            this.player.gotHitted(this, 10); // Da inserire i danni del boss
-        }
-        
+            this.player.shoot(this); // Da inserire i danni del boss
+        }        
     }
 }
 

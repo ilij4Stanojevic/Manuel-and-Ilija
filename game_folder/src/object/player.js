@@ -134,7 +134,8 @@ class Player extends Phaser.Physics.Arcade.Sprite{
 
         return holdTime;
     }
+
+    shoot(scene){
+        let beam = new Beam(scene, scene.player, direction);
+    }
 }
-
-
-// BAstardo

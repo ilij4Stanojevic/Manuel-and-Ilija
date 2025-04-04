@@ -41,6 +41,10 @@ class PreLoader extends Phaser.Scene{
             frameWidth: 16,
             frameHeight: 16
         });
+        this.load.spritesheet("beam", "assets/spritesheets/beam.png",{
+            frameWidth: 16,
+            frameHeight: 16
+        });
     }
 
     create(){
@@ -111,9 +115,15 @@ class PreLoader extends Phaser.Scene{
             repeat: -1
         });
 
-        if(this.anims.exists("player_animUp")){
-            console.log("Yes, I exist");
-        }
+        this.anims.create({
+            key: "beam_anim",
+            frames: this.anims.generateFrameNumbers("beam", {
+              start: 0,
+              end: 1
+            }),
+            frameRate: 4,
+            repeat: -1
+        });
 
         this.scene.start("Menu");
         // this.scene.start("BootGame");
