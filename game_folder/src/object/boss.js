@@ -30,7 +30,8 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         // Aggiungi la gestione della collisione tra i proiettili e il player
         this.scene.physics.add.collider(this.scene.player, this.projectiles, this.handleBulletCollision, null, this);
 
-        this.vita = 100;
+        this.Hp = 100;
+        
     }
 
     // Funzione di movimento del boss
@@ -89,7 +90,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
     // Funzione per gestire la vita del boss 
     hpManagement(){
         if(this.bossGetHitted){
-            this.vita -= danni;
+            this.Hp -= danni;
         }
     }
     // Funzione per aggiornare il boss
@@ -106,5 +107,3 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         bullet.destroy();
     }
 }
-
-//ciao

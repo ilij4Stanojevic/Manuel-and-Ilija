@@ -55,13 +55,13 @@ class Player extends Phaser.Physics.Arcade.Sprite{
             scene.player.setVelocityY(-speed);
             moving = true;
             direction = "u";
-            console.log(scene.anims.exists("playerUp"));
+            //console.log(scene.anims.exists("playerUp"));
             scene.player.anims.play("playerUp", true);
         } else if (scene.cursorKeys.down.isDown) {
             scene.player.setVelocityY(speed);
             moving = true;
             direction = "d";
-            console.log(scene.anims.exists("playerDOWN"));
+            //console.log(scene.anims.exists("playerDOWN"));
             scene.player.anims.play("playerDOWN", true);
         } else {
             scene.player.setVelocityY(0);
