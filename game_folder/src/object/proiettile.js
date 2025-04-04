@@ -6,7 +6,7 @@ class Proiettile extends Phaser.GameObjects.Sprite {
         
         super(scene, x, y, "proiettile");
         scene.add.existing(this);
-        this.setBlendMode(Phaser.BlendModes.NORMAL);
+        // this.setBlendMode(Phaser.BlendModes.NORMAL);
         
         scene.physics.world.enableBody(this);
 
@@ -34,8 +34,13 @@ class Proiettile extends Phaser.GameObjects.Sprite {
             this.destroy();
         }
     }
-    dealDamage(danneggiato){
+    dealDamage(danneggiato, danneggiatore){
+        // if(danneggiatore == this.)
         danneggiato.Hp -= danneggiatore.danni;
         console.log(danneggiato.Hp);
+
+        if(danneggiato.Hp <= 0){
+            console.log("User dead");
+        }
     }
 }

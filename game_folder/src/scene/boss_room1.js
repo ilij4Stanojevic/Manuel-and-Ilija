@@ -12,7 +12,7 @@ class Boss_room1 extends Phaser.Scene {
         this.map = new Map(this, this.walls, 2);
 
         let playerHP = this.registry.get("playerHP");
-        
+
         // Crea il player
         this.player = new Player(this, 11.5 * 64, 0, "player", this.walls, playerHP);
         this.physics.world.setBounds(0, 0, widthMap, heightMap);
@@ -32,7 +32,7 @@ class Boss_room1 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.boss.boss, () => {
             this.player.setVelocity(0, 0);  // Blocca il movimento del player al contatto
         });
-        this.physics.add.overlap(this.player, this.boss, Proiettile.dealDamage, null, this);
+        this.physics.add.overlap(this.player, this.boss, Proiettile.dealDamage);
     }
 
     update() {
@@ -57,5 +57,8 @@ class Boss_room1 extends Phaser.Scene {
         if (this.boss.bossAttivo) {
             this.boss.update(this.player);  // Muove il boss
         }
+
+
+        /**/ 
     }
 }

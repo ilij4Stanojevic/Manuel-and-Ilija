@@ -17,7 +17,8 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
         // Gruppo per i proiettili
         this.projectiles = this.scene.add.group();
-
+        this.projectiles.danni = this.danni;
+        
         // Timer per sparare
         this.shootTimer = this.scene.time.addEvent({
             delay: 400, // Ogni 0.4 secondi
@@ -28,10 +29,10 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         });
 
         // Aggiungi la gestione della collisione tra i proiettili e il player
-        this.scene.physics.add.overlap(this.scene.player, this.projectiles, Proiettile.dealDamage, null, Boss_room1);
+        this.scene.physics.add.overlap(scene.player, this.projectiles, Proiettile.dealDamage, null, scene);
 
         this.Hp = 100;
-        
+        this.danni = danni;
     }
 
     // Funzione di movimento del boss
