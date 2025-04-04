@@ -28,7 +28,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         });
 
         // Aggiungi la gestione della collisione tra i proiettili e il player
-        this.scene.physics.add.collider(this.scene.player, this.projectiles, this.handleBulletCollision, null, this);
+        this.scene.physics.add.overlap(this.scene.player, this.projectiles, Proiettile.dealDamage, null, Boss_room1);
 
         this.Hp = 100;
         
@@ -85,7 +85,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
     // Funzione per gestire quando il boss viene colpito
     bossGetHitted(){
-
+        
     }
     // Funzione per gestire la vita del boss 
     hpManagement(){
