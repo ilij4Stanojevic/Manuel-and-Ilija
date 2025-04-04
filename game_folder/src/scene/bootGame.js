@@ -14,6 +14,8 @@ class BootGame extends Phaser.Scene{
         
         this.player = new Player(this, 100, 100, "player", this.walls, 100); // Chiama la classe Player per crealo
 
+        this.beam = new Beam(this);
+
         this.physics.world.setBounds(0, 0, widthMap, heightMap); // Mette i bordi esterni (es. quando il giocatore attraversava la porta, usciva dalla mappa)
 
         this.cursorKeys = this.input.keyboard.createCursorKeys(); // Prende in input i tasti cliccati dall'utente
@@ -29,6 +31,9 @@ class BootGame extends Phaser.Scene{
         this.requiredHoldTime = 50;  // Time required to fill the bar (in seconds)
         this.delta = 0;
 
+        this.projectiles = this.physics.add.group();
+
+        // Vari tasti
         this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E); // Prendo in una variabile il tasto E
         this.keyB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
     }
@@ -47,8 +52,6 @@ class BootGame extends Phaser.Scene{
 
                     this.registry.set("playerHP", this.player.hp);
 
-                    // console.log(this.player.hp);
-
                     this.scene.start("Boss_room1");
                 }
 
@@ -61,8 +64,14 @@ class BootGame extends Phaser.Scene{
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.keyB)){
-            this.player.shoot(this); // Da inserire i danni del boss
-        }        
+            this.player.shoot(this);
+
+
+
+            this.projectiles.children.iterate((projectile) => {
+                if (projectile) this.beam.destroyBeam();
+            });
+        }
     }
 }
 

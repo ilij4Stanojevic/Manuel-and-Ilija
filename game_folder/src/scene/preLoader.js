@@ -41,7 +41,11 @@ class PreLoader extends Phaser.Scene{
             frameWidth: 16,
             frameHeight: 16
         });
-        this.load.spritesheet("beam", "assets/spritesheets/beam.png",{
+        this.load.spritesheet("beamLr", "assets/spritesheets/beam lr.png",{
+            frameWidth: 16,
+            frameHeight: 16
+        });
+        this.load.spritesheet("beamUd", "assets/spritesheets/beam ud.png",{
             frameWidth: 16,
             frameHeight: 16
         });
@@ -116,8 +120,17 @@ class PreLoader extends Phaser.Scene{
         });
 
         this.anims.create({
-            key: "beam_anim",
-            frames: this.anims.generateFrameNumbers("beam", {
+            key: "beamUd_anim",
+            frames: this.anims.generateFrameNumbers("beamUd", {
+              start: 0,
+              end: 1
+            }),
+            frameRate: 4,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "beamLr_anim",
+            frames: this.anims.generateFrameNumbers("beamLr", {
               start: 0,
               end: 1
             }),

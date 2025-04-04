@@ -136,6 +136,6 @@ class Player extends Phaser.Physics.Arcade.Sprite{
     }
 
     shoot(scene){
-        let beam = new Beam(scene, scene.player, direction);
+        let beam = new Beam(scene);
     }
 }
