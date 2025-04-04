@@ -39,10 +39,9 @@ class Proiettile extends Phaser.Physics.Arcade.Sprite {
     }
     dealDamage(danneggiato, danneggiatore){
         danneggiato.Hp -= danneggiatore.danni;
-        console.log(danneggiato.Hp);
-
+        
         if(danneggiato.Hp <= 0){
-            console.log("User dead");
+
         }
     }
 }

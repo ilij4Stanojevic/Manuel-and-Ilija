@@ -1,19 +1,26 @@
-class Beam extends Phaser.GameObjects.Sprite{
-    constructor(scene){
-        var startX = scene.player.x;
-        var startY = scene.player.y;
-        super(scene, startX, startY, "beam");
-
+class Beam extends Phaser.GameObjects.Sprite{        
+    constructor(scene, danneggiatore, danneggiato, texture_proiettile, direction) {
+        // Posizione iniziale del proiettile (boss)
+        var x = danneggiatore.x;
+        var y = danneggiatore.y;
+        
+        super(scene, x, y,);
         scene.add.existing(this);
+        // this.setBlendMode(Phaser.BlendModes.NORMAL);
         
         scene.physics.world.enableBody(this);
 
-        scene.projectiles.add(this);
+        // Costante per la velocità del proiettile
+        const VELOCITA = 500; // Modifica questo valore se necessario
 
-        this.maxDistance = 4 * 64;
-        let speed = 250;
-        let flipped = true;
+        // Distanza massima percorsa (5 tile * 64 pixel)
+        this.distanzaMax = 5 * 64;
 
+        // Salva la posizione iniziale per il controllo della distanza
+        this.startX = x;
+        this.startY = y;
+
+        // Calcola la direzione normalizzata verso il giocatore
         switch(direction){
             case "u":
                 flipped = false;
@@ -40,14 +47,26 @@ class Beam extends Phaser.GameObjects.Sprite{
                 this.play("beamLr_anim");
                 break;
         }
-        
+
+        // Imposta la velocità in base alla direzione
+        this.body.setVelocity(direzione.x * VELOCITA, direzione.y * VELOCITA);
+        this.play(texture_proiettile);
+        this.setDisplaySize(100, 100);
+        this.body.setSize(5, 5);
     }
 
-    destroyBeam(){
+    update() {
         let distanzaPercorsa = Phaser.Math.Distance.Between(this.startX, this.startY, this.x, this.y);
 
-        if (distanzaPercorsa >= this.maxDistance) {
-            this.destroy(); // Destroy projectile after 320px
+        if (distanzaPercorsa >= this.distanzaMax) {
+            this.destroy();
         }
     }
+    dealDamage(danneggiato, danneggiatore){
+        danneggiato.Hp -= danneggiatore.danni;
+
+        if(danneggiato.Hp <= 0){
+            
+        }
+    }       
 }

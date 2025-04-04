@@ -22,6 +22,12 @@ class Player extends Phaser.Physics.Arcade.Sprite{
 
         scene.player = this;
         this.scene.player.body.setSize(26, 40);
+
+        this.keyB = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+
+        this.projectiles = this.scene.add.group();
+        this.projectiles.danni = this.danni;
+
     }
 
     movePlayerManager(scene, cursorKeys){
@@ -133,7 +139,14 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         return holdTime;
     }
 
-    shoot(scene){
-        let beam = new Beam(scene);
+    shoot(scene, player){
+        let proiettile = new Beam(scene, scene.player, scene.boss, "beamUd");
+            this.projectiles.add(proiettile);
+    }
+    update(){
+        if(Phaser.Input.Keyboard.JustDown(this.keyB)){
+            console.log("spara");
+            
+        }
     }
 }
