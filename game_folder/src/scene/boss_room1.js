@@ -11,8 +11,10 @@ class Boss_room1 extends Phaser.Scene {
         this.walls = this.physics.add.staticGroup();
         this.map = new Map(this, this.walls, 2);
 
+        let playerHP = this.registry.get("playerHP");
+        
         // Crea il player
-        this.player = new Player(this, 11.5 * 64, 0, "player", this.walls);
+        this.player = new Player(this, 11.5 * 64, 0, "player", this.walls, playerHP);
         this.physics.world.setBounds(0, 0, widthMap, heightMap);
 
         // Imposta i controlli del giocatore

@@ -5,7 +5,7 @@ let direction; // Usare quando si invocherà la classe per gli spari
 // "r" = right
 
 class Player extends Phaser.Physics.Arcade.Sprite{
-    constructor(scene, x, y, texture, walls){  
+    constructor(scene, x, y, texture, walls, hpStart){  
         super(scene, x, y, "player");
 
         scene.add.existing(this);
@@ -18,6 +18,8 @@ class Player extends Phaser.Physics.Arcade.Sprite{
             scene.physics.add.collider(this, walls);
         }
         
+        this.hp = hpStart;
+
         scene.player = this;
     }
 
@@ -55,13 +57,11 @@ class Player extends Phaser.Physics.Arcade.Sprite{
             scene.player.setVelocityY(-speed);
             moving = true;
             direction = "u";
-            //console.log(scene.anims.exists("playerUp"));
             scene.player.anims.play("playerUp", true);
         } else if (scene.cursorKeys.down.isDown) {
             scene.player.setVelocityY(speed);
             moving = true;
             direction = "d";
-            //console.log(scene.anims.exists("playerDOWN"));
             scene.player.anims.play("playerDOWN", true);
         } else {
             scene.player.setVelocityY(0);
@@ -92,6 +92,30 @@ class Player extends Phaser.Physics.Arcade.Sprite{
             return true;
         }
         return false;
+    }
+
+    gotHitted(scene, damage){
+        this.hp -= damage;
+        console.log("Player HP: " + this.hp);
+
+        if(this.hp <= 0){
+            // scene.scene.start("GameOver");
+            console.log("Player has died");
+        }
+    }
+
+    showBarHp(scene, camera, hpBar){
+        hpBar.clear();
+        let x = camera.scrollX;
+        let y = camera.scrollY;
+
+        let progress = Phaser.Math.Clamp(this.hp / 100, 0, 1);
+
+        scene.hpBar.fillStyle(0x00ff00, 1);
+        scene.hpBar.lineStyle(2, 0x000000);
+
+        scene.hpBar.fillRect(x, y, barHpWidth * progress, barHpHeight);
+        scene.hpBar.strokeRect(x, y, barHpWidth, barHpHeight);
     }
     
     crossing(scene, holdTime,requiredHoldTime, delta, progressBar, camera){
