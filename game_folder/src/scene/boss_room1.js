@@ -64,12 +64,9 @@ class Boss_room1 extends Phaser.Scene {
             this.boss.update(this.player);  // Muove il boss
         }
 
-<<<<<<< HEAD
         this.player.showBarHp(this, this.hpBarPlayer);
         this.boss.showBarHp(this, this.hpBarBoss);
 
-=======
->>>>>>> 47ac203825f11e59503eb5a28f09396d477fca80
         this.player.update(this);
     }
 }

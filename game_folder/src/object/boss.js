@@ -105,8 +105,8 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
     showBarHp(scene, hpBar){
         hpBar.clear(); // Pulisce la barra
-        let x = 768 - (barHpWidth/2); // Posizione X della barra
-        let y = 384 - barHpHeight; // Posizione Y della barra
+        let x = 100; // Posizione X della barra 768 - (barHpWidth/2)
+        let y = 100; // Posizione Y della barra 384 - barHpHeight
 
         // Calcola la percentuale della salute
         let progress = Phaser.Math.Clamp(this.Hp / 100, 0, 1);
