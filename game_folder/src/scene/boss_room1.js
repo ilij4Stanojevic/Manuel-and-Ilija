@@ -17,7 +17,7 @@ class Boss_room1 extends Phaser.Scene {
         this.player = new Player(this, 11.5 * 64, 0, "player", this.walls, playerHP);
         this.physics.world.setBounds(0, 0, widthMap, heightMap);
 
-
+        this.projectileCollisionManager = new ProjectileCollisionManager(this);
 
         // Configura la telecamera
         this.camera = this.cameras.main;
@@ -32,8 +32,11 @@ class Boss_room1 extends Phaser.Scene {
             this.player.setVelocity(0, 0);  // Blocca il movimento del player al contatto
         });
         
-        this.hpBar = this.add.graphics();
-        this.keyB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+        this.hpBarPlayer = this.add.graphics();
+        this.hpBarBoss = this.add.graphics();
+
+        this.projectileCollisionManager.addProjectileCollisionBoss(this.player.projectiles, this.boss.boss, this.player.damage);
+        this.projectileCollisionManager.addProjectileCollisionPlayer(this.boss.projectiles, this.player, this.boss.danni);
     }
 
     update() {
@@ -45,9 +48,11 @@ class Boss_room1 extends Phaser.Scene {
 
         // Controlla se il boss è visibile nella telecamera
         if (this.cameras.main.worldView.contains(this.boss.boss.x, this.boss.boss.y)) {
-            if (!this.boss.bossAttivo) {
-                this.boss.activate();  // Attiva il boss
-            }
+            if(this.boss.isDead == false){
+                if(!this.boss.bossAttivo){
+                    this.boss.activate();  // Attiva il boss
+                } 
+            }                     
         } else {
             if (this.boss.bossAttivo) {
                 this.boss.deactivate();  // Disattiva il boss
@@ -58,8 +63,9 @@ class Boss_room1 extends Phaser.Scene {
         if (this.boss.bossAttivo) {
             this.boss.update(this.player);  // Muove il boss
         }
-        this.player.showBarHp(this, this.camera, this.hpBar);
 
+        this.player.showBarHp(this, this.hpBarPlayer);
+        this.boss.showBarHp(this, this.hpBarBoss);
 
         this.player.update(this);
     }

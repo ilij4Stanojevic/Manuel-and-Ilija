@@ -31,7 +31,7 @@ class BootGame extends Phaser.Scene{
     update(){
         this.player.movePlayerManager(this, this.cursorKeys); // Funzione che fa muovere il giocatore
         this.player.update(this);
-        this.player.showBarHp(this, this.camera, this.hpBar);
+        this.player.showBarHp(this, this.hpBar);
     }
 }
 
