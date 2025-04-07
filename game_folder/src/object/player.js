@@ -36,13 +36,13 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         let speed = 200;
         let flipped = false;
 
-        if (scene.cursorKeys.left.isDown || scene.keyA.isDown) {
+        if (scene.cursorKeys.left.isDown) {
             scene.player.setVelocityX(-speed);
             moving = true;
             flipped = true;
             direction = "l";
             scene.player.anims.play("player_animRight", true);
-        } else if (scene.cursorKeys.right.isDown || scene.keyD.isDown) {
+        } else if (scene.cursorKeys.right.isDown) {
             scene.player.setVelocityX(speed);
             flipped = false;
             moving = true;
@@ -61,12 +61,12 @@ class Player extends Phaser.Physics.Arcade.Sprite{
             scene.player.anims.play("player_animStoppedRight",true);
         }
 
-        if (scene.cursorKeys.up.isDown || scene.keyW.isDown) {
+        if (scene.cursorKeys.up.isDown) {
             scene.player.setVelocityY(-speed);
             moving = true;
             direction = "u";
             scene.player.anims.play("playerUp", true);
-        } else if (scene.cursorKeys.down.isDown || scene.keyS.isDown) {
+        } else if (scene.cursorKeys.down.isDown) {
             scene.player.setVelocityY(speed);
             moving = true;
             direction = "d";
