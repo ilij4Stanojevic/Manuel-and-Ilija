@@ -5,59 +5,83 @@ let direction; // Usato per determinare la direzione quando il giocatore spara
 // "r" = right (destra)
 
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, walls, minerals, hpStart){  
+    constructor(scene, x, y, texture, walls, minerals, hpStart, interactionTargets = []) {
         super(scene, x, y, "player");
-
-
-        
-        // Aggiungi il giocatore alla scena
+    
         scene.add.existing(this);
         scene.physics.add.existing(this);
-
-        // Impostazioni fisiche
-        this.setCollideWorldBounds(true); // Il giocatore non può uscire dai confini
-        this.setDisplaySize(50, 50); // Imposta la dimensione del giocatore
-
-        // Aggiungi il collider per le pareti, se sono presenti
-        if(walls){
-            scene.physics.add.collider(this, walls);
-        }
-        if(minerals){
-            scene.physics.add.collider(this, minerals);
-        }
-        
-        // Proprietà del giocatore
-        this.hp = hpStart; // Punti vita iniziali
-        this.damage = 10; // Danno inflitto dal giocatore
-
-        // Riferimento al giocatore nella scena
+    
+        this.setCollideWorldBounds(true);
+        this.setDisplaySize(50, 50);
+        if (walls) scene.physics.add.collider(this, walls);
+        if (minerals) scene.physics.add.collider(this, minerals);
+    
+        this.hp = hpStart;
+        this.damage = 10;
         scene.player = this;
-        this.scene.player.body.setSize(26, 40); // Imposta la dimensione del corpo per il collision detection
-
-        // Inizializza i tasti
-        this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); // Tasto spazio per sparare
-
-        // Gruppo di proiettili
-        this.projectiles = this.scene.add.group();
-        this.projectiles.danni = this.danni; // Danno per i proiettili
-
-        // Variabili per la barra di progresso
-        this.holdTime = 0;  // Tempo che il giocatore tiene premuto il tasto "E"
-        this.requiredHoldTime = 50;  // Tempo necessario per riempire la barra (in secondi)
-        this.delta = 0; // Delta time per l'aggiornamento della barra di progresso
-
-        // Barra di progresso (per interazione con la porta)
+    
+        this.scene.player.body.setSize(26, 40);
+    
+        this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.projectiles = scene.add.group();
+        this.projectiles.danni = this.danni;
+    
+        this.holdTime = 0;
+        this.requiredHoldTime = 50;
+        this.delta = 0;
         this.progressBar = scene.add.graphics();
-
-        // Definizione dei tasti per il movimento
+    
         this.cursorKeys = scene.input.keyboard.createCursorKeys();
-        this.keyE = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E); // Tasto di interazione "E"
-        this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W); // Tasto su "W"
-        this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); // Tasto sinistra "A"
-        this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S); // Tasto giù "S"
-        this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D); // Tasto destra "D"
+        this.keyE = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    
+        this.interactionTargets = interactionTargets; // 👈 Ora è una lista di target
     }
-
+    
+    //controlla se è vicino a oggetti con cui può interagire
+    getNearbyInteractable(tileSize = 64) {
+        let playerTileX = Math.floor(this.x / tileSize);
+        let playerTileY = Math.floor(this.y / tileSize);
+    
+        // Interazione con oggetti interattivi (porte, NPC, ecc.)
+        for (let target of this.interactionTargets) {
+            if (target.tileX === playerTileX && target.tileY === playerTileY) {
+                return target;
+            }
+        }
+    
+        // Interazione con minerali, solo se esistono
+        if (this.scene.minerals && this.scene.minerals.children) {
+            let nearbyMineral = null;
+            this.scene.minerals.children.iterate((mineral) => {
+                if (!mineral) return;
+                let mineralTileX = Math.floor(mineral.x / tileSize);
+                let mineralTileY = Math.floor(mineral.y / tileSize);
+                if (Math.abs(playerTileX - mineralTileX) <= 1 && Math.abs(playerTileY - mineralTileY) <= 1) {
+                    nearbyMineral = mineral;
+                }
+            });
+    
+            if (nearbyMineral) {
+                return {
+                    type: "mineral",
+                    object: nearbyMineral,
+                    tileX: Math.floor(nearbyMineral.x / tileSize),
+                    tileY: Math.floor(nearbyMineral.y / tileSize),
+                    onComplete: () => {
+                        nearbyMineral.destroy();
+                    }
+                };
+            }
+        }
+    
+        return null;
+    }
+    
+    
     // Gestisce il movimento del giocatore
     movePlayerManager(scene, cursorKeys){
         let moving = false;
@@ -172,26 +196,28 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
     
     // Gestisce l'interazione con la porta e la barra di progresso
-    crossing(scene, holdTime, requiredHoldTime, delta, progressBar, camera){
-        holdTime += delta / 1000; // Incrementa il tempo in secondi
-
-        // Calcola la percentuale di progresso
-        let progress = Phaser.Math.Clamp(holdTime / requiredHoldTime, 0, 1);
-
-        // Disegna la barra di progresso
-        scene.progressBar.fillStyle(0x00ff00, 1); // Colore verde
-        scene.progressBar.lineStyle(2, 0x000000); // Linea nera
-
-        // Calcola la posizione della barra rispetto alla telecamera
+    crossing(target, delta) {
+        this.holdTime += delta / 1000;
+    
+        let progress = Phaser.Math.Clamp(this.holdTime / this.requiredHoldTime, 0, 1);
         let centerX = this.scene.camera.scrollX + (768 / 2) - (barProgressWidth / 2); 
         let centerY = this.scene.camera.scrollY;
-
-        // Disegna il riempimento della barra
-        scene.progressBar.fillRect(centerX, centerY, barProgressWidth * progress, barProgressHeight);
-        scene.progressBar.strokeRect(centerX, centerY, barProgressWidth, barProgressHeight);
-
-        return holdTime; // Ritorna il tempo di attesa aggiornato
+    
+        this.progressBar.fillStyle(0x00ff00, 1);
+        this.progressBar.lineStyle(2, 0x000000);
+        this.progressBar.fillRect(centerX, centerY, barProgressWidth * progress, barProgressHeight);
+        this.progressBar.strokeRect(centerX, centerY, barProgressWidth, barProgressHeight);
+    
+        if (this.holdTime >= this.requiredHoldTime) {
+            this.progressBar.clear();
+            this.holdTime = 0;
+            this.delta = 0;
+            if (target.onComplete) target.onComplete();
+        } else {
+            this.delta += 16;
+        }
     }
+    
 
     // Gestisce il tiro del giocatore
     shoot(scene, player){
@@ -210,31 +236,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
             this.shoot(this, this.scene.player);
         }
-
         // Se il tasto "E" è premuto, interagisce con la porta
-        if (this.keyE.isDown) {
-            if(this.scene.player.checkPositionToDoor(this, 13, 0, tileSize)){ // Verifica la posizione sulla porta  
-                // Aggiunge tempo alla barra di progresso
-                this.holdTime = this.scene.player.crossing(this, this.holdTime, this.requiredHoldTime, this.delta, this.progressBar, this.camera);
-
-                // Se il tempo di attesa è sufficiente, avvia la transizione
-                if(this.holdTime >= this.requiredHoldTime){
-                    this.progressBar.clear(); // Pulisce la barra
-
-                    this.scene.registry.set("playerHP", this.scene.player.hp); // Salva i punti vita
-
-                    // Avvia la scena successiva
-                    this.scene.scene.start("Boss_room1");
-                }
-
-                // Aggiungi delta per aggiornare la barra
-                this.delta += 16;
-            }
-        } else {
-            // Se il tasto "E" non è premuto, resetta la barra
-            this.holdTime = 0;
-            this.delta = 0;
-            this.progressBar.clear();
+        this.projectiles.getChildren().forEach(p => p.update());
+    
+        if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
+            this.shoot(this, this.scene.player);
         }
+    
+        if (this.keyE.isDown) {
+            const interactable = this.getNearbyInteractable();
+    
+            if (interactable) {
+                this.crossing(interactable, this.delta);
+                return;
+            }
+        }
+        this.holdTime = 0;
+        this.delta = 0;
+        this.progressBar.clear();     
     }
 }
