@@ -9,7 +9,6 @@ class ProjectileCollisionManager {
     }
 
     dealDamageBoss(boss, projectile, damage){
-        console.log(damage);
         boss.gotHitted(damage);  // Danno inflitto al giocatore
         projectile.destroy();  // Distrugge il proiettile
     }
@@ -23,7 +22,6 @@ class ProjectileCollisionManager {
 
     addProjectileCollisionBoss(projectilesGroup, boss, damage) {
         this.scene.physics.add.overlap(boss, projectilesGroup, (boss, projectile) => {
-            console.log(damage);
             this.dealDamageBoss(this.scene.boss, projectile, damage);
         });
     }    

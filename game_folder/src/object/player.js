@@ -48,6 +48,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Barra di progresso (per interazione con la porta)
         this.progressBar = scene.add.graphics();
+        this.hpBar = scene.add.graphics();
 
         // Definizione dei tasti per il movimento
         this.cursorKeys = scene.input.keyboard.createCursorKeys();
@@ -152,23 +153,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Mostra la barra della salute
-    showBarHp(scene, hpBar){
-        hpBar.clear(); // Pulisce la barra
-        let x = 0; // Posizione X della barra
-        let y = 0; // Posizione Y della barra
+    showBarHp(){
+        this.hpBar.clear(); // Pulisce la barra
+        let x = 10; // Posizione X della barra
+        let y = 10; // Posizione Y della barra
 
         // Calcola la percentuale della salute
         let progress = Phaser.Math.Clamp(this.hp / 100, 0, 1);
 
         // Imposta il colore e lo stile della barra
-        hpBar.fillStyle(0x00ff00, 1); // Verde
-        hpBar.lineStyle(2, 0x000000); // Linea nera
+        this.hpBar.fillStyle(0x00ff00, 1); // Verde
+        this.hpBar.lineStyle(2, 0x000000); // Linea nera
 
         // Disegna la barra di salute
-        hpBar.fillRect(x, y, barHpWidth * progress, barHpHeight);
-        hpBar.strokeRect(x, y, barHpWidth, barHpHeight);
+        this.hpBar.fillRect(x, y, barPlayerHpWidth * progress, barPlayerHpHeight);
+        this.hpBar.strokeRect(x, y, barPlayerHpWidth, barPlayerHpHeight);
 
-        hpBar.setScrollFactor(0); // La barra non si sposterà con la telecamera
+        this.hpBar.setScrollFactor(0); // La barra non si sposterà con la telecamera
     }
     
     // Gestisce l'interazione con la porta e la barra di progresso

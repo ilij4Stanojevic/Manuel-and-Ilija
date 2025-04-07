@@ -31,9 +31,6 @@ class Boss_room1 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.boss.boss, () => {
             this.player.setVelocity(0, 0);  // Blocca il movimento del player al contatto
         });
-        
-        this.hpBarPlayer = this.add.graphics();
-        this.hpBarBoss = this.add.graphics();
 
         this.projectileCollisionManager.addProjectileCollisionBoss(this.player.projectiles, this.boss.boss, this.player.damage);
         this.projectileCollisionManager.addProjectileCollisionPlayer(this.boss.projectiles, this.player, this.boss.danni);
@@ -64,8 +61,8 @@ class Boss_room1 extends Phaser.Scene {
             this.boss.update(this.player);  // Muove il boss
         }
 
-        this.player.showBarHp(this, this.hpBarPlayer);
-        this.boss.showBarHp(this, this.hpBarBoss);
+        this.player.showBarHp();
+        this.boss.showBarHp();
 
         this.player.update(this);
     }
