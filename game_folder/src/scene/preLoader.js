@@ -50,6 +50,14 @@ class PreLoader extends Phaser.Scene{
             frameWidth: 16,
             frameHeight: 16
         });
+        this.load.spritesheet("rock1", "assets/spritesheets/rock 1.png",{
+            frameWidth: 32,
+            frameHeight: 32
+        });
+        this.load.spritesheet("rock2", "assets/spritesheets/rock 2.png",{
+            frameWidth: 32,
+            frameHeight: 32
+        });
     }
 
     create(){
@@ -63,6 +71,8 @@ class PreLoader extends Phaser.Scene{
         this.anims.remove("beamUd_anim");
         this.anims.remove("beamLr_anim");
         this.anims.remove("boss1_anim");
+        this.anims.remove("rock1_anim");
+        this.anims.remove("rock2_anim");
 
         this.anims.create({
             key: "playerUp",
@@ -155,6 +165,24 @@ class PreLoader extends Phaser.Scene{
             frames: this.anims.generateFrameNumbers("boss1", {
               start: 0,
               end: 3
+            }),
+            frameRate: 4,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "rock1_anim",
+            frames: this.anims.generateFrameNumbers("rock1",{
+                start: 0,
+                end: 4
+            }),
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "rock2_anim",
+            frames: this.anims.generateFrameNumbers("rock2",{
+                start: 0,
+                end: 3
             }),
             frameRate: 4,
             repeat: -1
