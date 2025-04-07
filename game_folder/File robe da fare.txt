@@ -1,5 +1,14 @@
 MANUEL
 - Minerali nella pagina iniziale e fare in modo che li raccolga
+- passaggio di vita e power Up 
 
 ILIJA 
--collider proiettili player e boss
+
+
+
+Generale
+-barra di interazione del player
+-difficoltà del boss
+-vite del player
+-proiettili del player scompaiono quando sbattono sul muro
+-vita del boss appare e scompare quando attivo

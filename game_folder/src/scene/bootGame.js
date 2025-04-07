@@ -9,11 +9,7 @@ class BootGame extends Phaser.Scene{
             { tileX: 13, tileY: 0, onComplete: () => {
                 this.registry.set("playerHP", this.player.hp);
                 this.scene.start("Boss_room1");
-            }} //,
-            // { tileX: 5, tileY: 10, onComplete: () => {
-            //     this.registry.set("playerHP", this.player.hp);
-            //     this.scene.start("SecretRoom");
-            // }}
+            }}
         ];
 
         var numberMap = 1; // Numero di mappa in cui si trova il giocatore
