@@ -10,12 +10,13 @@ class PreLoader extends Phaser.Scene{
     constructor(){
         super("PreLoader");
     }
-
     preload(){
         this.load.image("background", "assets/images/map.png");
         this.load.image("background_menu", "assets/images/background_menu.jpg");
         this.load.image("menu_button", "assets/images/menu_button.png");
         this.load.image("bg_boss1", "assets/images/bg_boss1.png");
+        this.load.image("backToGame_button", "assets/images/BackToGame_button.png");
+        this.load.image("exit_button", "assets/images/Exit_button.png");
         
         this.load.spritesheet("player", "assets/spritesheets/Astronaut.png",{
             frameWidth: 64,
@@ -52,6 +53,17 @@ class PreLoader extends Phaser.Scene{
     }
 
     create(){
+        this.anims.remove("playerUp");
+        this.anims.remove("player_animStoppedUp");
+        this.anims.remove("playerDOWN");
+        this.anims.remove("player_animStoppedDown");
+        this.anims.remove("player_animRight");
+        this.anims.remove("player_animStoppedRight");
+        this.anims.remove("proiettile_b1");
+        this.anims.remove("beamUd_anim");
+        this.anims.remove("beamLr_anim");
+        this.anims.remove("boss1_anim");
+
         this.anims.create({
             key: "playerUp",
             frames: this.anims.generateFrameNumbers("playerSkinUp",{
