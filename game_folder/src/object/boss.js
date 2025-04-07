@@ -29,11 +29,12 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         });
         
         this.isDead = false;
-        this.Hp = 20;
+        this.Hp = 200;
         this.danni = danni;
         this.boss.play(texture);
         this.boss.body.setSize(10, 10);
         this.boss.setDisplaySize(64,64);
+        this.hpBar = scene.add.graphics();
     }
 
     //funzione movimeto boss
@@ -99,26 +100,27 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             console.log("The boss is dead");
             this.isDead = true;
             this.deactivate();
+            this.hpBar.clear();
             this.boss.destroy();
         }
     }
 
-    showBarHp(scene, hpBar){
-        hpBar.clear(); // Pulisce la barra
-        let x = 100; // Posizione X della barra 768 - (barHpWidth/2)
-        let y = 100; // Posizione Y della barra 384 - barHpHeight
+    showBarHp(){
+        this.hpBar.clear(); // Pulisce la barra
+        let x = 384 - (barBossHpWidth/2); // Posizione X della barra 
+        let y = 384 - barBossHpHeight - 10; // Posizione Y della barra 
 
         // Calcola la percentuale della salute
-        let progress = Phaser.Math.Clamp(this.Hp / 100, 0, 1);
+        let progress = Phaser.Math.Clamp(this.Hp / 200, 0, 1);
 
         // Imposta il colore e lo stile della barra
-        hpBar.fillStyle(0x00ff00, 1); // Verde
-        hpBar.lineStyle(2, 0x000000); // Linea nera
+        this.hpBar.fillStyle(0xFF0000, 1); // Verde
+        this.hpBar.lineStyle(2, 0x000000); // Linea nera
 
         // Disegna la barra di salute
-        hpBar.fillRect(x, y, barHpWidth * progress, barHpHeight);
-        hpBar.strokeRect(x, y, barHpWidth, barHpHeight);
+        this.hpBar.fillRect(x, y, barBossHpWidth * progress, barBossHpHeight);
+        this.hpBar.strokeRect(x, y, barBossHpWidth, barBossHpHeight);
 
-        hpBar.setScrollFactor(x,y); // La barra non si sposterà con la telecamera
+        this.hpBar.setScrollFactor(0); // La barra non si sposterà con la telecamera
     }
 }

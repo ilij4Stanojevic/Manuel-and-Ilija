@@ -33,8 +33,6 @@ class BootGame extends Phaser.Scene{
         this.camera.setBounds(0, 0, widthMap, heightMap); // Mette i "bordi massimi" della camera, oltre a quelli non registra
         this.camera.startFollow(this.player)
 
-        this.hpBar = this.add.graphics();
-
         this.projectiles = this.physics.add.group();
         this.physics.world.createDebugGraphic();
     }
@@ -42,8 +40,6 @@ class BootGame extends Phaser.Scene{
     update(){
         this.player.movePlayerManager(this, this.cursorKeys); // Funzione che fa muovere il giocatore
         this.player.update(this);
-        this.player.showBarHp(this, this.hpBar);
-        this.player.hp = 70;    
+        this.player.showBarHp(this);
     }
 }
-

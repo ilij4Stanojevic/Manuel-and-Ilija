@@ -3,8 +3,10 @@ const widthMap = document.getElementById("idContainerGame").clientWidth;
 const heightMap = document.getElementById("idContainerGame").clientHeight;
 const barProgressWidth = 50;
 const barProgressHeight = 10;
-const barHpWidth = 200;
-const barHpHeight = 20;
+const barPlayerHpWidth = 200;
+const barPlayerHpHeight = 20;
+const barBossHpWidth = 200;
+const barBossHpHeight = 20;
 
 class PreLoader extends Phaser.Scene{
     constructor(){
