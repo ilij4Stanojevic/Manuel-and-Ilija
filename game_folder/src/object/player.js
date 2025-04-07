@@ -29,6 +29,20 @@ class Player extends Phaser.Physics.Arcade.Sprite{
 
         this.projectiles = this.scene.add.group();
         this.projectiles.danni = this.danni;
+
+        this.holdTime = 0;  // Track how long the player holds the "E" key
+        this.requiredHoldTime = 50;  // Time required to fill the bar (in seconds)
+        this.delta = 0;
+
+        this.progressBar = scene.add.graphics();
+
+        // Vari tasti
+        this.cursorKeys = scene.input.keyboard.createCursorKeys();
+        this.keyE = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E); // Prendo in una variabile il tasto interazione (e)
+        this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W); // Prendo in una variabile il tasto avanti (w)
+        this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); // Prendo in una variabile il tasto sinistra (a)
+        this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S); // Prendo in una variabile il tasto sotto (s)
+        this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D); // Prendo in una variabile il tasto destra (d)
     }
 
     movePlayerManager(scene, cursorKeys){
@@ -36,13 +50,13 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         let speed = 200;
         let flipped = false;
 
-        if (scene.cursorKeys.left.isDown) {
+        if (this.cursorKeys.left.isDown || this.keyA.isDown) {
             scene.player.setVelocityX(-speed);
             moving = true;
             flipped = true;
             direction = "l";
             scene.player.anims.play("player_animRight", true);
-        } else if (scene.cursorKeys.right.isDown) {
+        } else if (this.cursorKeys.right.isDown || this.keyD.isDown) {
             scene.player.setVelocityX(speed);
             flipped = false;
             moving = true;
@@ -61,12 +75,12 @@ class Player extends Phaser.Physics.Arcade.Sprite{
             scene.player.anims.play("player_animStoppedRight",true);
         }
 
-        if (scene.cursorKeys.up.isDown) {
+        if (this.cursorKeys.up.isDown || this.keyW.isDown) {
             scene.player.setVelocityY(-speed);
             moving = true;
             direction = "u";
             scene.player.anims.play("playerUp", true);
-        } else if (scene.cursorKeys.down.isDown) {
+        } else if (this.cursorKeys.down.isDown || this.keyS.isDown) {
             scene.player.setVelocityY(speed);
             moving = true;
             direction = "d";
@@ -91,8 +105,8 @@ class Player extends Phaser.Physics.Arcade.Sprite{
     }
 
     checkPositionToDoor(scene, x, y, tileSize){
-        let playerX = Math.floor(scene.player.x / tileSize);
-        let playerY = Math.floor(scene.player.y / tileSize);
+        let playerX = Math.floor(this.scene.player.x / tileSize);
+        let playerY = Math.floor(this.scene.player.y / tileSize);
 
         let doorPositionX = x;
         let doorPositionY = y;
@@ -133,8 +147,8 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         scene.progressBar.fillStyle(0x00ff00, 1);
         scene.progressBar.lineStyle(2, 0x000000);
 
-        let centerX = camera.scrollX + (768 / 2) - (barProgressWidth / 2); // (768/2) perché è la metà dei quello che vediamo 
-        let centerY = camera.scrollY;
+        let centerX = this.scene.camera.scrollX + (768 / 2) - (barProgressWidth / 2); // (768/2) perché è la metà dei quello che vediamo 
+        let centerY = this.scene.camera.scrollY;
 
         scene.progressBar.fillRect(centerX, centerY, barProgressWidth * progress, barProgressHeight);
         scene.progressBar.strokeRect(centerX, centerY, barProgressWidth, barProgressHeight); 
@@ -152,6 +166,25 @@ class Player extends Phaser.Physics.Arcade.Sprite{
             });
             if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
             this.shoot(this, this.scene.player);
+        }
+        if (this.keyE.isDown) { // Controllo quando viene cliccato una volta sola
+            if(this.scene.player.checkPositionToDoor(this, 13, 0, tileSize)){ // Funzione che controlla la posizione del giocatore con la posizione della porta  
+                this.holdTime = this.scene.player.crossing(this, this.holdTime, this.requiredHoldTime, this.delta,this.progressBar, this.camera);
+
+                if(this.holdTime >= this.requiredHoldTime){
+                    this.progressBar.clear();
+
+                    this.scene.registry.set("playerHP", this.scene.player.hp);
+
+                    this.scene.scene.start("Boss_room1");
+                }
+
+                this.delta += 16;
+            }
+        }else{
+            this.holdTime = 0;
+            this.delta = 0;
+            this.progressBar.clear();
         }
     }
 }
