@@ -1,6 +1,6 @@
 MANUEL 
-- Vita del boss e che subisce danni (forse fatto)
+-pagina gameOver
 
 ILIJA 
 - Minerali nella pagina iniziale e fare in modo che li raccolga
-- Attacco Player nella classe
+-collider proiettili player e boss

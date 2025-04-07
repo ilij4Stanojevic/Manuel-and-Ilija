@@ -139,11 +139,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // Gestisce il danno subito dal giocatore
     gotHitted(scene, damage){
         this.hp -= damage; // Sottrae i danni dai punti vita
-
-        if(this.hp <= 0){
-            // Qui puoi aggiungere logica per il Game Over
-            // scene.scene.start("GameOver");
-        }
     }
 
     // Mostra la barra della salute
@@ -230,6 +225,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.holdTime = 0;
             this.delta = 0;
             this.progressBar.clear();
+        }
+        // da spostare nel gotHitted
+        if(this.hp <= 0){
+            // se il player muore passa a questa scena
+            this.scene.scene.start("GameOver");
         }
     }
 }

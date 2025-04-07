@@ -25,7 +25,8 @@ window.onload = function(){
             PreLoader,
             Menu,
             BootGame,
-            Boss_room1
+            Boss_room1,
+            GameOver
         ]
     };
 
