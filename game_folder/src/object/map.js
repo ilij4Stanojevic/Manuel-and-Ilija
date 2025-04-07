@@ -28,7 +28,7 @@ let collisionMap2 = [
 ]
 
 class Map{
-    constructor(scene, walls, minerals, numberMap){
+    constructor(scene, walls, numberMap, minerals){
         var collisionMap = null;
         const mineralDimension = 32;
         var texture;
