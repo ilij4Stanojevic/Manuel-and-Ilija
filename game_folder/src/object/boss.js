@@ -28,12 +28,16 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             paused: true  // Il timer parte in pausa
         });
 
+        this.projectilesPlayer = scene.player.projectiles;
         this.danniPlayer = scene.player.damage;
 
         // Creiamo il gestore di collisione
         this.projectileCollisionManager = new ProjectileCollisionManager(scene);
         this.projectileCollisionManager.addProjectileCollision(this.projectiles, scene.player, danni);
-        // this.projectileCollisionManager.addProjectileCollision(this.projectiles, this.boss, this.danniPlayer);
+
+        console.log(this.boss);
+
+        this.projectileCollisionManager.addProjectileCollision(this.projectilesPlayer, scene.boss, this.danniPlayer);
 
         this.Hp = 150;
         this.danni = danni;
@@ -95,6 +99,14 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
     update(player) {
         if (this.bossAttivo) {
             this.moveToPlayer(player);  // Muove il boss verso il giocatore
+        }
+    }
+
+    gotHitted(scene, damage){
+        this.hp -= damage;
+
+        if(this.hp <= 0){
+            console.log("The boss is dead");
         }
     }
 }
