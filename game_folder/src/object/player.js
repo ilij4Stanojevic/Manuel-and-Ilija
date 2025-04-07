@@ -5,9 +5,11 @@ let direction; // Usato per determinare la direzione quando il giocatore spara
 // "r" = right (destra)
 
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, walls, hpStart){  
+    constructor(scene, x, y, texture, walls, minerals, hpStart){  
         super(scene, x, y, "player");
 
+
+        
         // Aggiungi il giocatore alla scena
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -19,6 +21,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Aggiungi il collider per le pareti, se sono presenti
         if(walls){
             scene.physics.add.collider(this, walls);
+        }
+        if(minerals){
+            scene.physics.add.collider(this, minerals);
         }
         
         // Proprietà del giocatore

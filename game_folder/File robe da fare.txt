@@ -1,6 +1,5 @@
-MANUEL 
--pagina gameOver
+MANUEL
+- Minerali nella pagina iniziale e fare in modo che li raccolga
 
 ILIJA 
-- Minerali nella pagina iniziale e fare in modo che li raccolga
 -collider proiettili player e boss
