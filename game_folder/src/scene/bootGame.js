@@ -14,7 +14,7 @@ class BootGame extends Phaser.Scene{
         
         this.player = new Player(this, 13.5 *64, 100, "player", this.walls, 100); // Chiama la classe Player per crealo
 
-        this.beam = new Beam(this);
+        // this.beam = new Beam(this);
 
         this.physics.world.setBounds(0, 0, widthMap, heightMap); // Mette i bordi esterni (es. quando il giocatore attraversava la porta, usciva dalla mappa)
 
@@ -63,15 +63,15 @@ class BootGame extends Phaser.Scene{
             this.progressBar.clear();
         }
 
-        if(Phaser.Input.Keyboard.JustDown(this.keyB)){
-            this.player.shoot(this);
+        // if(Phaser.Input.Keyboard.JustDown(this.keyB)){
+        //     this.player.shoot(this);
 
 
 
-            this.projectiles.children.iterate((projectile) => {
-                if (projectile) this.beam.destroyBeam();
-            });
-        }
+        //     this.projectiles.children.iterate((projectile) => {
+        //         if (projectile) this.beam.destroyBeam();
+        //     });
+        // }
     }
 }
 

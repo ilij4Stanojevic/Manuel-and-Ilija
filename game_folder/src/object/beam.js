@@ -1,4 +1,4 @@
-class Beam extends Phaser.GameObjects.Sprite{
+/*class Beam extends Phaser.GameObjects.Sprite{
     constructor(scene){
         var startX = scene.player.x;
         var startY = scene.player.y;
@@ -50,4 +50,4 @@ class Beam extends Phaser.GameObjects.Sprite{
             this.destroy(); // Destroy projectile after 320px
         }
     }
-}
+}*/

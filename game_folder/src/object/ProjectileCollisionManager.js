@@ -1,7 +1,6 @@
 class ProjectileCollisionManager {
-    constructor(scene, player) {
+    constructor(scene) {
         this.scene = scene;
-        this.player = player;
     }
 
     // Metodo per gestire la collisione tra il proiettile e il giocatore
@@ -11,9 +10,16 @@ class ProjectileCollisionManager {
     }
 
     // Aggiungi la gestione delle collisioni tra il giocatore e i proiettili
-    addProjectileCollision(projectilesGroup, damage) {
-        this.scene.physics.add.overlap(this.player, projectilesGroup, (player, projectile) => {
-            ProjectileCollisionManager.dealDamageToPlayer(player, projectile, damage);
+    addProjectileCollision(projectilesGroup, enemy, damage) {
+        // console.log(enemy);
+
+        this.scene.physics.add.overlap(enemy, projectilesGroup, (enemy, projectile) => {
+            ProjectileCollisionManager.dealDamage(enemy, projectile, damage);
         });
+    }
+
+    static dealDamage(enemy, projectile, damage) {
+        enemy.gotHitted(projectile.scene, damage);  // Danno inflitto al giocatore
+        projectile.destroy();  // Distrugge il proiettile
     }
 }

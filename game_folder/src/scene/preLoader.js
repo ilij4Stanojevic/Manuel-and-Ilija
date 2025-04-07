@@ -59,7 +59,7 @@ class PreLoader extends Phaser.Scene{
                 end: 3
             }),
             frameRate: 4,
-            repeat: 0
+            repeat: -1
         });
         this.anims.create({
             key: "player_animStoppedUp",
@@ -78,7 +78,7 @@ class PreLoader extends Phaser.Scene{
                 end: 3
             }),
             frameRate: 4,
-            repeat: 0
+            repeat: -1
         });
         this.anims.create({
             key: "player_animStoppedDown",

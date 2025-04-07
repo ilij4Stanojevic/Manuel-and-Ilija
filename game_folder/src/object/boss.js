@@ -28,11 +28,14 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             paused: true  // Il timer parte in pausa
         });
 
-        // Creiamo il gestore di collisione
-        this.projectileCollisionManager = new ProjectileCollisionManager(this.scene, this.scene.player);
-        this.projectileCollisionManager.addProjectileCollision(this.projectiles, danni);
+        this.danniPlayer = scene.player.damage;
 
-        this.Hp = 100;
+        // Creiamo il gestore di collisione
+        this.projectileCollisionManager = new ProjectileCollisionManager(scene);
+        this.projectileCollisionManager.addProjectileCollision(this.projectiles, scene.player, danni);
+        // this.projectileCollisionManager.addProjectileCollision(this.projectiles, this.boss, this.danniPlayer);
+
+        this.Hp = 150;
         this.danni = danni;
         this.boss.play(texture);
         this.boss.body.setSize(10, 10);

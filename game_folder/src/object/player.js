@@ -20,6 +20,8 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         
         this.hp = hpStart;
 
+        this.damage = 10;
+
         scene.player = this;
         this.scene.player.body.setSize(26, 40);
     }
@@ -104,8 +106,8 @@ class Player extends Phaser.Physics.Arcade.Sprite{
     }
     showBarHp(scene, camera, hpBar){
         hpBar.clear();
-        let x = camera.scrollX;
-        let y = camera.scrollY;
+        let x = 0;
+        let y = 0;
 
         let progress = Phaser.Math.Clamp(this.hp / 100, 0, 1);
 
@@ -114,6 +116,8 @@ class Player extends Phaser.Physics.Arcade.Sprite{
 
         scene.hpBar.fillRect(x, y, barHpWidth * progress, barHpHeight);
         scene.hpBar.strokeRect(x, y, barHpWidth, barHpHeight);
+
+        hpBar.setScrollFactor(0);
     }
     
     crossing(scene, holdTime,requiredHoldTime, delta, progressBar, camera){
@@ -133,7 +137,7 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         return holdTime;
     }
 
-    shoot(scene){
-        let beam = new Beam(scene);
-    }
+    // shoot(scene){
+    //     let beam = new Beam(scene);
+    // }
 }
