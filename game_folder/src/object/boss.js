@@ -27,19 +27,9 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             loop: true,
             paused: true  // Il timer parte in pausa
         });
-
-        this.projectilesPlayer = scene.player.projectiles;
-        this.danniPlayer = scene.player.damage;
-
-        // Creiamo il gestore di collisione
-        this.projectileCollisionManager = new ProjectileCollisionManager(scene);
-        this.projectileCollisionManager.addProjectileCollision(this.projectiles, scene.player, danni);
-
-        console.log(this.boss);
-
-        this.projectileCollisionManager.addProjectileCollision(this.projectilesPlayer, scene.boss, this.danniPlayer);
-
-        this.Hp = 150;
+        
+        this.isDead = false;
+        this.Hp = 20;
         this.danni = danni;
         this.boss.play(texture);
         this.boss.body.setSize(10, 10);
@@ -102,11 +92,33 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    gotHitted(scene, damage){
-        this.hp -= damage;
+    gotHitted(damage){
+        this.Hp -= damage;
 
-        if(this.hp <= 0){
+        if(this.Hp <= 0){
             console.log("The boss is dead");
+            this.isDead = true;
+            this.deactivate();
+            this.boss.destroy();
         }
+    }
+
+    showBarHp(scene, hpBar){
+        hpBar.clear(); // Pulisce la barra
+        let x = 768 - (barHpWidth/2); // Posizione X della barra
+        let y = 384 - barHpHeight; // Posizione Y della barra
+
+        // Calcola la percentuale della salute
+        let progress = Phaser.Math.Clamp(this.Hp / 100, 0, 1);
+
+        // Imposta il colore e lo stile della barra
+        hpBar.fillStyle(0x00ff00, 1); // Verde
+        hpBar.lineStyle(2, 0x000000); // Linea nera
+
+        // Disegna la barra di salute
+        hpBar.fillRect(x, y, barHpWidth * progress, barHpHeight);
+        hpBar.strokeRect(x, y, barHpWidth, barHpHeight);
+
+        hpBar.setScrollFactor(x,y); // La barra non si sposterà con la telecamera
     }
 }

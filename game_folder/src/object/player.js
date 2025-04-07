@@ -147,7 +147,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Mostra la barra della salute
-    showBarHp(scene, camera, hpBar){
+    showBarHp(scene, hpBar){
         hpBar.clear(); // Pulisce la barra
         let x = 0; // Posizione X della barra
         let y = 0; // Posizione Y della barra
@@ -156,12 +156,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let progress = Phaser.Math.Clamp(this.hp / 100, 0, 1);
 
         // Imposta il colore e lo stile della barra
-        scene.hpBar.fillStyle(0x00ff00, 1); // Verde
-        scene.hpBar.lineStyle(2, 0x000000); // Linea nera
+        hpBar.fillStyle(0x00ff00, 1); // Verde
+        hpBar.lineStyle(2, 0x000000); // Linea nera
 
         // Disegna la barra di salute
-        scene.hpBar.fillRect(x, y, barHpWidth * progress, barHpHeight);
-        scene.hpBar.strokeRect(x, y, barHpWidth, barHpHeight);
+        hpBar.fillRect(x, y, barHpWidth * progress, barHpHeight);
+        hpBar.strokeRect(x, y, barHpWidth, barHpHeight);
 
         hpBar.setScrollFactor(0); // La barra non si sposterà con la telecamera
     }
