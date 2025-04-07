@@ -16,53 +16,22 @@ class BootGame extends Phaser.Scene{
 
         this.physics.world.setBounds(0, 0, widthMap, heightMap); // Mette i bordi esterni (es. quando il giocatore attraversava la porta, usciva dalla mappa)
 
-        this.cursorKeys = this.input.keyboard.createCursorKeys(); // Prende in input i tasti cliccati dall'utente
+        // this.cursorKeys = this.input.keyboard.createCursorKeys(); // Prende in input i tasti cliccati dall'utente
 
         this.camera = this.cameras.main; // Crea la camera che prende il giocatore
         this.camera.setBounds(0, 0, widthMap, heightMap); // Mette i "bordi massimi" della camera, oltre a quelli non registra
         this.camera.startFollow(this.player)
 
-        this.progressBar = this.add.graphics();
         this.hpBar = this.add.graphics();
-
-        this.holdTime = 0;  // Track how long the player holds the "E" key
-        this.requiredHoldTime = 50;  // Time required to fill the bar (in seconds)
-        this.delta = 0;
 
         this.projectiles = this.physics.add.group();
 
-        // Vari tasti
-        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E); // Prendo in una variabile il tasto E
-        this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     }
 
     update(){
         this.player.movePlayerManager(this, this.cursorKeys); // Funzione che fa muovere il giocatore
         this.player.update(this);
         this.player.showBarHp(this, this.camera, this.hpBar);
-
-        if (this.keyE.isDown) { // Controllo quando viene cliccato una volta sola
-            if(this.player.checkPositionToDoor(this, 13, 0, tileSize)){ // Funzione che controlla la posizione del giocatore con la posizione della porta  
-                this.holdTime = this.player.crossing(this, this.holdTime, this.requiredHoldTime, this.delta,this.progressBar, this.camera);
-
-                if(this.holdTime >= this.requiredHoldTime){
-                    this.progressBar.clear();
-
-                    this.registry.set("playerHP", this.player.hp);
-
-                    this.scene.start("Boss_room1");
-                }
-
-                this.delta += 16;
-            }
-        }else{
-            this.holdTime = 0;
-            this.delta = 0;
-            this.progressBar.clear();
-        }
     }
 }
 

@@ -17,8 +17,7 @@ class Boss_room1 extends Phaser.Scene {
         this.player = new Player(this, 11.5 * 64, 0, "player", this.walls, playerHP);
         this.physics.world.setBounds(0, 0, widthMap, heightMap);
 
-        // Imposta i controlli del giocatore
-        this.cursorKeys = this.input.keyboard.createCursorKeys();
+
 
         // Configura la telecamera
         this.camera = this.cameras.main;
