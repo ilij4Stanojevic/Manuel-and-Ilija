@@ -61,8 +61,7 @@ class Boss_room1 extends Phaser.Scene {
         }
         this.player.showBarHp(this, this.camera, this.hpBar);
 
-        if(Phaser.Input.Keyboard.JustDown(this.keyB)){
-            this.player.gotHitted(this, 10); // Da inserire i danni del boss
-        }
+
+        this.player.update(this);
     }
 }

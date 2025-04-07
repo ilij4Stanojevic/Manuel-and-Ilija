@@ -23,11 +23,10 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         scene.player = this;
         this.scene.player.body.setSize(26, 40);
 
-        this.keyB = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+        this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         this.projectiles = this.scene.add.group();
         this.projectiles.danni = this.danni;
-
     }
 
     movePlayerManager(scene, cursorKeys){
@@ -35,13 +34,13 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         let speed = 200;
         let flipped = false;
 
-        if (scene.cursorKeys.left.isDown) {
+        if (scene.cursorKeys.left.isDown || scene.keyA.isDown) {
             scene.player.setVelocityX(-speed);
             moving = true;
             flipped = true;
             direction = "l";
             scene.player.anims.play("player_animRight", true);
-        } else if (scene.cursorKeys.right.isDown) {
+        } else if (scene.cursorKeys.right.isDown || scene.keyD.isDown) {
             scene.player.setVelocityX(speed);
             flipped = false;
             moving = true;
@@ -60,12 +59,12 @@ class Player extends Phaser.Physics.Arcade.Sprite{
             scene.player.anims.play("player_animStoppedRight",true);
         }
 
-        if (scene.cursorKeys.up.isDown) {
+        if (scene.cursorKeys.up.isDown || scene.keyW.isDown) {
             scene.player.setVelocityY(-speed);
             moving = true;
             direction = "u";
             scene.player.anims.play("playerUp", true);
-        } else if (scene.cursorKeys.down.isDown) {
+        } else if (scene.cursorKeys.down.isDown || scene.keyS.isDown) {
             scene.player.setVelocityY(speed);
             moving = true;
             direction = "d";
@@ -140,13 +139,15 @@ class Player extends Phaser.Physics.Arcade.Sprite{
     }
 
     shoot(scene, player){
-        let proiettile = new Beam(scene, scene.player, scene.boss, "beamUd");
+        let proiettile = new Beam(this.scene, this.scene.player, this.scene.avversario, "beamUd", direction);
             this.projectiles.add(proiettile);
     }
     update(){
-        if(Phaser.Input.Keyboard.JustDown(this.keyB)){
-            console.log("spara");
-            
+            this.projectiles.getChildren().forEach(proiettile => {
+                proiettile.update();
+            });
+            if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
+            this.shoot(this, this.scene.player);
         }
     }
 }

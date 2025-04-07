@@ -33,12 +33,15 @@ class BootGame extends Phaser.Scene{
 
         // Vari tasti
         this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E); // Prendo in una variabile il tasto E
-        
+        this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     }
 
     update(){
         this.player.movePlayerManager(this, this.cursorKeys); // Funzione che fa muovere il giocatore
-
+        this.player.update(this);
         this.player.showBarHp(this, this.camera, this.hpBar);
 
         if (this.keyE.isDown) { // Controllo quando viene cliccato una volta sola
