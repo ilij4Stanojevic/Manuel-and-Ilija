@@ -14,8 +14,6 @@ class BootGame extends Phaser.Scene{
         
         this.player = new Player(this, 13.5 *64, 100, "player", this.walls, 100); // Chiama la classe Player per crealo
 
-        // this.beam = new Beam(this);
-
         this.physics.world.setBounds(0, 0, widthMap, heightMap); // Mette i bordi esterni (es. quando il giocatore attraversava la porta, usciva dalla mappa)
 
         this.cursorKeys = this.input.keyboard.createCursorKeys(); // Prende in input i tasti cliccati dall'utente
@@ -35,12 +33,15 @@ class BootGame extends Phaser.Scene{
 
         // Vari tasti
         this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E); // Prendo in una variabile il tasto E
-        this.keyB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+        this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     }
 
     update(){
         this.player.movePlayerManager(this, this.cursorKeys); // Funzione che fa muovere il giocatore
-
+        this.player.update(this);
         this.player.showBarHp(this, this.camera, this.hpBar);
 
         if (this.keyE.isDown) { // Controllo quando viene cliccato una volta sola
@@ -62,16 +63,6 @@ class BootGame extends Phaser.Scene{
             this.delta = 0;
             this.progressBar.clear();
         }
-
-        // if(Phaser.Input.Keyboard.JustDown(this.keyB)){
-        //     this.player.shoot(this);
-
-
-
-        //     this.projectiles.children.iterate((projectile) => {
-        //         if (projectile) this.beam.destroyBeam();
-        //     });
-        // }
     }
 }
 

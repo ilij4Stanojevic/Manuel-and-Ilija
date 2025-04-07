@@ -1,8 +1,6 @@
 MANUEL 
 - Vita del boss e che subisce danni (forse fatto)
-- Boss danni (forse fatto)
 
 ILIJA 
 - Minerali nella pagina iniziale e fare in modo che li raccolga
-- Vita player nella classe
 - Attacco Player nella classe
