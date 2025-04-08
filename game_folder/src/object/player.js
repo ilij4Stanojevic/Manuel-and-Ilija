@@ -32,7 +32,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.player.body.setSize(26, 40);
 
         // Aggiungi tasti per il movimento e interazione
-        this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.projectiles = scene.add.group();
         this.projectiles.danni = this.danni;
     
@@ -45,14 +44,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.heartLast = 3;
         this.lifeChecked = false;
         
-        // Definizione dei tasti per il movimento
-        this.cursorKeys = scene.input.keyboard.createCursorKeys();
-        this.keyE = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        // Definizione dei tasti
+        this.keyE = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E); // tasto interazione
         this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        this.cursorKeys = scene.input.keyboard.createCursorKeys();
+        this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); // tasto per sparare
+        this.shitf = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
         // Gruppi e grafica per i proiettili e le barre
         this.projectiles = scene.add.group();
@@ -125,11 +124,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // Gestisce il movimento del giocatore in base ai tasti premuti
     movePlayerManager() {
-        const speed = 200;  // Velocità di movimento del giocatore
+        
+        var speed = 100;  // Velocità di movimento del giocatore
+        var staminaBoost = 2; // moltiplicatore velocità corsa
+        var endurance = 100; // durata stamina
+        var staminaActive = true;
         let moving = false;  // Flag per determinare se il giocatore si sta muovendo
 
+        // movimento stamina 
+        /*
+        if(this.shitf.isDown && staminaActive){
+
+        }
+        */
         // Movimento verso sinistra
-        if (this.cursorKeys.left.isDown || this.keyA.isDown) {
+        if (this.keyA.isDown) {
             this.setVelocityX(-speed);
             this.setFlipX(true);
             this.direction = "l";  // Direzione sinistra
@@ -137,7 +146,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             moving = true;
         } 
         // Movimento verso destra
-        else if (this.cursorKeys.right.isDown || this.keyD.isDown) {
+        else if (this.keyD.isDown) {
             this.setVelocityX(speed);
             this.setFlipX(false);
             this.direction = "r";  // Direzione destra
@@ -148,19 +157,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         // Movimento verso l'alto
-        if (this.cursorKeys.up.isDown || this.keyW.isDown) {
+        if (this.keyW.isDown) {
             this.setVelocityY(-speed);
             this.direction = "u";  // Direzione su
             this.anims.play("playerUp", true);  // Animazione su
             moving = true;
-        } 
+        }
         // Movimento verso il basso
-        else if (this.cursorKeys.down.isDown || this.keyS.isDown) {
+        else if (this.keyS.isDown) {
             this.setVelocityY(speed);
             this.direction = "d";  // Direzione giù
             this.anims.play("playerDOWN", true);  // Animazione giù
             moving = true;
-        } else {
+        }else {
             this.setVelocityY(0);  // Ferma il movimento verticale
         }
 

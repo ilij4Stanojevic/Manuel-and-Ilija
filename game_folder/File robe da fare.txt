@@ -1,5 +1,4 @@
 MANUEL
--proiettili del player e del boss scompaiono quando sbattono sul muro
 
 ILIJA 
 

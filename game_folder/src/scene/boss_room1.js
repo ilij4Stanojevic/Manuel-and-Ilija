@@ -19,7 +19,7 @@ class Boss_room1 extends Phaser.Scene {
         this.player = new Player(this, 11.5 * 64, 0, "player", this.walls, undefined, playerHP, undefined, numberMap);
         this.physics.world.setBounds(0, 0, widthMap, heightMap);
 
-        this.projectileCollisionManager = new ProjectileCollisionManager(this);
+        this.projectileCollisionManager = new ProjectileCollisionManager(this, this.walls);
 
         // Configura la telecamera
         this.camera = this.cameras.main;
@@ -36,6 +36,8 @@ class Boss_room1 extends Phaser.Scene {
 
         this.projectileCollisionManager.addProjectileCollisionBoss(this.player.projectiles, this.boss.boss, this.player.damage);
         this.projectileCollisionManager.addProjectileCollisionPlayer(this.boss.projectiles, this.player, this.boss.danni);
+        this.projectileCollisionManager.addProjectileCollisionProjectiles(this.boss.projectiles, this.walls);
+        this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
         
         // this.physics.world.createDebugGraphic();
 

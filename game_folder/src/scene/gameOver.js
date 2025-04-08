@@ -26,21 +26,13 @@ class GameOver extends Phaser.Scene {
         this.backToMenu.setOrigin(0.5, 0.5);
         this.backToMenu.setDisplaySize(100, 100 / 3);
 
-        // Crea il tasto per uscire centrato
-        this.exitButton = this.add.image(width / 2, (height / (20/10)) + altezza, "exit_button");
-        this.exitButton.setOrigin(0.5, 0.5);
-        this.exitButton.setDisplaySize(100, 100 / 3);
-
         // Impostiamo i bottoni interattivi
         this.backToMenu.setInteractive();
-        this.exitButton.setInteractive();
 
         // Azione per tornare al menu
         this.input.on('gameobjectdown', (pointer, gameObject) => {
             if (gameObject === this.backToMenu) {
                 this.scene.start("PreLoader");  // Torni al preloader
-            } else if (gameObject === this.exitButton) {
-                window.close();  // Chiude il gioco
             }
         });
     }
