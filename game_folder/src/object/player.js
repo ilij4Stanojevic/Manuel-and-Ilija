@@ -208,10 +208,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.holdTime += delta / 1000;  // Aumenta il tempo di interazione
 
             let progress = Phaser.Math.Clamp(this.holdTime / this.requiredHoldTime, 0, 1);  // Calcola la percentuale di interazione
-            let x = this.x, y = this.y;  // Posizione per la barra di progresso
+            let x = this.x - 15, y = this.y - 23;  // Posizione per la barra di progresso
 
             this.progressBar.clear();  // Pulisce la barra precedente
-            this.progressBar.fillStyle(0x00ff00, 1);  // Colore verde
+            this.progressBar.fillStyle(0xffffff, 1);  // Colore verde
             this.progressBar.lineStyle(2, 0x000000);  // Bordo nero
             this.progressBar.fillRect(x, y, barProgressWidth * progress, barProgressHeight);
             this.progressBar.strokeRect(x, y, barProgressWidth, barProgressHeight);
