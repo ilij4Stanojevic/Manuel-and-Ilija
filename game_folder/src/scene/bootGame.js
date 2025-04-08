@@ -41,14 +41,5 @@ class BootGame extends Phaser.Scene{
     update(){
         this.player.update(this);
         this.player.showBarHp(this);
-
-        if(this.player.lifeChecked == false){
-            for(let i=0; i<this.player.heartLast; i++){
-                let hL = this.add.image(this.heartX, 10,"heart_life").setOrigin(0,0);
-                this.heartX += 10 + 48;
-                hL.setScrollFactor(0);
-            }
-            this.player.lifeChecked = true;
-        }
     }
 }

@@ -41,9 +41,6 @@ class Boss_room1 extends Phaser.Scene {
     }
 
     update() {
-        // Muove il player
-        this.player.movePlayerManager(this, this.cursorKeys);
-
         // Aggiorna tutti i proiettili attivi
         this.boss.projectiles.getChildren().forEach(proiettile_b => proiettile_b.update());
 

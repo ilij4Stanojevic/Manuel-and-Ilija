@@ -260,6 +260,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.initHearts(scene);
             this.lifeChecked = true;
         }
+
+        this.movePlayerManager();
+
         // Aggiorna tutti i proiettili
         this.projectiles.getChildren().forEach(proiettile => {
             proiettile.update();
