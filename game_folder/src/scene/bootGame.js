@@ -1,42 +1,60 @@
-class BootGame extends Phaser.Scene{
-    constructor(){
-        super("BootGame");
+class BootGame extends Phaser.Scene {
+    constructor() {
+        super("BootGame");  // Nome della scena (BootGame)
     }
 
-    create(){
-        this.add.image(0,0,"background").setOrigin(0,0); // Punto in alto a sinistra
+    create() {
+        // Aggiunge un'immagine di sfondo all'inizio della scena, con origine in alto a sinistra
+        this.add.image(0, 0, "background").setOrigin(0, 0);
+
+        // Definizione di un array di porte, ognuna con coordinate di tile e una funzione onComplete che esegue un'azione quando si interagisce con la porta
         let doors = [
-            { tileX: 13, tileY: 0, onComplete: () => {
-                this.registry.set("playerHP", this.player.hp);
-                this.scene.start("Boss_room1");
-            }}
+            {
+                tileX: 13, tileY: 0, onComplete: () => {
+                    // Salva la salute del giocatore nel registro quando entra nella porta
+                    this.registry.set("playerHP", this.player.hp);
+                    // Passa alla scena "Boss_room1" quando il giocatore interagisce con la porta
+                    this.scene.start("Boss_room1");
+                }
+            }
         ];
-        var numberMap = 1; // Numero di mappa in cui si trova il giocatore
 
-        this.walls = this.physics.add.staticGroup(); // Aggiunge l'oggetto walls per i bordi
-        this.minerals = this.physics.add.staticGroup(); //aggiunge l'ogetto minerals per i minerali
+        // Variabile per tenere traccia del numero della mappa (in questo caso 1)
+        var numberMap = 1;
 
-        this.map = new Map(this, this.walls, numberMap, this.minerals); // Chiama la classe Map per creare la mappa
-        
+        // Crea gruppi statici per i muri e i minerali, usati come collisioni statiche
+        this.walls = this.physics.add.staticGroup();  // Gruppo per i muri
+        this.minerals = this.physics.add.staticGroup();  // Gruppo per i minerali
+
+        // Crea la mappa tramite la classe 'Map' passando i muri e minerali
+        this.map = new Map(this, this.walls, numberMap, this.minerals);
+
+        // Ottiene i punti vita del giocatore dal registro (o imposta a 100 se non esistono)
         let playerHP = this.registry.get("playerHP") || 100;
-        //let playerPowerUps = this.registry.get("playerPowerUps") || [];
 
-        this.player = new Player(this, 13.5 * 64, 100, "player", this.walls, this.minerals, 100, doors); // Chiama la classe Player per crearlo
+        // Crea il giocatore e lo posiziona sulla mappa, passando parametri come posizione, muri, minerali, e porte
+        this.player = new Player(this, 13.5 * 64, 100, "player", this.walls, this.minerals, playerHP, doors);
 
-        this.physics.world.setBounds(0, 0, widthMap, heightMap); // Mette i bordi esterni (es. quando il giocatore attraversava la porta, usciva dalla mappa)
+        // Imposta i confini della fisica del mondo di gioco (per evitare che il giocatore esca dai limiti della mappa)
+        this.physics.world.setBounds(0, 0, widthMap, heightMap);
 
-        // this.cursorKeys = this.input.keyboard.createCursorKeys(); // Prende in input i tasti cliccati dall'utente
+        // Crea la telecamera principale che seguirà il giocatore
+        this.camera = this.cameras.main;
+        this.camera.setBounds(0, 0, widthMap, heightMap);  // Imposta i bordi massimi della telecamera
+        this.camera.startFollow(this.player);  // Inizia a seguire il giocatore con la telecamera
 
-        this.camera = this.cameras.main; // Crea la camera che prende il giocatore
-        this.camera.setBounds(0, 0, widthMap, heightMap); // Mette i "bordi massimi" della camera, oltre a quelli non registra
-        this.camera.startFollow(this.player)
-
+        // Crea un gruppo di proiettili che il giocatore può sparare
         this.projectiles = this.physics.add.group();
+
+        // Crea una grafica di debug per il mondo fisico (utile per il debugging)
         this.physics.world.createDebugGraphic();
     }
 
-    update(){
+    update() {
+        // Aggiorna la logica del giocatore (movimento, interazioni, ecc.)
         this.player.update(this);
+
+        // Mostra la barra della salute del giocatore
         this.player.showBarHp(this);
     }
 }
