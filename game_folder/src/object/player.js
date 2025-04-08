@@ -31,6 +31,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Aggiungi tasti per il movimento e interazione
         this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.projectiles = scene.add.group();
+        this.projectiles.danni = this.danni;
+    
+        this.holdTime = 0;
+        this.requiredHoldTime = 50;
+        this.delta = 0;
+        this.progressBar = scene.add.graphics();
+        this.hpBar = scene.add.graphics();
+
+        this.heartLast = 3;
+        this.lifeChecked = false;
+        
+        // Definizione dei tasti per il movimento
+        this.cursorKeys = scene.input.keyboard.createCursorKeys();
         this.keyE = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -160,21 +174,29 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.hp -= damage;  // Riduci gli HP del giocatore
         console.log(this.hp);  // Stampa gli HP correnti
 
-        if (this.hp <= 0) {
-            // Logica di game over (puoi implementarla qui)
+        if(this.hp <= 0){
+            // Qui puoi aggiungere logica per il Game Over
+            // scene.scene.start("GameOver");
+            this.heartLast -= 1;
+            this.lifeChecked = false;
+            this.hp = 100;
         }
     }
 
-    // Funzione per mostrare la barra della salute
-    showBarHp() {
-        this.hpBar.clear();  // Pulisce la barra
+    // Mostra la barra della salute
+    showBarHp(){
+        this.hpBar.clear(); // Pulisce la barra
+        let x = 10; // Posizione X della barra
+        let y = 20 + 48; // Posizione Y della barra
 
-        let x = 10, y = 10;  // Posizione della barra
-        let progress = Phaser.Math.Clamp(this.hp / 100, 0, 1);  // Calcola la percentuale di salute
+        // Calcola la percentuale della salute
+        let progress = Phaser.Math.Clamp(this.hp / 100, 0, 1);
 
-        // Disegna la barra della salute
-        this.hpBar.fillStyle(0x00ff00, 1);  // Colore verde
-        this.hpBar.lineStyle(2, 0x000000);  // Bordo nero
+        // Imposta il colore e lo stile della barra
+        this.hpBar.fillStyle(0x00ff00, 1); // Verde
+        this.hpBar.lineStyle(2, 0x000000); // Linea nera
+
+        // Disegna la barra di salute
         this.hpBar.fillRect(x, y, barPlayerHpWidth * progress, barPlayerHpHeight);
         this.hpBar.strokeRect(x, y, barPlayerHpWidth, barPlayerHpHeight);
         this.hpBar.setScrollFactor(0);  // La barra non si muove con la telecamera
@@ -216,12 +238,40 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.projectiles.add(beam);  // Aggiungi il proiettile al gruppo
     }
 
-    // Metodo di aggiornamento chiamato ad ogni frame
-    update() {
-        this.movePlayerManager();  // Gestisci il movimento del giocatore
-        this.projectiles.getChildren().forEach(p => p.update());  // Aggiorna i proiettili
+    initHearts(scene){
+        if (this.heartImages) {
+            this.heartImages.forEach(h => h.destroy());
+        }
+        this.heartImages = [];
 
-        // Se si preme la barra spaziatrice, spara
+        let heartX = 10;
+        console.log("The player has " + this.heartLast + " left.");
+        for(let i=0; i<this.heartLast; i++){
+            let hL = scene.add.image(heartX, 10,"heart_life").setOrigin(0,0);
+            this.heartImages.push(hL);
+            heartX += 10 + 48;
+            hL.setScrollFactor(0);
+        }
+    }
+
+    // Metodo di aggiornamento chiamato ad ogni frame
+    update(scene){
+        if(this.lifeChecked == false){
+            this.initHearts(scene);
+            this.lifeChecked = true;
+        }
+        // Aggiorna tutti i proiettili
+        this.projectiles.getChildren().forEach(proiettile => {
+            proiettile.update();
+        });
+
+        // Se il giocatore preme il tasto spazio, spara
+        if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
+            this.shoot(this, this.scene.player);
+        }
+        // Se il tasto "E" è premuto, interagisce con la porta
+        this.projectiles.getChildren().forEach(p => p.update());
+    
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
             this.shoot();
         }
@@ -238,6 +288,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Se non c'è interazione, resetta la barra di progresso
         this.holdTime = 0;
         this.delta = 0;
+        this.progressBar.clear();
         this.progressBar.clear();
     }
 }

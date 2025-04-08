@@ -3,11 +3,9 @@ class BootGame extends Phaser.Scene {
         super("BootGame");  // Nome della scena (BootGame)
     }
 
-    create() {
-        // Aggiunge un'immagine di sfondo all'inizio della scena, con origine in alto a sinistra
-        this.add.image(0, 0, "background").setOrigin(0, 0);
+    create(){
+        let bg = this.add.image(0,0,"background").setOrigin(0,0); // Punto in alto a sinistra
 
-        // Definizione di un array di porte, ognuna con coordinate di tile e una funzione onComplete che esegue un'azione quando si interagisce con la porta
         let doors = [
             {
                 tileX: 13, tileY: 0, onComplete: () => {
@@ -48,6 +46,8 @@ class BootGame extends Phaser.Scene {
 
         // Crea una grafica di debug per il mondo fisico (utile per il debugging)
         this.physics.world.createDebugGraphic();
+
+        this.heartX = 10;
     }
 
     update() {
@@ -56,5 +56,14 @@ class BootGame extends Phaser.Scene {
 
         // Mostra la barra della salute del giocatore
         this.player.showBarHp(this);
+
+        if(this.player.lifeChecked == false){
+            for(let i=0; i<this.player.heartLast; i++){
+                let hL = this.add.image(this.heartX, 10,"heart_life").setOrigin(0,0);
+                this.heartX += 10 + 48;
+                hL.setScrollFactor(0);
+            }
+            this.player.lifeChecked = true;
+        }
     }
 }

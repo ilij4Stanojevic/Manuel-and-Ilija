@@ -21,7 +21,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         
         // Timer per sparare
         this.shootTimer = this.scene.time.addEvent({
-            delay: 400, // Ogni 0.4 secondi
+            delay: 1000, // Ogni 0.4 secondi
             callback: this.shoot,
             callbackScope: this,
             loop: true,
@@ -106,6 +106,8 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
     }
 
     showBarHp(){
+        console.log("The boss has " + this.Hp + " Hp.");
+
         this.hpBar.clear(); // Pulisce la barra
         let x = 384 - (barBossHpWidth/2); // Posizione X della barra 
         let y = 384 - barBossHpHeight - 10; // Posizione Y della barra 

@@ -3,7 +3,7 @@ const widthMap = document.getElementById("idContainerGame").clientWidth;
 const heightMap = document.getElementById("idContainerGame").clientHeight;
 const barProgressWidth = 50;
 const barProgressHeight = 10;
-const barPlayerHpWidth = 200;
+const barPlayerHpWidth = (48 * 3) + 20;
 const barPlayerHpHeight = 20;
 const barBossHpWidth = 200;
 const barBossHpHeight = 20;
@@ -19,6 +19,8 @@ class PreLoader extends Phaser.Scene{
         this.load.image("bg_boss1", "assets/images/bg_boss1.png");
         this.load.image("backToGame_button", "assets/images/BackToGame_button.png");
         this.load.image("exit_button", "assets/images/Exit_button.png");
+        this.load.image("heart_life", "assets/images/heart_life.png");
+        this.load.image("heart_dead", "assets/images/heart_dead.png");
         
         this.load.spritesheet("player", "assets/spritesheets/Astronaut.png",{
             frameWidth: 64,
