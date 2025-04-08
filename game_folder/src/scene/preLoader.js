@@ -1,8 +1,8 @@
 const tileSize = 64;
 const widthMap = document.getElementById("idContainerGame").clientWidth;
 const heightMap = document.getElementById("idContainerGame").clientHeight;
-const barProgressWidth = 50;
-const barProgressHeight = 10;
+const barProgressWidth = 30;
+const barProgressHeight = 5;
 const barPlayerHpWidth = (48 * 3) + 20;
 const barPlayerHpHeight = 20;
 const barBossHpWidth = 200;
