@@ -8,7 +8,6 @@ ILIJA
 
 Generale
 -barra di interazione del player
--difficoltà del boss
+-difficoltà del boss (Velocità di sparo)
 -vite del player
 -proiettili del player scompaiono quando sbattono sul muro
--vita del boss appare e scompare quando attivo

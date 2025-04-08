@@ -4,7 +4,8 @@ class BootGame extends Phaser.Scene{
     }
 
     create(){
-        this.add.image(0,0,"background").setOrigin(0,0); // Punto in alto a sinistra
+        let bg = this.add.image(0,0,"background").setOrigin(0,0); // Punto in alto a sinistra
+
         let doors = [
             { tileX: 13, tileY: 0, onComplete: () => {
                 this.registry.set("playerHP", this.player.hp);
@@ -31,11 +32,22 @@ class BootGame extends Phaser.Scene{
 
         this.projectiles = this.physics.add.group();
         this.physics.world.createDebugGraphic();
+
+        this.heartX = 10;
     }
 
     update(){
         this.player.movePlayerManager(this, this.cursorKeys); // Funzione che fa muovere il giocatore
         this.player.update(this);
         this.player.showBarHp(this);
+
+        if(this.player.lifeChecked == false){
+            for(let i=0; i<this.player.heartLast; i++){
+                let hL = this.add.image(this.heartX, 10,"heart_life").setOrigin(0,0);
+                this.heartX += 10 + 48;
+                hL.setScrollFactor(0);
+            }
+            this.player.lifeChecked = true;
+        }
     }
 }

@@ -31,6 +31,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.delta = 0;
         this.progressBar = scene.add.graphics();
         this.hpBar = scene.add.graphics();
+
+        this.heartLast = 3;
+        this.lifeChecked = false;
         
         // Definizione dei tasti per il movimento
         this.cursorKeys = scene.input.keyboard.createCursorKeys();
@@ -171,17 +174,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     gotHitted(scene, damage){
         this.hp -= damage; // Sottrae i danni dai punti vita
 
-        // if(this.hp <= 0){
-        //     // Qui puoi aggiungere logica per il Game Over
-        //     // scene.scene.start("GameOver");
-        // }
+        if(this.hp <= 0){
+            // Qui puoi aggiungere logica per il Game Over
+            // scene.scene.start("GameOver");
+            this.heartLast -= 1;
+            this.lifeChecked = false;
+            this.hp = 100;
+        }
     }
 
     // Mostra la barra della salute
     showBarHp(){
         this.hpBar.clear(); // Pulisce la barra
         let x = 10; // Posizione X della barra
-        let y = 10; // Posizione Y della barra
+        let y = 20 + 48; // Posizione Y della barra
 
         // Calcola la percentuale della salute
         let progress = Phaser.Math.Clamp(this.hp / 100, 0, 1);
@@ -218,8 +224,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         } else {
             this.delta += 16;
         }
-    }
-    
+    }   
 
     // Gestisce il tiro del giocatore
     shoot(scene, player){
@@ -227,8 +232,28 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.projectiles.add(proiettile); // Aggiunge il proiettile al gruppo
     }
 
+    initHearts(scene){
+        if (this.heartImages) {
+            this.heartImages.forEach(h => h.destroy());
+        }
+        this.heartImages = [];
+
+        let heartX = 10;
+        console.log("The player has " + this.heartLast + " left.");
+        for(let i=0; i<this.heartLast; i++){
+            let hL = scene.add.image(heartX, 10,"heart_life").setOrigin(0,0);
+            this.heartImages.push(hL);
+            heartX += 10 + 48;
+            hL.setScrollFactor(0);
+        }
+    }
+
     // Metodo di aggiornamento chiamato ad ogni frame
-    update(){
+    update(scene){
+        if(this.lifeChecked == false){
+            this.initHearts(scene);
+            this.lifeChecked = true;
+        }
         // Aggiorna tutti i proiettili
         this.projectiles.getChildren().forEach(proiettile => {
             proiettile.update();
@@ -255,6 +280,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         this.holdTime = 0;
         this.delta = 0;
-        this.progressBar.clear();     
+        this.progressBar.clear();
     }
 }

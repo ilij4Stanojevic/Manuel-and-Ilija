@@ -38,6 +38,8 @@ class Boss_room1 extends Phaser.Scene {
         this.projectileCollisionManager.addProjectileCollisionPlayer(this.boss.projectiles, this.player, this.boss.danni);
         
         this.physics.world.createDebugGraphic();
+
+        this.heartX = 10;
     }
 
     update() {
@@ -53,6 +55,7 @@ class Boss_room1 extends Phaser.Scene {
                 if(!this.boss.bossAttivo){
                     this.boss.activate();  // Attiva il boss
                 } 
+                this.boss.showBarHp();
             }                     
         } else {
             if (this.boss.bossAttivo) {
@@ -66,7 +69,6 @@ class Boss_room1 extends Phaser.Scene {
         }
 
         this.player.showBarHp();
-        this.boss.showBarHp();
 
         this.player.update(this);
     }
