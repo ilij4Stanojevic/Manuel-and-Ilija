@@ -48,6 +48,10 @@ class BootGame extends Phaser.Scene {
         // this.physics.world.createDebugGraphic();
 
         this.heartX = 10;
+
+        this.projectileCollisionManager = new ProjectileCollisionManager(this, this.walls);
+        this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
+        this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals);
     }
 
     update() {

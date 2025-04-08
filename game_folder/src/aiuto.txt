@@ -57,3 +57,9 @@ Per salvare
 git add .
 git commit -m "Descrizione delle modifiche"
 git push
+
+
+reparto link
+
+pause and play game
+https://stackoverflow.com/questions/50988219/pause-and-resume-game-in-phaser-3

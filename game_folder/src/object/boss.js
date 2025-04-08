@@ -21,7 +21,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         
         // Timer per sparare
         this.shootTimer = this.scene.time.addEvent({
-            delay: 700, // Ogni 0.4 secondi
+            delay: 500, // Ogni 0.5 secondi
             callback: this.shoot,
             callbackScope: this,
             loop: true,
@@ -29,7 +29,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         });
         
         this.isDead = false;
-        this.Hp = 200;
+        this.Hp = 1000;
         this.danni = danni;
         this.boss.play(texture);
         this.boss.body.setSize(10, 10);
@@ -110,7 +110,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         let y = 384 - barBossHpHeight - 10; // Posizione Y della barra 
 
         // Calcola la percentuale della salute
-        let progress = Phaser.Math.Clamp(this.Hp / 200, 0, 1);
+        let progress = Phaser.Math.Clamp(this.Hp / 1000, 0, 1);
 
         // Imposta il colore e lo stile della barra
         this.hpBar.fillStyle(0xFF0000, 1); // Verde
