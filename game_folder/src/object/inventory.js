@@ -7,5 +7,9 @@ window.Inventory = {
 
     removeInventory(scene){
         scene.overlay.setVisible(false);
+    },
+
+    addInventory(scene, item){
+        
     }
 };
