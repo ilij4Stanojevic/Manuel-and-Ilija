@@ -1,15 +1,9 @@
 MANUEL
--sistemare interazione porta (pixel in cui interagisce)
-
-- Minerali nella pagina iniziale
-
+-proiettili del player e del boss scompaiono quando sbattono sul muro
 
 ILIJA 
 
 
 
 Generale
--barra di interazione del player
 -difficoltà del boss (Velocità di sparo)
--vite del player
--proiettili del player scompaiono quando sbattono sul muro

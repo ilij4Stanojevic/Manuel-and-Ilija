@@ -31,7 +31,7 @@ class BootGame extends Phaser.Scene {
         let playerHP = this.registry.get("playerHP") || 100;
 
         // Crea il giocatore e lo posiziona sulla mappa, passando parametri come posizione, muri, minerali, e porte
-        this.player = new Player(this, 13.5 * 64, 100, "player", this.walls, this.minerals, playerHP, doors);
+        this.player = new Player(this, 13.5 * 64, 100, "player", this.walls, this.minerals, playerHP, doors, numberMap);
 
         // Imposta i confini della fisica del mondo di gioco (per evitare che il giocatore esca dai limiti della mappa)
         this.physics.world.setBounds(0, 0, widthMap, heightMap);
