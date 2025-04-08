@@ -35,7 +35,7 @@ class Boss_room1 extends Phaser.Scene {
         this.projectileCollisionManager.addProjectileCollisionBoss(this.player.projectiles, this.boss.boss, this.player.damage);
         this.projectileCollisionManager.addProjectileCollisionPlayer(this.boss.projectiles, this.player, this.boss.danni);
         
-        this.physics.world.createDebugGraphic();
+        // this.physics.world.createDebugGraphic();
 
         this.heartX = 10;
     }

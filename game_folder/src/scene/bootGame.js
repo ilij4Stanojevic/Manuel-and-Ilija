@@ -45,7 +45,7 @@ class BootGame extends Phaser.Scene {
         this.projectiles = this.physics.add.group();
 
         // Crea una grafica di debug per il mondo fisico (utile per il debugging)
-        this.physics.world.createDebugGraphic();
+        // this.physics.world.createDebugGraphic();
 
         this.heartX = 10;
     }

@@ -56,6 +56,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.projectiles = scene.add.group();
         this.progressBar = scene.add.graphics();
         this.hpBar = scene.add.graphics();
+        this.hpBar.setDepth(10);
 
         // Variabili di interazione
         this.holdTime = 0;  // Tempo di interazione
@@ -172,12 +173,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // Funzione per gestire i danni subiti dal giocatore
     gotHitted(scene, damage) {
         this.hp -= damage;  // Riduci gli HP del giocatore
-        console.log(this.hp);  // Stampa gli HP correnti
 
         if(this.hp <= 0){
             // Qui puoi aggiungere logica per il Game Over
             // scene.scene.start("GameOver");
-            this.heartLast -= 1;
+            console.log("The player has " + this.heartLast + " lifes left.");
+            if(this.heartLast < 0){
+                scene.scene.start("GameOver");
+            }else{
+                this.heartLast -= 1;
+            }
             this.lifeChecked = false;
             this.hp = 100;
         }
@@ -245,12 +250,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.heartImages = [];
 
         let heartX = 10;
-        console.log("The player has " + this.heartLast + " left.");
         for(let i=0; i<this.heartLast; i++){
             let hL = scene.add.image(heartX, 10,"heart_life").setOrigin(0,0);
             this.heartImages.push(hL);
+            hL.setDisplaySize(48, 48);
             heartX += 10 + 48;
             hL.setScrollFactor(0);
+        }
+        if(this.heartLast < 3){
+            for(let i=0; i< 3-this.heartLast; i++){
+                let hL = scene.add.image(heartX, 10,"heart_dead").setOrigin(0,0);
+                hL.setDisplaySize(48, 48);
+                this.heartImages.push(hL);
+                heartX += 10 + 48;
+                hL.setScrollFactor(0);
+            }
         }
     }
 
