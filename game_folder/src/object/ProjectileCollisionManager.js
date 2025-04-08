@@ -15,7 +15,7 @@ class ProjectileCollisionManager {
     }
 
     projectileDestroy(projectile){
-            projectile.destroy();  // Distrugge il proiettile
+        projectile.destroy();  // Distrugge il proiettile
     }
     // Aggiungi la gestione delle collisioni tra il giocatore e i proiettili
     addProjectileCollisionPlayer(projectilesGroup, player, damage) {

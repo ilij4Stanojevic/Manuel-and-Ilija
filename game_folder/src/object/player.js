@@ -101,29 +101,29 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
             // Ritorna minerale se trovato
             if (nearbyMineral) {
-                    switch(this.numberMap){
-                        case 1:
-                            collisionMap = collisionMap1;
+                switch(this.numberMap){
+                    case 1:
+                        collisionMap = collisionMap1;
+                        break;
+                    case 2:
+                        collisionMap = collisionMap2;
+                        break;
+                }
+                tipo = collisionMap[Math.trunc(my)][Math.trunc(mx)];
+                return {
+                    type: tipo,
+                    object: nearbyMineral,
+                    tileX: Math.floor(nearbyMineral.x / tileSize),
+                    tileY: Math.floor(nearbyMineral.y / tileSize),
+                    onComplete: () => {
+                        nearbyMineral.destroy()
+                        switch(tipo){
+                            case 3:
+                                this.hp +=10;
                             break;
-                        case 2:
-                            collisionMap = collisionMap2;
-                            break;
-                    }
-                    tipo = collisionMap[Math.trunc(my)][Math.trunc(mx)];
-                    return {
-                        type: tipo,
-                        object: nearbyMineral,
-                        tileX: Math.floor(nearbyMineral.x / tileSize),
-                        tileY: Math.floor(nearbyMineral.y / tileSize),
-                        onComplete: () => {
-                            nearbyMineral.destroy()
-                            switch(tipo){
-                                case 3:
-                                    this.hp +=10;
-                                break;
 
-                            }
-                        }// gestione raccolta minerali
+                        }
+                    }// gestione raccolta minerali
                 }
             }
         }
@@ -333,6 +333,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Se si tiene premuto il tasto E, interagisci con gli oggetti vicini
         if (this.keyE.isDown) {
             const interactable = this.getNearbyInteractable();  // Trova un oggetto interagibile
+
+            console.log(interactable);
+
             if (interactable) {
                 this.crossing(interactable, this.delta);  // Esegui l'interazione
                 return;
