@@ -1,6 +1,8 @@
 MANUEL
-- Minerali nella pagina iniziale e fare in modo che li raccolga
-- passaggio di vita e power Up 
+-sistemare interazione porta (pixel in cui interagisce)
+
+- Minerali nella pagina iniziale
+
 
 ILIJA 
 

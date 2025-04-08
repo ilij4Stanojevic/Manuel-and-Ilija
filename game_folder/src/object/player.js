@@ -1,260 +1,243 @@
-let direction; // Usato per determinare la direzione quando il giocatore spara
-// "u" = up (su)
-// "d" = down (giù)
-// "l" = left (sinistra)
-// "r" = right (destra)
-
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, walls, minerals, hpStart, interactionTargets = []) {
+        // Chiamata al costruttore della classe padre (Phaser.Physics.Arcade.Sprite)
         super(scene, x, y, "player");
-    
+
+        // Inizializza lo stato di interazione del giocatore
+        this.interactionActive = true;
+
+        // Aggiungi il player alla scena e alla fisica
         scene.add.existing(this);
         scene.physics.add.existing(this);
-    
+
+        // Imposta i limiti di mondo per evitare che il giocatore esca dallo schermo
         this.setCollideWorldBounds(true);
-        this.setDisplaySize(50, 50);
+        this.setDisplaySize(50, 50); // Imposta la dimensione del giocatore
+
+        // Aggiungi il giocatore come collider con muri e minerali (se passati)
         if (walls) scene.physics.add.collider(this, walls);
         if (minerals) scene.physics.add.collider(this, minerals);
-    
+
+        // Punti vita e danno iniziali
         this.hp = hpStart;
         this.damage = 10;
-        scene.player = this;
-    
+
+        // Direzione iniziale del giocatore (verso il basso)
+        this.direction = "d"; 
+        scene.player = this;  // Assegna il giocatore alla scena
+
+        // Imposta le dimensioni del corpo del giocatore per la fisica
         this.scene.player.body.setSize(26, 40);
-    
+
+        // Aggiungi tasti per il movimento e interazione
         this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.projectiles = scene.add.group();
-        this.projectiles.danni = this.danni;
-    
-        this.holdTime = 0;
-        this.requiredHoldTime = 50;
-        this.delta = 0;
-        this.progressBar = scene.add.graphics();
-        this.hpBar = scene.add.graphics();
-        
-        // Definizione dei tasti per il movimento
-        this.cursorKeys = scene.input.keyboard.createCursorKeys();
         this.keyE = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    
-        this.interactionTargets = interactionTargets; // 👈 Ora è una lista di target
+        this.cursorKeys = scene.input.keyboard.createCursorKeys();
+
+        // Gruppi e grafica per i proiettili e le barre
+        this.projectiles = scene.add.group();
+        this.progressBar = scene.add.graphics();
+        this.hpBar = scene.add.graphics();
+
+        // Variabili di interazione
+        this.holdTime = 0;  // Tempo di interazione
+        this.requiredHoldTime = 50;  // Tempo richiesto per completare l'interazione
+        this.delta = 0;  // Variabile per il delta di aggiornamento
+        this.interactionTargets = interactionTargets;  // Oggetti con cui il giocatore può interagire
     }
-    
-    //controlla se è vicino a oggetti con cui può interagire
-    getNearbyInteractable(tileSize = 64) {
-        let playerTileX = Math.floor(this.x / tileSize);
-        let playerTileY = Math.floor(this.y / tileSize);
-    
-        // Interazione con oggetti interattivi (porte, NPC, ecc.)
+
+    // Funzione per trovare oggetti interagibili vicini al giocatore
+    getNearbyInteractable() {
+        const tileSize = 64;  // Dimensione di un tile nel gioco
+        const maxDistance = 0.7;  // Distanza massima per considerare un oggetto interagibile
+        const px = this.x / tileSize;  // Posizione del giocatore in termini di tile
+        const py = this.y / tileSize;
+
+        // Controlla gli oggetti interagibili nella lista 'interactionTargets'
         for (let target of this.interactionTargets) {
-            if (target.tileX === playerTileX && target.tileY === playerTileY) {
-                return target;
-            }
+            const dist = Phaser.Math.Distance.Between(px, py, target.tileX, target.tileY);
+            if (dist <= maxDistance) return target;  // Ritorna l'oggetto se entro la distanza
         }
-    
-        // Interazione con minerali, solo se esistono
-        if (this.scene.minerals && this.scene.minerals.children) {
+
+        // Controlla se ci sono minerali vicini
+        if (this.scene.minerals?.children) {
             let nearbyMineral = null;
             this.scene.minerals.children.iterate((mineral) => {
                 if (!mineral) return;
-                let mineralTileX = Math.floor(mineral.x / tileSize);
-                let mineralTileY = Math.floor(mineral.y / tileSize);
-                if (Math.abs(playerTileX - mineralTileX) <= 1 && Math.abs(playerTileY - mineralTileY) <= 1) {
-                    nearbyMineral = mineral;
-                }
+                const mx = mineral.x / tileSize;
+                const my = mineral.y / tileSize;
+                const dist = Phaser.Math.Distance.Between(px, py, mx, my);
+                if (dist <= maxDistance) nearbyMineral = mineral;
             });
-    
+
+            // Ritorna minerale se trovato
             if (nearbyMineral) {
                 return {
                     type: "mineral",
                     object: nearbyMineral,
                     tileX: Math.floor(nearbyMineral.x / tileSize),
                     tileY: Math.floor(nearbyMineral.y / tileSize),
-                    onComplete: () => {
-                        nearbyMineral.destroy();
-                    }
+                    onComplete: () => nearbyMineral.destroy()  // Distruggi minerale dopo l'interazione
                 };
             }
         }
-    
-        return null;
-    }
-    
-    
-    // Gestisce il movimento del giocatore
-    movePlayerManager(scene, cursorKeys){
-        let moving = false;
-        let speed = 200; // Velocità del giocatore
-        let flipped = false;
 
-        // Movimento a sinistra
+        return null;  // Nessun oggetto interagibile trovato
+    }
+
+    // Gestisce il movimento del giocatore in base ai tasti premuti
+    movePlayerManager() {
+        const speed = 200;  // Velocità di movimento del giocatore
+        let moving = false;  // Flag per determinare se il giocatore si sta muovendo
+
+        // Movimento verso sinistra
         if (this.cursorKeys.left.isDown || this.keyA.isDown) {
-            scene.player.setVelocityX(-speed); // Muove il giocatore verso sinistra
-            moving = true;
+            this.setVelocityX(-speed);
             this.setFlipX(true);
-            direction = "l"; // Direzione sinistra
-            scene.player.anims.play("player_animRight", true); // Riproduce animazione sinistra
-        } 
-        // Movimento a destra
-        else if (this.cursorKeys.right.isDown || this.keyD.isDown) {
-            scene.player.setVelocityX(speed); // Muove il giocatore verso destra
-            this.setFlipX(false);
+            this.direction = "l";  // Direzione sinistra
+            this.anims.play("player_animRight", true);  // Animazione sinistra
             moving = true;
-            direction = "r"; // Direzione destra
-            scene.player.anims.play("player_animRight", true); // Riproduce animazione destra
         } 
-        // Se non si muove
-        else {
-            scene.player.setVelocityX(0);
-            switch(direction){
+        // Movimento verso destra
+        else if (this.cursorKeys.right.isDown || this.keyD.isDown) {
+            this.setVelocityX(speed);
+            this.setFlipX(false);
+            this.direction = "r";  // Direzione destra
+            this.anims.play("player_animRight", true);  // Animazione destra
+            moving = true;
+        } else {
+            this.setVelocityX(0);  // Ferma il movimento orizzontale
+        }
+
+        // Movimento verso l'alto
+        if (this.cursorKeys.up.isDown || this.keyW.isDown) {
+            this.setVelocityY(-speed);
+            this.direction = "u";  // Direzione su
+            this.anims.play("playerUp", true);  // Animazione su
+            moving = true;
+        } 
+        // Movimento verso il basso
+        else if (this.cursorKeys.down.isDown || this.keyS.isDown) {
+            this.setVelocityY(speed);
+            this.direction = "d";  // Direzione giù
+            this.anims.play("playerDOWN", true);  // Animazione giù
+            moving = true;
+        } else {
+            this.setVelocityY(0);  // Ferma il movimento verticale
+        }
+
+        // Se il giocatore non si muove, riproduce l'animazione di fermo
+        if (!moving) {
+            switch (this.direction) {
                 case "l":
                     this.setFlipX(true);
-                    scene.player.anims.play("player_animStoppedRight", true); // Riproduce animazione ferma
+                    this.anims.play("player_animStoppedRight", true);
                     break;
                 case "r":
                     this.setFlipX(false);
-                    scene.player.anims.play("player_animStoppedRight", true); // Riproduce animazione ferma
-                    break;
-            }
-        }
-
-        // Movimento su
-        if (this.cursorKeys.up.isDown || this.keyW.isDown) {
-            scene.player.setVelocityY(-speed); // Muove il giocatore verso l'alto
-            moving = true;
-            direction = "u"; // Direzione su
-            scene.player.anims.play("playerUp", true); // Riproduce animazione su
-        } 
-        // Movimento giù
-        else if (this.cursorKeys.down.isDown || this.keyS.isDown) {
-            scene.player.setVelocityY(speed); // Muove il giocatore verso il basso
-            moving = true;
-            direction = "d"; // Direzione giù
-            scene.player.anims.play("playerDOWN", true); // Riproduce animazione giù
-        }
-        // Se non si muove
-        else {
-            scene.player.setVelocityY(0);
-            switch(direction){
-                case "d":
-                    scene.player.anims.play("player_animStoppedDown", true); // Animazione ferma giù
+                    this.anims.play("player_animStoppedRight", true);
                     break;
                 case "u":
-                    scene.player.anims.play("player_animStoppedUp", true); // Animazione ferma su
+                    this.anims.play("player_animStoppedUp", true);
+                    break;
+                case "d":
+                    this.anims.play("player_animStoppedDown", true);
                     break;
             }
-        }
-
-        // Inizia a seguire il giocatore con la telecamera quando si muove
-        if (moving) {
-            scene.camera.startFollow(scene.player);
+            this.interactionActive = true;  // Abilita l'interazione quando il giocatore è fermo
+        } else {
+            this.interactionActive = false;  // Disabilita l'interazione durante il movimento
+            this.scene.camera.startFollow(this);  // Segui il giocatore con la telecamera
         }
     }
 
-    // Controlla se il giocatore è sulla stessa posizione della porta
-    checkPositionToDoor(scene, x, y, tileSize){
-        let playerX = Math.floor(this.scene.player.x / tileSize); // Posizione X del giocatore
-        let playerY = Math.floor(this.scene.player.y / tileSize); // Posizione Y del giocatore
+    // Funzione per gestire i danni subiti dal giocatore
+    gotHitted(scene, damage) {
+        this.hp -= damage;  // Riduci gli HP del giocatore
+        console.log(this.hp);  // Stampa gli HP correnti
 
-        let doorPositionX = x; // Posizione X della porta
-        let doorPositionY = y; // Posizione Y della porta
-        if(playerX === doorPositionX && playerY === doorPositionY){
-            return true; // Se il giocatore è sulla porta, ritorna true
+        if (this.hp <= 0) {
+            // Logica di game over (puoi implementarla qui)
         }
-        return false; // Altrimenti, ritorna false
     }
 
-    // Gestisce il danno subito dal giocatore
-    gotHitted(scene, damage){
-        this.hp -= damage; // Sottrae i danni dai punti vita
+    // Funzione per mostrare la barra della salute
+    showBarHp() {
+        this.hpBar.clear();  // Pulisce la barra
 
-        // if(this.hp <= 0){
-        //     // Qui puoi aggiungere logica per il Game Over
-        //     // scene.scene.start("GameOver");
-        // }
-    }
+        let x = 10, y = 10;  // Posizione della barra
+        let progress = Phaser.Math.Clamp(this.hp / 100, 0, 1);  // Calcola la percentuale di salute
 
-    // Mostra la barra della salute
-    showBarHp(){
-        this.hpBar.clear(); // Pulisce la barra
-        let x = 10; // Posizione X della barra
-        let y = 10; // Posizione Y della barra
-
-        // Calcola la percentuale della salute
-        let progress = Phaser.Math.Clamp(this.hp / 100, 0, 1);
-
-        // Imposta il colore e lo stile della barra
-        this.hpBar.fillStyle(0x00ff00, 1); // Verde
-        this.hpBar.lineStyle(2, 0x000000); // Linea nera
-
-        // Disegna la barra di salute
+        // Disegna la barra della salute
+        this.hpBar.fillStyle(0x00ff00, 1);  // Colore verde
+        this.hpBar.lineStyle(2, 0x000000);  // Bordo nero
         this.hpBar.fillRect(x, y, barPlayerHpWidth * progress, barPlayerHpHeight);
         this.hpBar.strokeRect(x, y, barPlayerHpWidth, barPlayerHpHeight);
-
-        this.hpBar.setScrollFactor(0); // La barra non si sposterà con la telecamera
+        this.hpBar.setScrollFactor(0);  // La barra non si muove con la telecamera
     }
-    
-    // Gestisce l'interazione con la porta e la barra di progresso
+
+    // Funzione di interazione con oggetti come porte, minerali, ecc.
     crossing(target, delta) {
-        this.holdTime += delta / 1000;
-    
-        let progress = Phaser.Math.Clamp(this.holdTime / this.requiredHoldTime, 0, 1);
-        let centerX = this.scene.camera.scrollX + (768 / 2) - (barProgressWidth / 2); 
-        let centerY = this.scene.camera.scrollY;
-    
-        this.progressBar.fillStyle(0x00ff00, 1);
-        this.progressBar.lineStyle(2, 0x000000);
-        this.progressBar.fillRect(centerX, centerY, barProgressWidth * progress, barProgressHeight);
-        this.progressBar.strokeRect(centerX, centerY, barProgressWidth, barProgressHeight);
-    
-        if (this.holdTime >= this.requiredHoldTime) {
-            this.progressBar.clear();
+        if (this.interactionActive) {
+            this.holdTime += delta / 1000;  // Aumenta il tempo di interazione
+
+            let progress = Phaser.Math.Clamp(this.holdTime / this.requiredHoldTime, 0, 1);  // Calcola la percentuale di interazione
+            let x = this.x, y = this.y;  // Posizione per la barra di progresso
+
+            this.progressBar.clear();  // Pulisce la barra precedente
+            this.progressBar.fillStyle(0x00ff00, 1);  // Colore verde
+            this.progressBar.lineStyle(2, 0x000000);  // Bordo nero
+            this.progressBar.fillRect(x, y, barProgressWidth * progress, barProgressHeight);
+            this.progressBar.strokeRect(x, y, barProgressWidth, barProgressHeight);
+
+            // Se il tempo di interazione è sufficiente, esegui l'azione e distruggi l'oggetto
+            if (this.holdTime >= this.requiredHoldTime) {
+                this.progressBar.clear();
+                this.holdTime = 0;
+                this.delta = 0;
+                if (target.onComplete) target.onComplete();  // Esegui l'azione di completamento
+            } else {
+                this.delta += 16;
+            }
+        } else {
             this.holdTime = 0;
             this.delta = 0;
-            if (target.onComplete) target.onComplete();
-        } else {
-            this.delta += 16;
+            this.progressBar.clear();  // Pulisce la barra se non c'è interazione
         }
     }
-    
 
-    // Gestisce il tiro del giocatore
-    shoot(scene, player){
-        let proiettile = new Beam(this.scene, this.scene.player, this.scene.avversario, "beamUd", direction);
-        this.projectiles.add(proiettile); // Aggiunge il proiettile al gruppo
+    // Funzione per sparare un proiettile
+    shoot() {
+        const beam = new Beam(this.scene, this, this.scene.avversario, "beamUd", this.direction);
+        this.projectiles.add(beam);  // Aggiungi il proiettile al gruppo
     }
 
     // Metodo di aggiornamento chiamato ad ogni frame
-    update(){
-        // Aggiorna tutti i proiettili
-        this.projectiles.getChildren().forEach(proiettile => {
-            proiettile.update();
-        });
+    update() {
+        this.movePlayerManager();  // Gestisci il movimento del giocatore
+        this.projectiles.getChildren().forEach(p => p.update());  // Aggiorna i proiettili
 
-        // Se il giocatore preme il tasto spazio, spara
-        if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
-            this.shoot(this, this.scene.player);
-        }
-        // Se il tasto "E" è premuto, interagisce con la porta
-        this.projectiles.getChildren().forEach(p => p.update());
-    
+        // Se si preme la barra spaziatrice, spara
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
-            this.shoot(this, this.scene.player);
+            this.shoot();
         }
-    
+
+        // Se si tiene premuto il tasto E, interagisci con gli oggetti vicini
         if (this.keyE.isDown) {
-            const interactable = this.getNearbyInteractable();
-    
+            const interactable = this.getNearbyInteractable();  // Trova un oggetto interagibile
             if (interactable) {
-                this.crossing(interactable, this.delta);
+                this.crossing(interactable, this.delta);  // Esegui l'interazione
                 return;
             }
         }
+
+        // Se non c'è interazione, resetta la barra di progresso
         this.holdTime = 0;
         this.delta = 0;
-        this.progressBar.clear();     
+        this.progressBar.clear();
     }
 }
