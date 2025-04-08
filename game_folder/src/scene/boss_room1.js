@@ -7,14 +7,16 @@ class Boss_room1 extends Phaser.Scene {
         // Aggiunge lo sfondo
         this.background = this.add.image(0, 0, 'bg_boss1').setOrigin(0, 0);
 
+        var numberMap = 2;
+
         // Crea il gruppo per i muri
         this.walls = this.physics.add.staticGroup();
-        this.map = new Map(this, this.walls, 2);
+        this.map = new Map(this, this.walls, numberMap);
 
         let playerHP = this.registry.get("playerHP");
 
         // Crea il player
-        this.player = new Player(this, 11.5 * 64, 0, "player", this.walls, undefined, playerHP, undefined);
+        this.player = new Player(this, 11.5 * 64, 0, "player", this.walls, undefined, playerHP, undefined, numberMap);
         this.physics.world.setBounds(0, 0, widthMap, heightMap);
 
         this.projectileCollisionManager = new ProjectileCollisionManager(this);

@@ -10,12 +10,6 @@ class Minerals extends Phaser.Physics.Arcade.Sprite {
             case 3:
                 texture = "rock2";
                 break;
-            case 4:
-                texture = "rock3";
-                break;
-            case 5:
-                texture = "rock4";
-                break;
             default:
                 texture = "rock1";
         }

@@ -1,5 +1,5 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, walls, minerals, hpStart, interactionTargets = []) {
+    constructor(scene, x, y, texture, walls, minerals, hpStart, interactionTargets = [], numberMap) {
         // Chiamata al costruttore della classe padre (Phaser.Physics.Arcade.Sprite)
         super(scene, x, y, "player");
 
@@ -17,6 +17,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Aggiungi il giocatore come collider con muri e minerali (se passati)
         if (walls) scene.physics.add.collider(this, walls);
         if (minerals) scene.physics.add.collider(this, minerals);
+
+        this.numberMap = numberMap;
 
         // Punti vita e danno iniziali
         this.hp = hpStart;
@@ -64,14 +66,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.delta = 0;  // Variabile per il delta di aggiornamento
         this.interactionTargets = interactionTargets;  // Oggetti con cui il giocatore può interagire
     }
-
+    
     // Funzione per trovare oggetti interagibili vicini al giocatore
     getNearbyInteractable() {
         const tileSize = 64;  // Dimensione di un tile nel gioco
         const maxDistance = 0.7;  // Distanza massima per considerare un oggetto interagibile
         const px = this.x / tileSize;  // Posizione del giocatore in termini di tile
         const py = this.y / tileSize;
-
+        var tipo, collisionMap, mx, my;
         // Controlla gli oggetti interagibili nella lista 'interactionTargets'
         for (let target of this.interactionTargets) {
             const dist = Phaser.Math.Distance.Between(px, py, target.tileX, target.tileY);
@@ -83,21 +85,38 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             let nearbyMineral = null;
             this.scene.minerals.children.iterate((mineral) => {
                 if (!mineral) return;
-                const mx = mineral.x / tileSize;
-                const my = mineral.y / tileSize;
+                mx = mineral.x / tileSize;
+                my = mineral.y / tileSize;
                 const dist = Phaser.Math.Distance.Between(px, py, mx, my);
                 if (dist <= maxDistance) nearbyMineral = mineral;
             });
 
             // Ritorna minerale se trovato
             if (nearbyMineral) {
-                return {
-                    type: "mineral",
-                    object: nearbyMineral,
-                    tileX: Math.floor(nearbyMineral.x / tileSize),
-                    tileY: Math.floor(nearbyMineral.y / tileSize),
-                    onComplete: () => nearbyMineral.destroy()  // Distruggi minerale dopo l'interazione
-                };
+                    switch(this.numberMap){
+                        case 1:
+                            collisionMap = collisionMap1;
+                            break;
+                        case 2:
+                            collisionMap = collisionMap2;
+                            break;
+                    }
+                    tipo = collisionMap[Math.trunc(my)][Math.trunc(mx)];
+                    return {
+                        type: tipo,
+                        object: nearbyMineral,
+                        tileX: Math.floor(nearbyMineral.x / tileSize),
+                        tileY: Math.floor(nearbyMineral.y / tileSize),
+                        onComplete: () => {
+                            nearbyMineral.destroy()
+                            switch(tipo){
+                                case 3:
+                                    this.hp +=10;
+                                break;
+
+                            }
+                        }// gestione raccolta minerali
+                }
             }
         }
 
