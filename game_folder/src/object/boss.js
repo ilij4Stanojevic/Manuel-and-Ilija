@@ -21,7 +21,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         
         // Timer per sparare
         this.shootTimer = this.scene.time.addEvent({
-            delay: 50, // Ogni 0.4 secondi
+            delay: 700, // Ogni 0.4 secondi
             callback: this.shoot,
             callbackScope: this,
             loop: true,

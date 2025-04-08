@@ -176,9 +176,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         if(this.hp <= 0){
             // Qui puoi aggiungere logica per il Game Over
-            // scene.scene.start("GameOver");
-            console.log("The player has " + this.heartLast + " lifes left.");
-            if(this.heartLast < 0){
+            
+            if(this.heartLast <= 0){
                 scene.scene.start("GameOver");
             }else{
                 this.heartLast -= 1;
@@ -189,7 +188,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Mostra la barra della salute
-    showBarHp(){
+    showBarHp(scene){
         this.hpBar.clear(); // Pulisce la barra
         let x = 10; // Posizione X della barra
         let y = 20 + 48; // Posizione Y della barra
@@ -249,16 +248,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         this.heartImages = [];
 
+        let heartsToDraw = this.heartLast;
         let heartX = 10;
-        for(let i=0; i<this.heartLast; i++){
+        for(let i=0; i<heartsToDraw; i++){
             let hL = scene.add.image(heartX, 10,"heart_life").setOrigin(0,0);
             this.heartImages.push(hL);
             hL.setDisplaySize(48, 48);
             heartX += 10 + 48;
             hL.setScrollFactor(0);
         }
+
         if(this.heartLast < 3){
-            for(let i=0; i< 3-this.heartLast; i++){
+            for(let i=0; i< 3 - heartsToDraw; i++){
                 let hL = scene.add.image(heartX, 10,"heart_dead").setOrigin(0,0);
                 hL.setDisplaySize(48, 48);
                 this.heartImages.push(hL);
@@ -305,7 +306,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Se non c'è interazione, resetta la barra di progresso
         this.holdTime = 0;
         this.delta = 0;
-        this.progressBar.clear();
         this.progressBar.clear();
     }
 }
