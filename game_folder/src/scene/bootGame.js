@@ -12,7 +12,6 @@ class BootGame extends Phaser.Scene{
                 this.scene.start("Boss_room1");
             }}
         ];
-
         var numberMap = 1; // Numero di mappa in cui si trova il giocatore
 
         this.walls = this.physics.add.staticGroup(); // Aggiunge l'oggetto walls per i bordi
@@ -20,6 +19,9 @@ class BootGame extends Phaser.Scene{
 
         this.map = new Map(this, this.walls, numberMap, this.minerals); // Chiama la classe Map per creare la mappa
         
+        let playerHP = this.registry.get("playerHP") || 100;
+        //let playerPowerUps = this.registry.get("playerPowerUps") || [];
+
         this.player = new Player(this, 13.5 * 64, 100, "player", this.walls, this.minerals, 100, doors); // Chiama la classe Player per crearlo
 
         this.physics.world.setBounds(0, 0, widthMap, heightMap); // Mette i bordi esterni (es. quando il giocatore attraversava la porta, usciva dalla mappa)
@@ -37,7 +39,6 @@ class BootGame extends Phaser.Scene{
     }
 
     update(){
-        this.player.movePlayerManager(this, this.cursorKeys); // Funzione che fa muovere il giocatore
         this.player.update(this);
         this.player.showBarHp(this);
 
