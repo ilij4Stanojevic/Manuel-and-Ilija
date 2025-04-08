@@ -1,9 +1,10 @@
 MANUEL
--proiettili del player e del boss scompaiono quando sbattono sul muro
+- risolvere la speed (la somma)
 
 ILIJA 
-
+- inventario
 
 
 Generale
--difficoltà del boss (Velocità di sparo)
+- difficoltà del boss (Velocità di sparo)
+- diminuire la speed player

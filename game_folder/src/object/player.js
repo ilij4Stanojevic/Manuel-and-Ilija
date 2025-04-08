@@ -42,6 +42,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.progressBar = scene.add.graphics();
         this.hpBar = scene.add.graphics();
 
+        this.overlay = scene.add.graphics();
+        this.overlay.fillStyle(0x000000, 0.6); // Black with 60% opacity
+        this.overlay.fillRect(0, 0, 768, 384);
+        this.overlay.setDepth(100); // Make sure it's above everything else
+        this.overlay.setScrollFactor(0);
+        this.overlay.setVisible(false);
+
         this.heartLast = 3;
         this.lifeChecked = false;
         
@@ -52,7 +59,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        this.cursorKeys = scene.input.keyboard.createCursorKeys();
+        this.keyQ = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        
 
         // Gruppi e grafica per i proiettili e le barre
         this.projectiles = scene.add.group();
@@ -125,7 +133,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // Gestisce il movimento del giocatore in base ai tasti premuti
     movePlayerManager() {
-        const speed = 200;  // Velocità di movimento del giocatore
+        const speed = 100;  // Velocità di movimento del giocatore
         let moving = false;  // Flag per determinare se il giocatore si sta muovendo
 
         // Movimento verso sinistra
@@ -287,7 +295,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
     }
-
     // Metodo di aggiornamento chiamato ad ogni frame
     update(scene){
         if(this.lifeChecked == false){
@@ -319,6 +326,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if (interactable) {
                 this.crossing(interactable, this.delta);  // Esegui l'interazione
                 return;
+            }
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(this.keyQ)) {
+            if(!this.QisPressed){
+                Inventory.showInventory(this);
+                this.QisPressed = true;
+            }else{
+                Inventory.removeInventory(this);
+                this.QisPressed = false;
             }
         }
 
