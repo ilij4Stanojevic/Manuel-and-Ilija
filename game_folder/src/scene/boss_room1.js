@@ -44,7 +44,7 @@ class Boss_room1 extends Phaser.Scene {
         this.heartX = 10;
     }
 
-    update() {
+    update(time, delta) {
         // Aggiorna tutti i proiettili attivi
         this.boss.projectiles.getChildren().forEach(proiettile_b => proiettile_b.update());
 
@@ -67,7 +67,7 @@ class Boss_room1 extends Phaser.Scene {
             this.boss.update(this.player);  // Muove il boss
         }
 
-        this.player.showBarHp(this);
+        this.player.showBarHp(time, delta, this);
         
         this.player.update(this);
     }

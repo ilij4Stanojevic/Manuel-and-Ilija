@@ -59,7 +59,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); // tasto per sparare
-        this.shitf = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        this.shift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         this.keyQ = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         
 
@@ -329,7 +329,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let heartsToDraw = this.heartLast;
         let heartX = 10;
         for(let i=0; i<heartsToDraw; i++){
-            let hL = scene.add.image(heartX, 10,"heart_life").setOrigin(0,0);
+            let hL = this.scene.add.image(heartX, 10,"heart_life").setOrigin(0,0);
             this.heartImages.push(hL);
             hL.setDisplaySize(48, 48);
             heartX += 10 + 48;
@@ -338,7 +338,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         if(this.heartLast < 3){
             for(let i=0; i< 3 - heartsToDraw; i++){
-                let hL = scene.add.image(heartX, 10,"heart_dead").setOrigin(0,0);
+                let hL = this.scene.add.image(heartX, 10,"heart_dead").setOrigin(0,0);
                 hL.setDisplaySize(48, 48);
                 this.heartImages.push(hL);
                 heartX += 10 + 48;
