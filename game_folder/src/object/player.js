@@ -275,7 +275,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let progress = Phaser.Math.Clamp(this.endurance / 100, 0, 1);
 
         // Imposta il colore e lo stile della barra
-        this.staminaBar.fillStyle(0x00ff00, 1); // Verde
+        this.staminaBar.fillStyle(0x00b6ff, 1); // Verde
         this.staminaBar.lineStyle(2, 0x000000); // Linea nera
 
         // Disegna la barra di salute

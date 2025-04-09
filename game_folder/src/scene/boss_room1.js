@@ -69,6 +69,9 @@ class Boss_room1 extends Phaser.Scene {
 
         this.player.showBarHp(time, delta, this);
         
-        this.player.update(this);
+        this.player.update(time, delta, this);
+
+        // barra della stamina
+        this.player.showBarStamina(this);
     }
 }
