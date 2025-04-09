@@ -128,7 +128,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     tileX: Math.floor(mx),
                     tileY: Math.floor(my),
                     onComplete: (scene) => {
-                        Inventory.addInventory(scene, nearbyMineral);
+                        Inventory.addInventory(scene, interactable);
                         nearbyMineral.destroy()
                         switch(tipo){
                             case 3:
@@ -376,6 +376,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             const interactable = this.getNearbyInteractable();  // Trova un oggetto interagibile
 
             if (interactable) {
+                console.log(interactable.type);
                 this.crossing(scene, interactable, this.delta);  // Esegui l'interazione
                 return;
             }

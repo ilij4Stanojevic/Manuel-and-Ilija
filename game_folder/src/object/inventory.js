@@ -15,12 +15,11 @@ window.Inventory = {
 
         this.inventoryArray.push(item);
 
-        console.log(item);
-
-        // for(let i=0; i<this.inventoryArray.length; i++){
-        //     console.log('Item n '+i+' :');
-        //     console.log(this.inventoryArray[i]);
-        // }
+        for(let i=1; i<this.inventoryArray.length; i++){
+            // console.log('Item n '+i+' :');
+            // console.log(this.inventoryArray[i]);
+            console.log(this.inventoryArray[i].tipo);
+        }
 
         // console.log('Inventory end');
     }
