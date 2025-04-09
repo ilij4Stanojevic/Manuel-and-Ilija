@@ -3,7 +3,7 @@ MANUEL
 
 ILIJA 
 - inventario
-
+- risolvere problema tipo dei minerali
 
 Generale
 - difficoltà del boss (Velocità di sparo)

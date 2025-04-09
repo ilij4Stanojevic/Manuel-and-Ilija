@@ -90,17 +90,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Controlla se ci sono minerali vicini
         if (this.scene.minerals?.children) {
-            let nearbyMineral = null;
+            var nearbyMineral = null;
             this.scene.minerals.children.iterate((mineral) => {
                 if (!mineral) return;
                 mx = mineral.x / tileSize;
                 my = mineral.y / tileSize;
                 const dist = Phaser.Math.Distance.Between(px, py, mx, my);
-                if (dist <= maxDistance) nearbyMineral = mineral;
+                // console.log("The value of dist is: " + dist);
+                
+                if (dist <= maxDistance){
+                    // console.log("The value of dist is " + dist + "; The value of maxDistance is : " + maxDistance);
+                    nearbyMineral = mineral;
+                }
             });
 
             // Ritorna minerale se trovato
             if (nearbyMineral) {
+                mx = nearbyMineral.x / tileSize;
+                my = nearbyMineral.y / tileSize;
                 switch(this.numberMap){
                     case 1:
                         collisionMap = collisionMap1;
@@ -113,9 +120,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 return {
                     type: tipo,
                     object: nearbyMineral,
-                    tileX: Math.floor(nearbyMineral.x / tileSize),
-                    tileY: Math.floor(nearbyMineral.y / tileSize),
-                    onComplete: () => {
+                    tileX: Math.floor(mx),
+                    tileY: Math.floor(my),
+                    onComplete: (scene) => {
+                        Inventory.addInventory(scene, nearbyMineral);
                         nearbyMineral.destroy()
                         switch(tipo){
                             case 3:
@@ -244,7 +252,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Funzione di interazione con oggetti come porte, minerali, ecc.
-    crossing(target, delta) {
+    crossing(scene, target, delta) {
         if (this.interactionActive) {
             this.holdTime += delta / 1000;  // Aumenta il tempo di interazione
 
@@ -262,7 +270,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.progressBar.clear();
                 this.holdTime = 0;
                 this.delta = 0;
-                if (target.onComplete) target.onComplete();  // Esegui l'azione di completamento
+                if (target.onComplete) target.onComplete(scene);  // Esegui l'azione di completamento
             } else {
                 this.delta += 16;
             }
@@ -334,10 +342,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.keyE.isDown) {
             const interactable = this.getNearbyInteractable();  // Trova un oggetto interagibile
 
-            console.log(interactable);
-
             if (interactable) {
-                this.crossing(interactable, this.delta);  // Esegui l'interazione
+                this.crossing(scene, interactable, this.delta);  // Esegui l'interazione
                 return;
             }
         }
