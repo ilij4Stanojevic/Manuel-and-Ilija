@@ -42,6 +42,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.progressBar = scene.add.graphics();
         this.hpBar = scene.add.graphics();
 
+        this.overlay = scene.add.graphics();
+        this.overlay.fillStyle(0x000000, 0.6); // Black with 60% opacity
+        this.overlay.fillRect(0, 0, 768, 384);
+        this.overlay.setDepth(100); // Make sure it's above everything else
+        this.overlay.setScrollFactor(0);
+        this.overlay.setVisible(false);
+
         this.heartLast = 3;
         this.lifeChecked = false;
         
@@ -52,7 +59,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); // tasto per sparare
-        this.shift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        this.shitf = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        this.keyQ = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        
 
         // Gruppi e grafica per i proiettili e le barre
         this.projectiles = scene.add.group();
@@ -86,40 +95,48 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Controlla se ci sono minerali vicini
         if (this.scene.minerals?.children) {
-            let nearbyMineral = null;
+            var nearbyMineral = null;
             this.scene.minerals.children.iterate((mineral) => {
                 if (!mineral) return;
                 mx = mineral.x / tileSize;
                 my = mineral.y / tileSize;
                 const dist = Phaser.Math.Distance.Between(px, py, mx, my);
-                if (dist <= maxDistance) nearbyMineral = mineral;
+                // console.log("The value of dist is: " + dist);
+                
+                if (dist <= maxDistance){
+                    // console.log("The value of dist is " + dist + "; The value of maxDistance is : " + maxDistance);
+                    nearbyMineral = mineral;
+                }
             });
 
             // Ritorna minerale se trovato
             if (nearbyMineral) {
-                    switch(this.numberMap){
-                        case 1:
-                            collisionMap = collisionMap1;
+                mx = nearbyMineral.x / tileSize;
+                my = nearbyMineral.y / tileSize;
+                switch(this.numberMap){
+                    case 1:
+                        collisionMap = collisionMap1;
+                        break;
+                    case 2:
+                        collisionMap = collisionMap2;
+                        break;
+                }
+                tipo = collisionMap[Math.trunc(my)][Math.trunc(mx)];
+                return {
+                    type: tipo,
+                    object: nearbyMineral,
+                    tileX: Math.floor(mx),
+                    tileY: Math.floor(my),
+                    onComplete: (scene) => {
+                        Inventory.addInventory(scene, nearbyMineral);
+                        nearbyMineral.destroy()
+                        switch(tipo){
+                            case 3:
+                                this.hp +=10;
                             break;
-                        case 2:
-                            collisionMap = collisionMap2;
-                            break;
-                    }
-                    tipo = collisionMap[Math.trunc(my)][Math.trunc(mx)];
-                    return {
-                        type: tipo,
-                        object: nearbyMineral,
-                        tileX: Math.floor(nearbyMineral.x / tileSize),
-                        tileY: Math.floor(nearbyMineral.y / tileSize),
-                        onComplete: () => {
-                            nearbyMineral.destroy()
-                            switch(tipo){
-                                case 3:
-                                    this.hp +=10;
-                                break;
 
-                            }
-                        }// gestione raccolta minerali
+                        }
+                    }// gestione raccolta minerali
                 }
             }
         }
@@ -268,7 +285,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Funzione di interazione con oggetti come porte, minerali, ecc.
-    crossing(target, delta) {
+    crossing(scene, target, delta) {
         if (this.interactionActive) {
             this.holdTime += delta / 1000;  // Aumenta il tempo di interazione
 
@@ -286,7 +303,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.progressBar.clear();
                 this.holdTime = 0;
                 this.delta = 0;
-                if (target.onComplete) target.onComplete();  // Esegui l'azione di completamento
+                if (target.onComplete) target.onComplete(scene);  // Esegui l'azione di completamento
             } else {
                 this.delta += 16;
             }
@@ -329,7 +346,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
     }
-
     // Metodo di aggiornamento chiamato ad ogni frame
     update(time, delta, scene){
         
@@ -358,9 +374,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Se si tiene premuto il tasto E, interagisci con gli oggetti vicini
         if (this.keyE.isDown) {
             const interactable = this.getNearbyInteractable();  // Trova un oggetto interagibile
+
             if (interactable) {
-                this.crossing(interactable, this.delta);  // Esegui l'interazione
+                this.crossing(scene, interactable, this.delta);  // Esegui l'interazione
                 return;
+            }
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(this.keyQ)) {
+            if(!this.QisPressed){
+                Inventory.showInventory(this);
+                this.QisPressed = true;
+            }else{
+                Inventory.removeInventory(this);
+                this.QisPressed = false;
             }
         }
 

@@ -1,8 +1,10 @@
 MANUEL
+- risolvere la speed (la somma)
 
 ILIJA 
-
-
+- inventario
+- risolvere problema tipo dei minerali
 
 Generale
--difficoltà del boss (Velocità di sparo)
+- difficoltà del boss (Velocità di sparo)
+- diminuire la speed player
