@@ -20,9 +20,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.numberMap = numberMap;
 
-        // Punti vita e danno iniziali
+        // Punti vita, danno e stamina iniziali
         this.hp = hpStart;
         this.damage = 10;
+        this.endurance = 100; // durata stamina
 
         // Direzione iniziale del giocatore (verso il basso)
         this.direction = "d"; 
@@ -51,12 +52,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); // tasto per sparare
-        this.shitf = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        this.shift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
         // Gruppi e grafica per i proiettili e le barre
         this.projectiles = scene.add.group();
         this.progressBar = scene.add.graphics();
         this.hpBar = scene.add.graphics();
+        this.staminaBar = scene.add.graphics();
         this.hpBar.setDepth(10);
 
         // Variabili di interazione
@@ -64,6 +66,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.requiredHoldTime = 50;  // Tempo richiesto per completare l'interazione
         this.delta = 0;  // Variabile per il delta di aggiornamento
         this.interactionTargets = interactionTargets;  // Oggetti con cui il giocatore può interagire
+
+        this.moving = false;  // Flag per determinare se il giocatore si sta muovendo
+
     }
     
     // Funzione per trovare oggetti interagibili vicini al giocatore
@@ -123,58 +128,66 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Gestisce il movimento del giocatore in base ai tasti premuti
-    movePlayerManager() {
-        
-        var speed = 100;  // Velocità di movimento del giocatore
-        var staminaBoost = 2; // moltiplicatore velocità corsa
-        var endurance = 100; // durata stamina
-        var staminaActive = true;
-        let moving = false;  // Flag per determinare se il giocatore si sta muovendo
-
-        // movimento stamina 
-        /*
-        if(this.shitf.isDown && staminaActive){
-
-        }
-        */
-        // Movimento verso sinistra
+    movePlayerManager(delta) {
+        var baseSpeed = 100;
+        var speed = baseSpeed;
+        var staminaBoost = 2;
+    
+        this.staminaConsumeRate = 33;
+        this.staminaChargeRate = 10;
+    
+        this.moving = false;
+    
+        // --- Gestione MOVIMENTO ---
         if (this.keyA.isDown) {
-            this.setVelocityX(-speed);
+            this.setVelocityX(-1);
             this.setFlipX(true);
-            this.direction = "l";  // Direzione sinistra
-            this.anims.play("player_animRight", true);  // Animazione sinistra
-            moving = true;
-        } 
-        // Movimento verso destra
-        else if (this.keyD.isDown) {
-            this.setVelocityX(speed);
+            this.direction = "l";
+            this.anims.play("player_animRight", true);
+            this.moving = true;
+        } else if (this.keyD.isDown) {
+            this.setVelocityX(1);
             this.setFlipX(false);
-            this.direction = "r";  // Direzione destra
-            this.anims.play("player_animRight", true);  // Animazione destra
-            moving = true;
+            this.direction = "r";
+            this.anims.play("player_animRight", true);
+            this.moving = true;
         } else {
-            this.setVelocityX(0);  // Ferma il movimento orizzontale
+            this.setVelocityX(0);
         }
-
-        // Movimento verso l'alto
+    
         if (this.keyW.isDown) {
-            this.setVelocityY(-speed);
-            this.direction = "u";  // Direzione su
-            this.anims.play("playerUp", true);  // Animazione su
-            moving = true;
+            this.setVelocityY(-1);
+            this.direction = "u";
+            this.anims.play("playerUp", true);
+            this.moving = true;
+        } else if (this.keyS.isDown) {
+            this.setVelocityY(1);
+            this.direction = "d";
+            this.anims.play("playerDOWN", true);
+            this.moving = true;
+        } else {
+            this.setVelocityY(0);
         }
-        // Movimento verso il basso
-        else if (this.keyS.isDown) {
-            this.setVelocityY(speed);
-            this.direction = "d";  // Direzione giù
-            this.anims.play("playerDOWN", true);  // Animazione giù
-            moving = true;
-        }else {
-            this.setVelocityY(0);  // Ferma il movimento verticale
+    
+        // --- Gestione STAMINA e velocità ---
+        if (this.shift.isDown && this.endurance > 0 && this.moving) {
+            speed *= staminaBoost;
+            this.endurance -= this.staminaConsumeRate * (delta / 1000);
+        } else {
+            speed = baseSpeed;
+            if (this.endurance < 100) {
+                this.endurance += this.staminaChargeRate * (delta / 1000);
+            }
         }
-
-        // Se il giocatore non si muove, riproduce l'animazione di fermo
-        if (!moving) {
+    
+        this.endurance = Phaser.Math.Clamp(this.endurance, 0, 100);
+    
+        // Applica velocità finale (dopo boost)
+        this.setVelocityX(this.body.velocity.x * speed);
+        this.setVelocityY(this.body.velocity.y * speed);
+    
+        // --- Gestione animazione di fermo ---
+        if (!this.moving) {
             switch (this.direction) {
                 case "l":
                     this.setFlipX(true);
@@ -191,12 +204,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     this.anims.play("player_animStoppedDown", true);
                     break;
             }
-            this.interactionActive = true;  // Abilita l'interazione quando il giocatore è fermo
+            this.interactionActive = true;
         } else {
-            this.interactionActive = false;  // Disabilita l'interazione durante il movimento
-            this.scene.camera.startFollow(this);  // Segui il giocatore con la telecamera
+            this.interactionActive = false;
+            this.scene.camera.startFollow(this);
         }
     }
+    
 
     // Funzione per gestire i danni subiti dal giocatore
     gotHitted(scene, damage) {
@@ -232,6 +246,25 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.hpBar.fillRect(x, y, barPlayerHpWidth * progress, barPlayerHpHeight);
         this.hpBar.strokeRect(x, y, barPlayerHpWidth, barPlayerHpHeight);
         this.hpBar.setScrollFactor(0);  // La barra non si muove con la telecamera
+    }
+
+    // Mostra la barra della salute
+    showBarStamina(scene){
+        this.staminaBar.clear(); // Pulisce la barra
+        let x = 10; // Posizione X della barra
+        let y = 384 - 20; // Posizione Y della barra
+
+        // Calcola la percentuale della salute
+        let progress = Phaser.Math.Clamp(this.endurance / 100, 0, 1);
+
+        // Imposta il colore e lo stile della barra
+        this.staminaBar.fillStyle(0x00ff00, 1); // Verde
+        this.staminaBar.lineStyle(2, 0x000000); // Linea nera
+
+        // Disegna la barra di salute
+        this.staminaBar.fillRect(x, y, barPlayerStaminaWidth * progress, barPlayerStaminaHeight);
+        this.staminaBar.strokeRect(x, y, barPlayerStaminaWidth, barPlayerStaminaHeight);
+        this.staminaBar.setScrollFactor(0);  // La barra non si muove con la telecamera
     }
 
     // Funzione di interazione con oggetti come porte, minerali, ecc.
@@ -298,13 +331,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Metodo di aggiornamento chiamato ad ogni frame
-    update(scene){
+    update(time, delta, scene){
+        
+        this.movePlayerManager(delta)
         if(this.lifeChecked == false){
             this.initHearts(scene);
             this.lifeChecked = true;
         }
-
-        this.movePlayerManager();
 
         // Aggiorna tutti i proiettili
         this.projectiles.getChildren().forEach(proiettile => {

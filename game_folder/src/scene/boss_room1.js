@@ -68,7 +68,7 @@ class Boss_room1 extends Phaser.Scene {
         }
 
         this.player.showBarHp(this);
-
+        
         this.player.update(this);
     }
 }

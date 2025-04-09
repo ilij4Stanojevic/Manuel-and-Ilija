@@ -7,6 +7,8 @@ const barPlayerHpWidth = (48 * 3) + 20;
 const barPlayerHpHeight = 20;
 const barBossHpWidth = 200;
 const barBossHpHeight = 20;
+const barPlayerStaminaWidth = (48 * 3);
+const barPlayerStaminaHeight = 10;
 
 class PreLoader extends Phaser.Scene{
     constructor(){

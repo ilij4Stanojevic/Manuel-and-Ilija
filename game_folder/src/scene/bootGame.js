@@ -54,11 +54,12 @@ class BootGame extends Phaser.Scene {
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals);
     }
 
-    update() {
+    update(time, delta) {
         // Aggiorna la logica del giocatore (movimento, interazioni, ecc.)
-        this.player.update(this);
-
+        this.player.update(time, delta, this);
         // Mostra la barra della salute del giocatore
         this.player.showBarHp(this);
+        // barra della stamina
+        this.player.showBarStamina(this);
     }
 }
