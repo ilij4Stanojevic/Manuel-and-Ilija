@@ -4,6 +4,8 @@ class Boss_room1 extends Phaser.Scene {
     }
 
     create() {
+        this.playerCanMove = true
+        this.canUpdate = true;
         // Aggiunge lo sfondo
         this.background = this.add.image(0, 0, 'bg_boss1').setOrigin(0, 0);
 
@@ -69,8 +71,9 @@ class Boss_room1 extends Phaser.Scene {
 
         this.player.showBarHp(time, delta, this);
         
-        this.player.update(time, delta, this);
-
+        if(this.canUpdate){
+            this.player.update(time, delta, this);
+        }
         // barra della stamina
         this.player.showBarStamina(this);
     }

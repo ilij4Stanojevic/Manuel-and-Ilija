@@ -36,5 +36,15 @@ class ProjectileCollisionManager {
             this.projectileDestroy(projectile);
         });
     }
+    addProjectileCollisionProjectilesTutorial(projectilesGroup, enemie){
+        this.scene.physics.add.overlap(projectilesGroup, enemie, (projectile, enemie) => {
+            this.projectileDestroy(projectile);
+            enemie.hp -= 10;
+            if(enemie.hp <= 0){
+                enemie.destroy();
+                this.scene.guardiaMorta = true;
+            }
+        });
+    }
     
 }
