@@ -32,7 +32,7 @@ class GameOver extends Phaser.Scene {
         // Azione per tornare al menu
         this.input.on('gameobjectdown', (pointer, gameObject) => {
             if (gameObject === this.backToMenu) {
-                this.scene.start("PreLoader");  // Torni al preloader
+                this.scene.start("BootGame");  // Torni al preloader
             }
         });
     }
