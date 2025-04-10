@@ -12,6 +12,7 @@ class Minerals extends Phaser.Physics.Arcade.Sprite {
                 break;
             default:
                 texture = "rock1";
+                break;
         }
 
         // Costruttore padre

@@ -23,6 +23,8 @@ class PreLoader extends Phaser.Scene{
         this.load.image("exit_button", "assets/images/Exit_button.png");
         this.load.image("heart_life", "assets/images/heart_life.png");
         this.load.image("heart_dead", "assets/images/heart_dead.png");
+        this.load.image("mineral1", "assets/images/mineral1.png");
+        this.load.image("mineral2", "assets/images/mineral2.png");
         
         this.load.spritesheet("player", "assets/spritesheets/Astronaut.png",{
             frameWidth: 64,

@@ -1,6 +1,6 @@
 window.onload = function(){
     gameSettings = {
-        speed: 100
+        speedPlayer: 100
     }
     config = {
         width: 768,

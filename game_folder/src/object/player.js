@@ -42,13 +42,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.progressBar = scene.add.graphics();
         this.hpBar = scene.add.graphics();
 
-        this.overlay = scene.add.graphics();
-        this.overlay.fillStyle(0x000000, 0.6); // Black with 60% opacity
-        this.overlay.fillRect(0, 0, 768, 384);
-        this.overlay.setDepth(100); // Make sure it's above everything else
-        this.overlay.setScrollFactor(0);
-        this.overlay.setVisible(false);
+        scene.overlay = scene.add.graphics();
+        scene.overlay.fillStyle(0x000000, 0.6); // Black with 60% opacity
+        scene.overlay.fillRect(0, 0, 768, 384);
+        scene.overlay.setDepth(100); // Make sure it's above everything else
+        scene.overlay.setScrollFactor(0);
+        scene.overlay.setVisible(false);
 
+        scene.inventoryContainer = scene.add.container(768/2, 40);
+    
         this.heartLast = 3;
         this.lifeChecked = false;
         
@@ -77,11 +79,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.interactionTargets = interactionTargets;  // Oggetti con cui il giocatore può interagire
 
         this.moving = false;  // Flag per determinare se il giocatore si sta muovendo
-
     }
     
     // Funzione per trovare oggetti interagibili vicini al giocatore
-    getNearbyInteractable() {
+    getNearbyInteractable(scene) {
         const tileSize = 64;  // Dimensione di un tile nel gioco
         const maxDistance = 0.7;  // Distanza massima per considerare un oggetto interagibile
         const px = this.x / tileSize;  // Posizione del giocatore in termini di tile
@@ -122,20 +123,28 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                         break;
                 }
                 tipo = collisionMap[Math.trunc(my)][Math.trunc(mx)];
+
+                let imageMineral;
+                let nameMineral;
+                switch(tipo){
+                    case 2:
+                        imageMineral = "mineral1";
+                        nameMineral = "PowerRel";
+                        break;
+                    case 3:
+                        imageMineral = "mineral2";
+                        nameMineral = "HealtRel";
+                        break;
+                }
+
                 return {
                     type: tipo,
                     object: nearbyMineral,
                     tileX: Math.floor(mx),
                     tileY: Math.floor(my),
                     onComplete: (scene) => {
-                        Inventory.addInventory(scene, interactable);
+                        Inventory.addItem(scene, tipo, imageMineral, nameMineral);
                         nearbyMineral.destroy()
-                        switch(tipo){
-                            case 3:
-                                this.hp +=10;
-                            break;
-
-                        }
                     }// gestione raccolta minerali
                 }
             }
@@ -146,7 +155,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // Gestisce il movimento del giocatore in base ai tasti premuti
     movePlayerManager(delta) {
-        var baseSpeed = 100;
+        var baseSpeed = gameSettings.speedPlayer;
         var speed = baseSpeed;
         var staminaBoost = 2;
     
@@ -237,6 +246,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             // Qui puoi aggiungere logica per il Game Over
             
             if(this.heartLast <= 0){
+                Inventory.removeAll();
                 scene.scene.start("GameOver");
             }else{
                 this.heartLast -= 1;
@@ -348,7 +358,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
     // Metodo di aggiornamento chiamato ad ogni frame
     update(time, delta, scene){
-        
         this.movePlayerManager(delta)
         if(this.lifeChecked == false){
             this.initHearts(scene);
@@ -373,10 +382,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Se si tiene premuto il tasto E, interagisci con gli oggetti vicini
         if (this.keyE.isDown) {
-            const interactable = this.getNearbyInteractable();  // Trova un oggetto interagibile
+            const interactable = this.getNearbyInteractable(scene);  // Trova un oggetto interagibile
 
             if (interactable) {
-                console.log(interactable.type);
                 this.crossing(scene, interactable, this.delta);  // Esegui l'interazione
                 return;
             }
@@ -384,10 +392,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         if (Phaser.Input.Keyboard.JustDown(this.keyQ)) {
             if(!this.QisPressed){
-                Inventory.showInventory(this);
+                Inventory.showInventory(scene);
                 this.QisPressed = true;
             }else{
-                Inventory.removeInventory(this);
+                Inventory.removeInventory(scene);
                 this.QisPressed = false;
             }
         }
