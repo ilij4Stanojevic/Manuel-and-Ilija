@@ -14,6 +14,6 @@ class Menu extends Phaser.Scene{
         this.menu_button.setDisplaySize(100, 100/3);
 
         this.menu_button.setInteractive();
-        this.input.on('gameobjectdown', () => this.scene.start('BootGame'));
+        this.input.on('gameobjectdown', () => this.scene.start('Tutorial'));
     }
 }

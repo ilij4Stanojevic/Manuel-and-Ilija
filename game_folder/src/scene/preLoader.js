@@ -23,6 +23,25 @@ class PreLoader extends Phaser.Scene{
         this.load.image("exit_button", "assets/images/Exit_button.png");
         this.load.image("heart_life", "assets/images/heart_life.png");
         this.load.image("heart_dead", "assets/images/heart_dead.png");
+        this.load.image("spaceship", "assets/images/rover.png");
+        this.load.image("background_tutorial", "assets/images/tutorial_map.png");
+        this.load.image("muro", "assets/images/muro.png");
+        this.load.image("pavimento", "assets/images/pavimento.png");
+        this.load.image("open_door_tutorial", "assets/images/open_door_tutorial.png");
+        this.load.image("pavimento_door_tutorial", "assets/images/pavimento_porta_tutorial.png");
+        this.load.image("keyW", "assets/images/W.png");
+        this.load.image("keyA", "assets/images/A.png");
+        this.load.image("keyS", "assets/images/S.png");
+        this.load.image("keyD", "assets/images/D.png");
+        this.load.image("keyE", "assets/images/E.png");
+        this.load.image("keyQ", "assets/images/Q.png");
+        this.load.image("spacebar", "assets/images/SPACE.png");
+        this.load.image("shift", "assets/images/SHIFT.png");
+        this.load.image("piece_of_paper", "assets/images/piece_of_paper.png");
+        this.load.image("control_panel", "assets/images/Lab_Control_Panel.png");
+        this.load.image("open_bigDoor_tutorial", "assets/images/open_bigDoor_tutorial.png");
+        document.fonts.load('32px font_tutorial');
+
         
         this.load.spritesheet("player", "assets/spritesheets/Astronaut.png",{
             frameWidth: 64,
