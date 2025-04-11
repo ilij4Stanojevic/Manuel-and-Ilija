@@ -23,8 +23,8 @@ window.onload = function(){
 
         scene: [
             PreLoader,
-            Tutorial,
-            Menu,
+            // Tutorial,
+            // Menu,
             BootGame,
             Boss_room1,
             GameOver

@@ -4,3 +4,7 @@ ILIJA
 - inventario
 
 Generale
+
+- velocità player shift
+- diminuire la barra della vita e i cuori
+- barra d'interazione

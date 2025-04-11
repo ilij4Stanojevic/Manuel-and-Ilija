@@ -1,3 +1,9 @@
+/*
+1 = barriera
+2 = minerale della forza (aumento danni che il player infligge)
+3 = minerale della salute (riempe la vita al massimo, sia gli hp sia i cuori)
+
+*/
 const collisionMap1 = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 2, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1],
@@ -7,7 +13,7 @@ const collisionMap1 = [
     [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0, 3, 0, 0, 1, 0, 1, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1],
     [1, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2, 1],
-    [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+    [1, 0, 0, 0, 1, 0, 0, 10, 10, 10, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
     [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
     [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -70,6 +76,15 @@ class Map{
                     scene.physics.add.existing(wall, true); // Make it a static physics body
                     
                     scene.walls.add(wall);
+                }else if(collisionMap[row][col] === 10){
+                    let x = col * tileSize + tileSize/2;
+                    let y = row * tileSize + tileSize/2;
+
+                    let monster = new Monster(scene, x, y, 32, "boss1");
+                    // monster.setBounce(0,0);
+                    monster.setDisplaySize(32,32);
+                    // scene.physics.add.existing(monster);
+                    scene.monsters.add(monster);
                 }
                 else if(collisionMap[row][col] > 1){
                     let x = col * mineralDimension + mineralDimension / 2;

@@ -34,6 +34,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         this.boss.play(texture);
         this.boss.body.setSize(10, 10);
         this.boss.setDisplaySize(64,64);
+        
         this.hpBar = scene.add.graphics();
     }
 

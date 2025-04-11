@@ -3,8 +3,8 @@ const widthMap = document.getElementById("idContainerGame").clientWidth;
 const heightMap = document.getElementById("idContainerGame").clientHeight;
 const barProgressWidth = 30;
 const barProgressHeight = 5;
-const barPlayerHpWidth = (48 * 3) + 20;
-const barPlayerHpHeight = 20;
+const barPlayerHpWidth = (32*3) + 10;
+const barPlayerHpHeight = 15;
 const barBossHpWidth = 200;
 const barBossHpHeight = 20;
 const barPlayerStaminaWidth = (48 * 3);
@@ -215,7 +215,7 @@ class PreLoader extends Phaser.Scene{
             repeat: -1
         });
 
-        this.scene.start("Menu");
-        // this.scene.start("BootGame");
+        // this.scene.start("Menu");
+        this.scene.start("BootGame");
     }
 }

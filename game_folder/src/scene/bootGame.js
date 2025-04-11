@@ -19,6 +19,7 @@ class BootGame extends Phaser.Scene {
         // Crea gruppi statici per i muri e i minerali, usati come collisioni statiche
         this.walls = this.physics.add.staticGroup();  // Gruppo per i muri
         this.minerals = this.physics.add.staticGroup();  // Gruppo per i minerali
+        this.monsters = this.physics.add.group();
 
         let spaceship = this.add.image(1534/4, 768-128-60,"spaceship").setOrigin(0,0); // Punto in alto a sinistra
         spaceship.setDisplaySize(128, 128);
@@ -28,15 +29,14 @@ class BootGame extends Phaser.Scene {
         // Variabile per tenere traccia del numero della mappa (in questo caso 1)
         var numberMap = 1;
 
-    
         // Crea la mappa tramite la classe 'Map' passando i muri e minerali
-        this.map = new Map(this, this.walls, numberMap, this.minerals);
+        this.map = new Map(this, this.walls, numberMap);
 
         // Ottiene i punti vita del giocatore dal registro (o imposta a 100 se non esistono)
         let playerHP = this.registry.get("playerHP") || 100;
 
         // Crea il giocatore e lo posiziona sulla mappa, passando parametri come posizione, muri, minerali, e porte
-        this.player = new Player(this, 1534/4+30+20, 768-128-60+30+30, "player", this.walls, this.minerals, playerHP, doors, numberMap);
+        this.player = new Player(this, 1534/4+30+20, 768-128-60+30+30, "player", this.walls, this.minerals, this.monsters, playerHP, doors, numberMap);
         this.tweens.add({
             targets: this.player,
             x: 768-128-60+30-100,
@@ -64,18 +64,17 @@ class BootGame extends Phaser.Scene {
         this.projectiles = this.physics.add.group();
 
         // Crea una grafica di debug per il mondo fisico (utile per il debugging)
-        // this.physics.world.createDebugGraphic();
+        this.physics.world.createDebugGraphic();
 
         this.heartX = 10;
 
         this.projectileCollisionManager = new ProjectileCollisionManager(this, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
-        this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals);
-
+        this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals); 
         }
 
     update(time, delta) {
-        console.log("x: ", this.player.x, " y: ", this.player.y);
+        // console.log("x: ", this.player.x, " y: ", this.player.y);
         // Aggiorna la logica del giocatore (movimento, interazioni, ecc.)
         if(this.canUpdate){
             this.player.update(time, delta, this);
