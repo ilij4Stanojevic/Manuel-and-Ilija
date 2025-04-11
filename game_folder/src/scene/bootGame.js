@@ -1,6 +1,6 @@
-class BootGame extends Phaser.Scene {
+class Moon extends Phaser.Scene {
     constructor() {
-        super("BootGame");  // Nome della scena (BootGame)
+        super("Moon");  // Nome della scena (BootGame)
     }
 
     create(){

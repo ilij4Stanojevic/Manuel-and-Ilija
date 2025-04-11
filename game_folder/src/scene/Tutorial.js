@@ -55,7 +55,7 @@ class Tutorial extends Phaser.Scene {
                                         this.player.anims.play("player_animRight", true);
                                     },
                                     onComplete: () => {
-                                        this.scene.start('BootGame');
+                                        this.scene.start('PlanetMenu');
                                     }
                                 });
                             }

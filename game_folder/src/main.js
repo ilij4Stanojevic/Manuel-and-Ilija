@@ -23,9 +23,10 @@ window.onload = function(){
 
         scene: [
             PreLoader,
-            // Tutorial,
-            // Menu,
-            BootGame,
+            Tutorial,
+            Menu,
+            PlanetMenu,
+            Moon,
             Boss_room1,
             GameOver
         ]
