@@ -25,7 +25,8 @@ window.onload = function(){
             PreLoader,
             Tutorial,
             Menu,
-            BootGame,
+            PlanetMenu,
+            Moon,
             Boss_room1,
             GameOver
         ]

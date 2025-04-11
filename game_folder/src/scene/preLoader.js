@@ -17,7 +17,9 @@ class PreLoader extends Phaser.Scene{
     preload(){
         this.load.image("background", "assets/images/map.png");
         this.load.image("background_menu", "assets/images/background_menu.jpg");
-        this.load.image("menu_button", "assets/images/menu_button.png");
+        this.load.image("background_planetMenu", "assets/images/background_planetMenu.png");
+        this.load.image("newGame_button", "assets/images/menu_button.png");
+        this.load.image("tutorial_button", "assets/images/tutorial_button2.png");
         this.load.image("bg_boss1", "assets/images/bg_boss1.png");
         this.load.image("backToGame_button", "assets/images/BackToGame_button.png");
         this.load.image("exit_button", "assets/images/Exit_button.png");
@@ -42,6 +44,10 @@ class PreLoader extends Phaser.Scene{
         this.load.image("piece_of_paper", "assets/images/piece_of_paper.png");
         this.load.image("control_panel", "assets/images/Lab_Control_Panel.png");
         this.load.image("open_bigDoor_tutorial", "assets/images/open_bigDoor_tutorial.png");
+        this.load.image("arrowLeft", "assets/images/arrowLeft.png");
+        this.load.image("arrowRight", "assets/images/arrowRight.png");
+        this.load.image("select_button", "assets/images/select_button.png");
+        
         document.fonts.load('32px font_tutorial');
 
         
@@ -85,6 +91,19 @@ class PreLoader extends Phaser.Scene{
             frameWidth: 32,
             frameHeight: 32
         });
+        this.load.spritesheet("planet1", "assets/spritesheets/planet1.png", {
+            frameWidth: 128,
+            frameHeight: 128
+        });
+        this.load.spritesheet("planet2", "assets/spritesheets/planet2.png", {
+            frameWidth: 128,
+            frameHeight: 128
+        });
+        this.load.spritesheet("planet3", "assets/spritesheets/planet3.png", {
+            frameWidth: 128,
+            frameHeight: 128
+        });
+        
     }
 
     create(){
@@ -214,6 +233,25 @@ class PreLoader extends Phaser.Scene{
             frameRate: 4,
             repeat: -1
         });
+        this.anims.create({
+            key: "planet1_anim",
+            frames: this.anims.generateFrameNumbers("planet1", { start: 0, end: 127 }),
+            frameRate: 24,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "planet2_anim",
+            frames: this.anims.generateFrameNumbers("planet2", { start: 0, end: 127 }),
+            frameRate: 24,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "planet3_anim",
+            frames: this.anims.generateFrameNumbers("planet3", { start: 0, end: 127 }),
+            frameRate: 24,
+            repeat: -1
+        });
+        
 
         this.scene.start("Menu");
         // this.scene.start("BootGame");

@@ -228,11 +228,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.endurance -= this.staminaConsumeRate * (delta / 1000);
         } else {
             speed = baseSpeed;
-            if (this.endurance < 100) {
+            if (this.endurance < 100 && !this.shiftisDown) {
                 this.endurance += this.staminaChargeRate * (delta / 1000);
             }
         }
-    
+        
         this.endurance = Phaser.Math.Clamp(this.endurance, 0, 100);
     
         // Applica velocità finale (dopo boost)
