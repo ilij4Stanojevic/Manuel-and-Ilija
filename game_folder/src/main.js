@@ -29,6 +29,7 @@ window.onload = function(){
             Moon,
             Azeroth,
             Boss_room1,
+            SpaceShip,
             GameOver
         ]
     };

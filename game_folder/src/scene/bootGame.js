@@ -19,28 +19,28 @@ class Moon extends Phaser.Scene {
                 tileX: 6.5, tileY: 10, onComplete: () => {
                     // Salva la salute del giocatore nel registro quando entra nella porta
                     this.registry.set("playerHP", this.player.hp);
-                    this.scene.start("PlanetMenu");
+                    this.scene.start("SpaceShip");
                 }
             },
             {
                 tileX: 6.5, tileY: 9, onComplete: () => {
                     // Salva la salute del giocatore nel registro quando entra nella porta
                     this.registry.set("playerHP", this.player.hp);
-                    this.scene.start("PlanetMenu");
+                    this.scene.start("SpaceShip");
                 }
             },
             {
                 tileX: 7.5, tileY: 10, onComplete: () => {
                     // Salva la salute del giocatore nel registro quando entra nella porta
                     this.registry.set("playerHP", this.player.hp);
-                    this.scene.start("PlanetMenu");
+                    this.scene.start("SpaceShip");
                 }
             },
             {
                 tileX: 7.5, tileY: 9, onComplete: () => {
                     // Salva la salute del giocatore nel registro quando entra nella porta
                     this.registry.set("playerHP", this.player.hp);
-                    this.scene.start("PlanetMenu");
+                    this.scene.start("SpaceShip");
                 }
             },
         ];
@@ -103,7 +103,6 @@ class Moon extends Phaser.Scene {
         }
 
     update(time, delta) {
-        console.log("x: ", this.player.x, " y: ", this.player.y);
         // Aggiorna la logica del giocatore (movimento, interazioni, ecc.)
         if(this.canUpdate){
             this.player.update(time, delta, this);
