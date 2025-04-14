@@ -96,8 +96,6 @@ class Moon extends Phaser.Scene {
         // Crea un gruppo di proiettili che il giocatore può sparare
         this.projectiles = this.physics.add.group();
 
-        this.heartX = 10;
-
         this.projectileCollisionManager = new ProjectileCollisionManager(this, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals);
@@ -109,9 +107,5 @@ class Moon extends Phaser.Scene {
         if(this.canUpdate){
             this.player.update(time, delta, this);
         }
-        // Mostra la barra della salute del giocatore
-        this.player.showBarHp(this);
-        // barra della stamina
-        this.player.showBarStamina(this);
     }
 }

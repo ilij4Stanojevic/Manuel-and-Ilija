@@ -11,28 +11,28 @@ class Azeroth extends Phaser.Scene {
                 tileX: 6.5, tileY: 10, onComplete: () => {
                     // Salva la salute del giocatore nel registro quando entra nella porta
                     this.registry.set("playerHP", this.player.hp);
-                    this.scene.start("PlanetMenu");
+                    this.scene.start("SpaceShip");
                 }
             },
             {
                 tileX: 6.5, tileY: 9, onComplete: () => {
                     // Salva la salute del giocatore nel registro quando entra nella porta
                     this.registry.set("playerHP", this.player.hp);
-                    this.scene.start("PlanetMenu");
+                    this.scene.start("SpaceShip");
                 }
             },
             {
                 tileX: 7.5, tileY: 10, onComplete: () => {
                     // Salva la salute del giocatore nel registro quando entra nella porta
                     this.registry.set("playerHP", this.player.hp);
-                    this.scene.start("PlanetMenu");
+                    this.scene.start("SpaceShip");
                 }
             },
             {
                 tileX: 7.5, tileY: 9, onComplete: () => {
                     // Salva la salute del giocatore nel registro quando entra nella porta
                     this.registry.set("playerHP", this.player.hp);
-                    this.scene.start("PlanetMenu");
+                    this.scene.start("SpaceShip");
                 }
             },
         ];
@@ -83,11 +83,6 @@ class Azeroth extends Phaser.Scene {
         // Crea un gruppo di proiettili che il giocatore può sparare
         this.projectiles = this.physics.add.group();
 
-        // Crea una grafica di debug per il mondo fisico (utile per il debugging)
-        // this.physics.world.createDebugGraphic();
-
-        this.heartX = 10;
-
         this.projectileCollisionManager = new ProjectileCollisionManager(this, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals);
@@ -99,9 +94,5 @@ class Azeroth extends Phaser.Scene {
         if(this.canUpdate){
             this.player.update(time, delta, this);
         }
-        // Mostra la barra della salute del giocatore
-        this.player.showBarHp(this);
-        // barra della stamina
-        this.player.showBarStamina(this);
     }
 }

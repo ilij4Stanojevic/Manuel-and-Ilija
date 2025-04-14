@@ -64,7 +64,7 @@ class SpaceShip extends Phaser.Scene {
         // Ottiene i punti vita del giocatore dal registro (o imposta a 100 se non esistono)
         let playerHP = this.registry.get("playerHP") || 100;
         // Crea il giocatore e lo posiziona sulla mappa, passando parametri come posizione, muri, minerali, e porte
-        this.player = new Player(this, this.playerX, this.playerY, "player", this.walls, undefined, playerHP, doors, numberMap);
+        this.player = new Player(this, this.playerX, this.playerY, "player", this.walls, undefined, undefined, playerHP, doors, numberMap);
         this.player.setDisplaySize(64, 64);
         this.player.setDepth(2);
         if(this.previousScene === "Tutorial"){
@@ -119,8 +119,6 @@ class SpaceShip extends Phaser.Scene {
         // Crea un gruppo di proiettili che il giocatore può sparare
         this.projectiles = this.physics.add.group();
 
-        this.heartX = 10;
-
         this.projectileCollisionManager = new ProjectileCollisionManager(this, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
         }
@@ -130,8 +128,5 @@ class SpaceShip extends Phaser.Scene {
         if(this.canUpdate){
             this.player.update(time, delta, this);
         }
-        // Mostra la barra della salute del giocatore
-        this.player.showBarHp(this);
-        this.player.showBarStamina(this);
     }
 }
