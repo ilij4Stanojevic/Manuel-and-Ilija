@@ -56,7 +56,7 @@ class Azeroth extends Phaser.Scene {
         let playerHP = this.registry.get("playerHP") || 100;
 
         // Crea il giocatore e lo posiziona sulla mappa, passando parametri come posizione, muri, minerali, e porte
-        this.player = new Player(this, 1534/4+30+20, 768-128-60+30+30, "player", this.walls, this.minerals, playerHP, doors, numberMap);
+        this.player = new Player(this, 1534/4+30+20, 768-128-60+30+30, "player", this.walls, this.minerals, undefined, playerHP, doors, numberMap);
         this.tweens.add({
             targets: this.player,
             x: 768-128-60+30-100,
