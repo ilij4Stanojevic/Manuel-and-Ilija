@@ -47,11 +47,16 @@ class Moon extends Phaser.Scene {
         ];
         // Crea gruppi statici per i muri e i minerali, usati come collisioni statiche
         this.walls = this.physics.add.staticGroup();  // Gruppo per i muri
+        this.walls.children.iterate(wall => {
+            wall.body.immovable = true;
+            wall.body.allowGravity = false;
+        });
         this.minerals = this.physics.add.staticGroup();  // Gruppo per i minerali
         this.monsters = this.physics.add.group({
-            immovable: true
+            immovable: false,
+            allowGravity: false
         });
-
+        
         let spaceship = this.add.image(1534/4, 768-128-60,"spaceship").setOrigin(0,0); // Punto in alto a sinistra
         spaceship.setDisplaySize(128, 128);
         this.walls.add(spaceship);
@@ -62,11 +67,9 @@ class Moon extends Phaser.Scene {
 
         // Crea la mappa tramite la classe 'Map' passando i muri e minerali
         this.map = new Map(this, this.walls, numberMap);
-
+        
         // Ottiene i punti vita del giocatore dal registro (o imposta a 100 se non esistono)
         let playerHP = this.registry.get("playerHP") || 100;
-
-        // console.log(this.minerals);
 
         // Crea il giocatore e lo posiziona sulla mappa, passando parametri come posizione, muri, minerali, e porte
         this.player = new Player(this, 1534/4+30+20, 768-128-60+30+30, "player", this.walls, this.minerals, this.monsters, playerHP, doors, numberMap, 10);
@@ -99,7 +102,14 @@ class Moon extends Phaser.Scene {
         this.projectileCollisionManager = new ProjectileCollisionManager(this, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals);
-        this.projectileCollisionManager.addProjectileCollisionMonsters(this.player.projectiles, this.monsters); 
+        this.projectileCollisionManager.addProjectileCollisionMonsters(this.player.projectiles, this.monsters);
+        this.physics.add.collider(this.monsters, this.walls);
+        this.physics.add.collider(this.monsters, this.monsters);
+
+        for(var i = 0; i < 3; i++){
+            var monster = new Monster(this, 2*64 + i * 20 + 32*i, 2*64, 32, "boss1", this.player);
+            this.monsters.add(monster);
+        }
     }
 
     update(time, delta) {
@@ -107,5 +117,10 @@ class Moon extends Phaser.Scene {
         if(this.canUpdate){
             this.player.update(time, delta, this);
         }
+        this.monsters.children.iterate(monster => {
+            if (monster && monster.update) {
+                monster.update();
+            }
+        });
     }
 }
