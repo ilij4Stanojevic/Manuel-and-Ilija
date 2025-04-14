@@ -18,6 +18,12 @@ class ProjectileCollisionManager {
     projectileDestroy(projectile){
         projectile.destroy();  // Distrugge il proiettile
     }
+
+    dealDamageMonster(monster, projectile){
+        let damage = this.scene.player.damage;
+        monster.gotHit(damage);
+        projectile.destroy(); 
+    }
     // Aggiungi la gestione delle collisioni tra il giocatore e i proiettili
     addProjectileCollisionPlayer(projectilesGroup, player, damage) {
         this.scene.physics.add.overlap(player, projectilesGroup, (player, projectile) => {
@@ -27,7 +33,13 @@ class ProjectileCollisionManager {
 
     addProjectileCollisionBoss(projectilesGroup, boss) {
         this.scene.physics.add.overlap(boss, projectilesGroup, (boss, projectile) => {
+            console.log(boss);
             this.dealDamageBoss(this.scene.boss, projectile);
+        });
+    }
+    addProjectileCollisionMonsters(projectilesGroup, monsters){
+        this.scene.physics.add.overlap(projectilesGroup, monsters, (projectile, monster) => {
+            this.dealDamageMonster(monster, projectile);
         });
     }
     addProjectileCollisionProjectiles(projectilesGroup, walls) {

@@ -48,7 +48,9 @@ class Moon extends Phaser.Scene {
         // Crea gruppi statici per i muri e i minerali, usati come collisioni statiche
         this.walls = this.physics.add.staticGroup();  // Gruppo per i muri
         this.minerals = this.physics.add.staticGroup();  // Gruppo per i minerali
-        this.monsters = this.physics.add.group();
+        this.monsters = this.physics.add.group({
+            immovable: true
+        });
 
         let spaceship = this.add.image(1534/4, 768-128-60,"spaceship").setOrigin(0,0); // Punto in alto a sinistra
         spaceship.setDisplaySize(128, 128);
@@ -63,6 +65,8 @@ class Moon extends Phaser.Scene {
 
         // Ottiene i punti vita del giocatore dal registro (o imposta a 100 se non esistono)
         let playerHP = this.registry.get("playerHP") || 100;
+
+        // console.log(this.minerals);
 
         // Crea il giocatore e lo posiziona sulla mappa, passando parametri come posizione, muri, minerali, e porte
         this.player = new Player(this, 1534/4+30+20, 768-128-60+30+30, "player", this.walls, this.minerals, this.monsters, playerHP, doors, numberMap, 10);
@@ -92,14 +96,12 @@ class Moon extends Phaser.Scene {
         // Crea un gruppo di proiettili che il giocatore può sparare
         this.projectiles = this.physics.add.group();
 
-        // Crea una grafica di debug per il mondo fisico (utile per il debugging)
-        this.physics.world.createDebugGraphic();
-
         this.heartX = 10;
 
         this.projectileCollisionManager = new ProjectileCollisionManager(this, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
-        this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals); 
+        this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals);
+        this.projectileCollisionManager.addProjectileCollisionMonsters(this.player.projectiles, this.monsters); 
     }
 
     update(time, delta) {

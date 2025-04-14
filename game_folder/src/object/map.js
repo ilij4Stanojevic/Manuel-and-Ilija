@@ -98,11 +98,9 @@ class Map{
                     let y = row * tileSize + tileSize/2;
 
                     let monster = new Monster(scene, x, y, 32, "monster_1map");
-                    scene.physics.add.existing(monster);
                     
                     scene.monsters.add(monster);
-                }
-                else if(collisionMap[row][col] > 1){
+                }else if(collisionMap[row][col] > 1){
                     let x = col * mineralDimension + mineralDimension / 2;
                     let y = row * mineralDimension + mineralDimension / 2;
                     

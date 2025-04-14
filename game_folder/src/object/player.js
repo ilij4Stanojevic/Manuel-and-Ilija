@@ -1,5 +1,5 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, walls, minerals, monsters, hpStart, interactionTargets = [], numberMap, damagePlayer) {
+    constructor(scene, x, y, texture, walls, minerals, monsters, hpStart, interactionTargets= [], numberMap, damagePlayer) {
         // Chiamata al costruttore della classe padre (Phaser.Physics.Arcade.Sprite)
         super(scene, x, y, "player");
 
@@ -17,9 +17,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setDisplaySize(50, 50); // Imposta la dimensione del giocatore
 
         // Aggiungi il giocatore come collider con muri e minerali (se passati)
-        if (walls) scene.physics.add.collider(this, walls);
-        if (minerals) scene.physics.add.collider(this, minerals);        
-        if(monsters) scene.physics.add.collider(this, monsters);
+        if (walls){
+            scene.physics.add.collider(this, walls);
+        }
+        if (minerals){
+            scene.physics.add.collider(this, minerals);
+        }
+        if(monsters){
+            scene.physics.add.collider(this, monsters);            
+        }
 
         this.numberMap = numberMap;
 
@@ -390,8 +396,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
     // Metodo di aggiornamento chiamato ad ogni frame
-    update(time, delta, scene){
-        
+    update(time, delta, scene){        
         if(this.scene.playerCanMove){
             this.movePlayerManager(delta);
         }
