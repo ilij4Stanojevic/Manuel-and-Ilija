@@ -55,7 +55,7 @@ class Tutorial extends Phaser.Scene {
                                         this.player.anims.play("player_animRight", true);
                                     },
                                     onComplete: () => {
-                                        this.scene.start('PlanetMenu');
+                                        this.scene.start("SpaceShip", { fromScene: this.scene.key });
                                     }
                                 });
                             }

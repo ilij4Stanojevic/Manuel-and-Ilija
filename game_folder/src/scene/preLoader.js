@@ -21,7 +21,7 @@ class PreLoader extends Phaser.Scene{
         this.load.image("newGame_button", "assets/images/newGame_button.png");
         this.load.image("tutorial_button", "assets/images/tutorial_button2.png");
         this.load.image("bg_boss1", "assets/images/bg_boss1.png");
-        this.load.image("backToGame_button", "assets/images/BackToGame_button.png");
+        this.load.image("backToGame_button", "assets/images/respawn_button.png");
         this.load.image("exit_button", "assets/images/Exit_button.png");
         this.load.image("heart_life", "assets/images/heart_life.png");
         this.load.image("heart_dead", "assets/images/heart_dead.png");
@@ -49,6 +49,8 @@ class PreLoader extends Phaser.Scene{
         this.load.image("select_button", "assets/images/select_button.png");
         this.load.image("background_azeroth", "assets/images/azeroth_bg.png");
         this.load.image("monster_1map", "assets/images/monster_1map.png");
+        this.load.image("background_spaceship", "assets/images/SpaceShip.png");
+        this.load.image("open_door_spaceShip", "assets/images/open_door_spaceShip.png");
         
         document.fonts.load('32px font_tutorial');
 
@@ -105,7 +107,10 @@ class PreLoader extends Phaser.Scene{
             frameWidth: 128,
             frameHeight: 128
         });
-        
+        this.load.spritesheet("spaceShipAnim", "assets/spritesheets/roverAnim.png", {
+            frameWidth: 128,
+            frameHeight: 128
+        });
     }
 
     create(){
@@ -253,7 +258,14 @@ class PreLoader extends Phaser.Scene{
             frameRate: 24,
             repeat: -1
         });
+        this.anims.create({
+            key: "spaceShip_anim",
+            frames: this.anims.generateFrameNumbers("spaceShipAnim", { start: 0, end: 0 }),
+            frameRate: 1,
+            repeat: -1
+        });
         
+
         this.scene.start("Menu");
     }
 }
