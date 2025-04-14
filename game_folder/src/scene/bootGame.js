@@ -5,7 +5,7 @@ class Moon extends Phaser.Scene {
 
     create(){
         let bg = this.add.image(0,0,"background").setOrigin(0,0); // Punto in alto a sinistra
-        this.playerCanMove = true
+        this.playerCanMove = true;
         let doors = [
             {
                 tileX: 13, tileY: 0, onComplete: () => {
