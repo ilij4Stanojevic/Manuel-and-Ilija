@@ -1,20 +1,12 @@
-class Moon extends Phaser.Scene {
+class Azeroth extends Phaser.Scene {
     constructor() {
-        super("Moon");  // Nome della scena (BootGame)
+        super("Azeroth");
     }
 
     create(){
-        let bg = this.add.image(0,0,"background").setOrigin(0,0); // Punto in alto a sinistra
+        let bg = this.add.image(0,0,"background_azeroth").setOrigin(0,0); // Punto in alto a sinistra
         this.playerCanMove = true
         let doors = [
-            {
-                tileX: 13, tileY: 0, onComplete: () => {
-                    // Salva la salute del giocatore nel registro quando entra nella porta
-                    this.registry.set("playerHP", this.player.hp);
-                    // Passa alla scena "Boss_room1" quando il giocatore interagisce con la porta
-                    this.scene.start("Boss_room1");
-                }
-            },
             {
                 tileX: 6.5, tileY: 10, onComplete: () => {
                     // Salva la salute del giocatore nel registro quando entra nella porta
@@ -53,10 +45,10 @@ class Moon extends Phaser.Scene {
         this.walls.add(spaceship);
         spaceship.body.setSize(80, 100);
         spaceship.setDepth(1);
-        // Variabile per tenere traccia del numero della mappa (in questo caso 1)
-        var numberMap = 1;
 
-    
+        // Variabile per tenere traccia del numero della mappa (in questo caso 1)
+        var numberMap = 4;
+
         // Crea la mappa tramite la classe 'Map' passando i muri e minerali
         this.map = new Map(this, this.walls, numberMap, this.minerals);
 
@@ -99,11 +91,10 @@ class Moon extends Phaser.Scene {
         this.projectileCollisionManager = new ProjectileCollisionManager(this, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals);
-
+        this.physics.world.createDebugGraphic();
         }
 
     update(time, delta) {
-        console.log("x: ", this.player.x, " y: ", this.player.y);
         // Aggiorna la logica del giocatore (movimento, interazioni, ecc.)
         if(this.canUpdate){
             this.player.update(time, delta, this);
