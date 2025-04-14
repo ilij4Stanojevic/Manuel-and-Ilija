@@ -13,7 +13,7 @@ const collisionMap1 = [
     [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0, 3, 0, 0, 1, 0, 1, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1],
     [1, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2, 1],
-    [1, 0, 0, 0, 1, 0, 0, 10, 10, 10, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+    [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
     [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
     [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -77,7 +77,7 @@ const collisionMap5 = [
 ]
 
 class Map{
-    constructor(scene, walls, numberMap,){
+    constructor(scene, walls, numberMap){
         var collisionMap = null;
         const mineralDimension = 32;
         var texture;
@@ -110,13 +110,6 @@ class Map{
                     scene.physics.add.existing(wall, true); // Make it a static physics body
                     
                     scene.walls.add(wall);
-                }else if(collisionMap[row][col] === 10){
-                    let x = col * tileSize + tileSize/2;
-                    let y = row * tileSize + tileSize/2;
-
-                    this.monster = new Monster(scene, x, y, 32, "boss1");
-                    
-                    scene.monsters.add(this.monster);
                 }else if(collisionMap[row][col] > 1){
                     let x = col * mineralDimension + mineralDimension / 2;
                     let y = row * mineralDimension + mineralDimension / 2;
