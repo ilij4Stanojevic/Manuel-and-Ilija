@@ -41,8 +41,6 @@ class Boss_room1 extends Phaser.Scene {
         this.projectileCollisionManager.addProjectileCollisionPlayer(this.boss.projectiles, this.player, this.boss.danni);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.boss.projectiles, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
-        
-        this.heartX = 10;
     }
 
     update(time, delta) {
@@ -67,13 +65,9 @@ class Boss_room1 extends Phaser.Scene {
         if (this.boss.bossAttivo) {
             this.boss.update(this.player);  // Muove il boss
         }
-
-        this.player.showBarHp(time, delta, this);
         
         if(this.canUpdate){
             this.player.update(time, delta, this);
         }
-        // barra della stamina
-        this.player.showBarStamina(this);
     }
 }

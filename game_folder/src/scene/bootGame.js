@@ -109,9 +109,5 @@ class Moon extends Phaser.Scene {
         if(this.canUpdate){
             this.player.update(time, delta, this);
         }
-        // Mostra la barra della salute del giocatore
-        this.player.showBarHp(this);
-        // barra della stamina
-        this.player.showBarStamina(this);
     }
 }

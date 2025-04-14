@@ -174,58 +174,57 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.moving = false;
     
         // --- Gestione MOVIMENTO ---
-        // sinistra e destra
-        if (this.keyA.isDown) {
+         // alto e basso 
+         if (this.keyW.isDown) {
+            if(this.keyA.isDown){
+                this.setVelocityX(-1*(1/1.44));
+                this.setVelocityY(-1*(1/1.44));
+                this.direction = "u";
+                this.anims.play("playerUp", true);
+                this.moving = true;
+            }else if(this.keyD.isDown){
+                this.setVelocityY(-1*(1/1.44));
+                this.setVelocityX(1*(1/1.44));
+                this.direction = "u";
+                this.anims.play("playerUp", true);
+                this.moving = true;
+            }else {
+                this.setVelocityY(-1);
+                this.setVelocityX(0);
+                this.direction = "u";
+                this.anims.play("playerUp", true);
+                this.moving = true;
+            }
+        } else if (this.keyS.isDown) {
+            if(this.keyA.isDown){
+                this.setVelocityY(1*(1/1.44));
+                this.setVelocityX(-1*(1/1.44));
+            } else if(this.keyD.isDown){
+                this.setVelocityY(1*(1/1.44));
+                this.setVelocityX(1*(1/1.44));
+            } else{
+                this.setVelocityY(1);
+                this.setVelocityX(0);
+            }
+            this.direction = "d";
+            this.moving = true;
+            this.anims.play("playerDOWN", true);
+        } else if (this.keyA.isDown && !this.keyW.isDown && !this.keyS.isDown) {
             this.setVelocityX(-1);
+            this.setVelocityY(0);
             this.setFlipX(true);
             this.direction = "l";
             this.anims.play("player_animRight", true);
             this.moving = true;
-        } else if (this.keyD.isDown) {
+        } else if (this.keyD.isDown && !this.keyW.isDown && !this.keyS.isDown) {
             this.setVelocityX(1);
+            this.setVelocityY(0);
             this.setFlipX(false);
             this.direction = "r";
             this.anims.play("player_animRight", true);
             this.moving = true;
         } else {
             this.setVelocityX(0);
-        }
-        // alto e basso 
-        if (this.keyW.isDown) {
-            this.setVelocityY(-1);
-            this.direction = "u";
-            this.anims.play("playerUp", true);
-            this.moving = true;
-        } else if (this.keyW.isDown && this.keyA.isDown) {
-            this.setVelocityX(-1*(1/1.44));
-            this.setVelocityY(-1*(1/1.44));
-            this.direction = "u";
-            this.anims.play("playerUp", true);
-            this.moving = true;
-        } else if (this.keyW.isDown && this.keyD.isDown) {
-            this.setVelocityY(-1*(1/1.44));
-            this.setVelocityY(1*(1/1.44));
-            this.direction = "u";
-            this.anims.play("playerUp", true);
-            this.moving = true;
-        } else if (this.keyS.isDown) {
-            this.setVelocityY(1);
-            this.direction = "d";
-            this.anims.play("playerDOWN", true);
-            this.moving = true;
-        } else if (this.keyS.isDown && this.keyA.isDown) {
-            this.setVelocityY(1*(1/1.44));
-            this.setVelocityX(-1*(1/1.44));
-            this.direction = "d";
-            this.anims.play("playerDOWN", true);
-            this.moving = true;
-        } else if (this.keyS.isDown && this.keyD.isDown) {
-            this.setVelocityY(1*(1/1.44));
-            this.setVelocityX(1*(1/1.44));
-            this.direction = "d";
-            this.anims.play("playerDOWN", true);
-            this.moving = true;
-        } else {
             this.setVelocityY(0);
         }
     
@@ -235,7 +234,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.endurance -= this.staminaConsumeRate * (delta / 1000);
         } else {
             speed = baseSpeed;
-            if (this.endurance < 100 && !this.shiftisDown) {
+            if (this.endurance < 100 && !this.shift.isDown) {
                 this.endurance += this.staminaChargeRate * (delta / 1000);
             }
         }
@@ -404,7 +403,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.initHearts(scene);
             this.lifeChecked = true;
         }
-
+        this.showBarHp(scene);
+        this.showBarStamina(scene);
         // Aggiorna tutti i proiettili
         this.projectiles.getChildren().forEach(proiettile => {
             proiettile.update();
@@ -445,5 +445,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.holdTime = 0;
         this.delta = 0;
         this.progressBar.clear();
+
+        console.log("x: ", this.body.velocity.x, "y: ",this.body.velocity.y);
     }
 }
