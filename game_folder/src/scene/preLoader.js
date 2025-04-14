@@ -51,6 +51,9 @@ class PreLoader extends Phaser.Scene{
         this.load.image("monster_1map", "assets/images/monster_1map.png");
         this.load.image("background_spaceship", "assets/images/SpaceShip.png");
         this.load.image("open_door_spaceShip", "assets/images/open_door_spaceShip.png");
+        this.load.image("bg_inventory", "assets/images/bg_inventory.png");
+        this.load.image("bg_card", "assets/images/tile_inventory.png");
+        this.load.image("use_button", "assets/images/use_button.png");
         
         document.fonts.load('32px font_tutorial');
 

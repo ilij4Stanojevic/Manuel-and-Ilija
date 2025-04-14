@@ -11,24 +11,6 @@ window.Inventory = {
         this.inventoryContainer = scene.inventoryContainer;
 
         let nItems = this.inventoryArray.length;
-
-        if(nItems > 0){
-            this.textInit = scene.add.text(768/2, 10, 'Inventary:', { 
-                fontSize: '30px', 
-                fill: '#fff' 
-            })
-                .setScrollFactor(0)
-                .setOrigin(0,0)
-                .setDepth(200);  
-        }else{
-            this.textInit = scene.add.text(768/2, 10, 'Empty Inventary', { 
-                fontSize: '30px', 
-                fill: '#fff' 
-            })
-                .setScrollFactor(0)
-                .setOrigin(0,0)
-                .setDepth(200);  
-        }
         
         this.inventoryContainer.setVisible(true);
     },
@@ -36,7 +18,6 @@ window.Inventory = {
     removeInventory(scene){
         scene.overlay.setVisible(false);
         this.inventoryContainer.setVisible(false);
-        this.textInit.setVisible(false);
     },
 
     checkDuplicateItem(){
@@ -52,9 +33,11 @@ window.Inventory = {
     addItem(scene, item, imageMineral, nameMineral){
         this.inventoryArray.push(item);
         this.imageArray.push(imageMineral);
-        this.nameArray.push(nameMineral);     
+        this.nameArray.push(nameMineral);
 
-        this.createContainer(scene);
+        if(scene.inventoryContainer.visible){
+            this.showInventory(scene);
+        }        
     },
 
     createContainer(scene){
@@ -66,13 +49,43 @@ window.Inventory = {
 
         let nItems = this.inventoryArray.length;
 
-        let widthInventory = 0;
+        this.bgImage = scene.add.image(0, 0, 'bg_inventory');
+        this.bgImage.setOrigin(0,0);
+
+        this.inventoryContainer.add(this.bgImage);
+
+        switch(nItems){
+            case 0:
+                this.textInit = scene.add.text(20, 20, 'Empty Inventary', { 
+                    fontSize: '30px', 
+                    fontFamily: "font_tutorial",
+                    fill: '0x000000' 
+                })
+                    .setScrollFactor(0)
+                    .setOrigin(0,0)
+                    .setDepth(200);
+                break;
+            default:
+                this.textInit = scene.add.text(20, 20, 'Inventary:', { 
+                    fontSize: '30px', 
+                    fontFamily: "font_tutorial",
+                    fill: '0x000000' 
+                })
+                    .setScrollFactor(0)
+                    .setOrigin(0,0)
+                    .setDepth(200); 
+                    break;
+        }
+
+        this.inventoryContainer.add(this.textInit);
+
+        let heighInventory = 1;
 
         for(let i=0; i<nItems; i++){
             if(this.inventoryArray[i] != -1){
-                const card = this.createInventory(scene, 0, widthInventory * 80, i);
+                const card = this.createInventory(scene, 10, heighInventory * 64, i);
 
-                widthInventory += 1;
+                heighInventory += 1;
 
                 this.inventoryContainer.add(card);
             }
@@ -84,34 +97,42 @@ window.Inventory = {
     },
 
     createInventory(scene, x, y, mineral){
-        const width = 786 - (786/2 + 10);
-        const height = 64;
-        const img = scene.add.image(0, 0, this.selectImage(mineral))
-            .setOrigin(0,0);
-        img.setDisplaySize(64, 64);
-        const nameText = scene.add.text(70, height/2 -7, this.updateInventoryText(mineral), { 
-            fontSize: '14px', 
-            fill: '#fff' 
+        const width = (768/2) - 20;
+        const height = 80;
+
+        this.bgCard = scene.add.image(0, 0, 'bg_card');
+        this.bgCard.setOrigin(0,0);
+        this.bgCard.setDisplaySize(width, height);
+
+        const img = scene.add.image(24 +3, 24 +16, this.selectImage(mineral))
+            .setOrigin(0.5,0.5);
+        img.setDisplaySize(48, 48);
+
+        const nameText = scene.add.text(70, height/2 -8, this.updateInventoryText(mineral), { 
+            fontFamily: "font_tutorial",
+            fontSize: '16px', 
+            fill: '0x000000' 
         });
 
-        const button = scene.add.rectangle(width-120, height/2 -12, 100, 30, '0xffffff')  
+        const button = scene.add.image(width-50, height/2, "use_button")
             .setInteractive({ 
                 useHandCursor: true
             })
+            .setDisplaySize(48,60)
             .setScrollFactor(0)
-            .setOrigin(0,0);
+            .setOrigin(0,0.5);
 
-        button.on('pointerdown', () => {
-            this.buttonClicked(scene, mineral);
-        });
+        // button.on('pointerdown', () => {
+        //     this.buttonClicked(scene, mineral);
+        // });
 
-        const buttonText = scene.add.text(width - 120 + (100/2), height / 2 , 'Use', {
-            fontSize: '12px',
-            fill: '0x000000',
-        })
-            .setOrigin(0.5,0.5);
+        // const buttonText = scene.add.text(width - 120 + (100/2), height / 2 , 'Use', {
+        //     fontSize: '12px',
+        //     fill: '0x000000',
+        // })
+        //     .setOrigin(0.5,0.5);
 
-        const cardContainer = scene.add.container(x, y, [img, nameText, button, buttonText]);
+        const cardContainer = scene.add.container(x, y, [this.bgCard, img, nameText ,button /*, buttonText*/]);
 
         return cardContainer;
     },
@@ -142,8 +163,6 @@ window.Inventory = {
         }
 
         this.createContainer(scene);
-
-        this.textInit.setVisible(false);
 
         this.showInventory(scene);
     },

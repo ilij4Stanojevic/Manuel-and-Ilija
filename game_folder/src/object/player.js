@@ -58,7 +58,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         scene.overlay.setScrollFactor(0);
         scene.overlay.setVisible(false);
 
-        scene.inventoryContainer = scene.add.container(768/2, 40);
+        scene.inventoryContainer = scene.add.container(768/2, 0);
+        scene.inventoryContainer.setVisible(false);
     
         this.heartLast = 3;
         this.lifeChecked = false;
