@@ -114,9 +114,9 @@ class Map{
                     let x = col * tileSize + tileSize/2;
                     let y = row * tileSize + tileSize/2;
 
-                    let monster = new Monster(scene, x, y, 32, "monster_1map");
+                    this.monster = new Monster(scene, x, y, 32, "boss1");
                     
-                    scene.monsters.add(monster);
+                    scene.monsters.add(this.monster);
                 }else if(collisionMap[row][col] > 1){
                     let x = col * mineralDimension + mineralDimension / 2;
                     let y = row * mineralDimension + mineralDimension / 2;
