@@ -3,8 +3,8 @@ const widthMap = document.getElementById("idContainerGame").clientWidth;
 const heightMap = document.getElementById("idContainerGame").clientHeight;
 const barProgressWidth = 30;
 const barProgressHeight = 5;
-const barPlayerHpWidth = (48 * 3) + 20;
-const barPlayerHpHeight = 20;
+const barPlayerHpWidth = (32*3) + 10;
+const barPlayerHpHeight = 15;
 const barBossHpWidth = 200;
 const barBossHpHeight = 20;
 const barPlayerStaminaWidth = (48 * 3);
@@ -18,7 +18,7 @@ class PreLoader extends Phaser.Scene{
         this.load.image("background", "assets/images/map.png");
         this.load.image("background_menu", "assets/images/background_menu.jpg");
         this.load.image("background_planetMenu", "assets/images/background_planetMenu.png");
-        this.load.image("newGame_button", "assets/images/menu_button.png");
+        this.load.image("newGame_button", "assets/images/newGame_button.png");
         this.load.image("tutorial_button", "assets/images/tutorial_button2.png");
         this.load.image("bg_boss1", "assets/images/bg_boss1.png");
         this.load.image("backToGame_button", "assets/images/respawn_button.png");
@@ -48,6 +48,7 @@ class PreLoader extends Phaser.Scene{
         this.load.image("arrowRight", "assets/images/arrowRight.png");
         this.load.image("select_button", "assets/images/select_button.png");
         this.load.image("background_azeroth", "assets/images/azeroth_bg.png");
+        this.load.image("monster_1map", "assets/images/monster_1map.png");
         this.load.image("background_spaceship", "assets/images/SpaceShip.png");
         this.load.image("open_door_spaceShip", "assets/images/open_door_spaceShip.png");
         
@@ -266,6 +267,5 @@ class PreLoader extends Phaser.Scene{
         
 
         this.scene.start("Menu");
-        // this.scene.start("BootGame");
     }
 }

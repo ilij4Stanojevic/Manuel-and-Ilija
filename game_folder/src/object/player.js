@@ -1,5 +1,5 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, walls, minerals, hpStart, interactionTargets = [], numberMap) {
+    constructor(scene, x, y, texture, walls, minerals, monsters, hpStart, interactionTargets = [], numberMap, damagePlayer) {
         // Chiamata al costruttore della classe padre (Phaser.Physics.Arcade.Sprite)
         super(scene, x, y, "player");
 
@@ -18,13 +18,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Aggiungi il giocatore come collider con muri e minerali (se passati)
         if (walls) scene.physics.add.collider(this, walls);
-        if (minerals) scene.physics.add.collider(this, minerals);
+        if (minerals) scene.physics.add.collider(this, minerals);        
+        if(monsters) scene.physics.add.collider(this, monsters);
 
         this.numberMap = numberMap;
 
         // Punti vita, danno e stamina iniziali
         this.hp = hpStart;
-        this.damage = 10;
+        this.damage = damagePlayer;
         this.endurance = 100; // durata stamina
 
         // Direzione iniziale del giocatore (verso il basso)
@@ -287,7 +288,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     showBarHp(scene){
         this.hpBar.clear(); // Pulisce la barra
         let x = 10; // Posizione X della barra
-        let y = 20 + 48; // Posizione Y della barra
+        let y = 10 + 32; // Posizione Y della barra
 
         // Calcola la percentuale della salute
         let progress = Phaser.Math.Clamp(this.hp / 100, 0, 1);
@@ -329,6 +330,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             let progress = Phaser.Math.Clamp(this.holdTime / this.requiredHoldTime, 0, 1);  // Calcola la percentuale di interazione
             let x = this.x - 15, y = this.y - 23;  // Posizione per la barra di progresso
 
+            if(y<0){
+                y = this.y;
+            }
+
             this.progressBar.clear();  // Pulisce la barra precedente
             this.progressBar.fillStyle(0xffffff, 1);  // Colore verde
             this.progressBar.lineStyle(2, 0x000000);  // Bordo nero
@@ -368,8 +373,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         for(let i=0; i<heartsToDraw; i++){
             let hL = this.scene.add.image(heartX, 10,"heart_life").setOrigin(0,0);
             this.heartImages.push(hL);
-            hL.setDisplaySize(48, 48);
-            heartX += 10 + 48;
+            hL.setDisplaySize(32, 32);
+            heartX += 5 + 32;
             hL.setScrollFactor(0);
             hL.setDepth(3); 
         }
@@ -377,9 +382,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if(this.heartLast < 3){
             for(let i=0; i< 3 - heartsToDraw; i++){
                 let hL = this.scene.add.image(heartX, 10,"heart_dead").setOrigin(0,0);
-                hL.setDisplaySize(48, 48);
+                hL.setDisplaySize(32, 32);
                 this.heartImages.push(hL);
-                heartX += 10 + 48;
+                heartX += 5 + 32;
                 hL.setScrollFactor(0);
             }
         }

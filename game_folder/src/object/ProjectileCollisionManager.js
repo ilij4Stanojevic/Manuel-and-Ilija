@@ -11,7 +11,6 @@ class ProjectileCollisionManager {
 
     dealDamageBoss(boss, projectile){
         let damage = this.scene.player.damage;
-        console.log(damage);
         boss.gotHitted(damage);  // Danno inflitto al giocatore
         projectile.destroy();  // Distrugge il proiettile
     }
@@ -45,6 +44,5 @@ class ProjectileCollisionManager {
                 this.scene.guardiaMorta = true;
             }
         });
-    }
-    
+    }    
 }

@@ -16,9 +16,10 @@ class Boss_room1 extends Phaser.Scene {
         this.map = new Map(this, this.walls, numberMap);
 
         let playerHP = this.registry.get("playerHP");
+        let playerDamage = this.registry.get("playerDamage");
 
         // Crea il player
-        this.player = new Player(this, 11.5 * 64, 0, "player", this.walls, undefined, playerHP, undefined, numberMap);
+        this.player = new Player(this, 11.5 * 64, 0, "player", this.walls, undefined, undefined, playerHP, undefined, numberMap, playerDamage);
         this.physics.world.setBounds(0, 0, widthMap, heightMap);
 
         this.projectileCollisionManager = new ProjectileCollisionManager(this, this.walls);
