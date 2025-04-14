@@ -100,8 +100,6 @@ class Moon extends Phaser.Scene {
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals);
         this.projectileCollisionManager.addProjectileCollisionMonsters(this.player.projectiles, this.monsters); 
-        
-        this.monsterClass = this.map.monster;
     }
 
     update(time, delta) {

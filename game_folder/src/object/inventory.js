@@ -29,9 +29,7 @@ window.Inventory = {
                 .setOrigin(0,0)
                 .setDepth(200);  
         }
-
-
-
+        
         this.inventoryContainer.setVisible(true);
     },
 

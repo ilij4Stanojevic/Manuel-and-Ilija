@@ -446,6 +446,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.delta = 0;
         this.progressBar.clear();
 
-        console.log("x: ", this.body.velocity.x, "y: ",this.body.velocity.y);
+        // console.log("x: ", this.body.velocity.x, "y: ",this.body.velocity.y);
     }
 }
