@@ -18,7 +18,7 @@ class PreLoader extends Phaser.Scene{
         this.load.image("background", "assets/images/map.png");
         this.load.image("background_menu", "assets/images/background_menu.jpg");
         this.load.image("background_planetMenu", "assets/images/background_planetMenu.png");
-        this.load.image("newGame_button", "assets/images/menu_button.png");
+        this.load.image("newGame_button", "assets/images/newGame_button.png");
         this.load.image("tutorial_button", "assets/images/tutorial_button2.png");
         this.load.image("bg_boss1", "assets/images/bg_boss1.png");
         this.load.image("backToGame_button", "assets/images/BackToGame_button.png");
@@ -47,6 +47,7 @@ class PreLoader extends Phaser.Scene{
         this.load.image("arrowLeft", "assets/images/arrowLeft.png");
         this.load.image("arrowRight", "assets/images/arrowRight.png");
         this.load.image("select_button", "assets/images/select_button.png");
+        this.load.image("monster_1map", "assets/images/monster_1map.png");
         
         document.fonts.load('32px font_tutorial');
 
@@ -252,8 +253,6 @@ class PreLoader extends Phaser.Scene{
             repeat: -1
         });
         
-
-        // this.scene.start("Menu");
-        this.scene.start("BootGame");
+        this.scene.start("Menu");
     }
 }

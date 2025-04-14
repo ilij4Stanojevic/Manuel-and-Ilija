@@ -80,10 +80,9 @@ class Map{
                     let x = col * tileSize + tileSize/2;
                     let y = row * tileSize + tileSize/2;
 
-                    let monster = new Monster(scene, x, y, 32, "boss1");
-                    // monster.setBounce(0,0);
-                    monster.setDisplaySize(32,32);
-                    // scene.physics.add.existing(monster);
+                    let monster = new Monster(scene, x, y, 32, "monster_1map");
+                    scene.physics.add.existing(monster);
+                    
                     scene.monsters.add(monster);
                 }
                 else if(collisionMap[row][col] > 1){

@@ -1,5 +1,5 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, walls, minerals, monsters, hpStart, interactionTargets = [], numberMap) {
+    constructor(scene, x, y, texture, walls, minerals, monsters, hpStart, interactionTargets = [], numberMap, damagePlayer) {
         // Chiamata al costruttore della classe padre (Phaser.Physics.Arcade.Sprite)
         super(scene, x, y, "player");
 
@@ -18,17 +18,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Aggiungi il giocatore come collider con muri e minerali (se passati)
         if (walls) scene.physics.add.collider(this, walls);
-        if (minerals) scene.physics.add.collider(this, minerals);
-        
-        if(monsters){
-            scene.physics.add.collider(this, monsters);
-        } 
+        if (minerals) scene.physics.add.collider(this, minerals);        
+        if(monsters) scene.physics.add.collider(this, monsters);
 
         this.numberMap = numberMap;
 
         // Punti vita, danno e stamina iniziali
         this.hp = hpStart;
-        this.damage = 10;
+        this.damage = damagePlayer;
         this.endurance = 100; // durata stamina
 
         // Direzione iniziale del giocatore (verso il basso)
@@ -387,7 +384,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 let hL = this.scene.add.image(heartX, 10,"heart_dead").setOrigin(0,0);
                 hL.setDisplaySize(32, 32);
                 this.heartImages.push(hL);
-                heartX += 5 + 48;
+                heartX += 5 + 32;
                 hL.setScrollFactor(0);
             }
         }

@@ -86,7 +86,7 @@ class Tutorial extends Phaser.Scene {
 
         // Setup player
         let playerHP = this.registry.get("playerHP") || 100;
-        this.player = new Player(this, 343, 0, "player", this.walls, undefined, playerHP, doors, numberMap);
+        this.player = new Player(this, 343, 0, "player", this.walls, undefined, undefined, playerHP, doors, numberMap, 10);
         this.player.setDisplaySize(64, 64);
         this.physics.world.setBounds(0, 0, widthMap, heightMap);
 
