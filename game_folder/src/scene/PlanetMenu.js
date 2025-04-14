@@ -12,7 +12,7 @@ class PlanetMenu extends Phaser.Scene {
         // Lista dei pianeti con nome, chiave dello spritesheet e scena da caricare
         this.planets = [
             { name: "Moon", key: "planet1", scene: "Moon" },
-            { name: "Azeroth", key: "planet2", scene: "MarteScene" },
+            { name: "Azeroth", key: "planet2", scene: "Azeroth" },
             { name: "Giove", key: "planet3", scene: "GioveScene" }
         ];
 

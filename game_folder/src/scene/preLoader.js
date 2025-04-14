@@ -47,6 +47,7 @@ class PreLoader extends Phaser.Scene{
         this.load.image("arrowLeft", "assets/images/arrowLeft.png");
         this.load.image("arrowRight", "assets/images/arrowRight.png");
         this.load.image("select_button", "assets/images/select_button.png");
+        this.load.image("background_azeroth", "assets/images/azeroth_bg.png");
         this.load.image("monster_1map", "assets/images/monster_1map.png");
         
         document.fonts.load('32px font_tutorial');

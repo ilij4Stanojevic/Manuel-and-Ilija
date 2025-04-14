@@ -27,6 +27,7 @@ window.onload = function(){
             Menu,
             PlanetMenu,
             Moon,
+            Azeroth,
             Boss_room1,
             GameOver
         ]
