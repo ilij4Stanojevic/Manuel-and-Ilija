@@ -105,11 +105,12 @@ class Moon extends Phaser.Scene {
         this.projectileCollisionManager.addProjectileCollisionMonsters(this.player.projectiles, this.monsters);
         this.physics.add.collider(this.monsters, this.walls);
         this.physics.add.collider(this.monsters, this.monsters);
-
-        for(var i = 0; i < 3; i++){
-            var monster = new Monster(this, 2*64 + i * 20 + 32*i, 2*64, 32, "boss1", this.player);
+        this.active = false;
+        for(var i=0; i < 3; i++){
+            var monster = new Monster(this, 2*64 + (20 + 32 + 20) * i, 2*64, 48, 1, 1, 10, undefined);
             this.monsters.add(monster);
         }
+        this.projectileCollisionManager.addProjectileCollisionPlayer(monster.projectiles, this.player, 10);
     }
 
     update(time, delta) {
@@ -118,9 +119,9 @@ class Moon extends Phaser.Scene {
             this.player.update(time, delta, this);
         }
         this.monsters.children.iterate(monster => {
-            if (monster && monster.update) {
-                monster.update();
-            }
+            monster.update(this.active);
+            var distanzaDaPlayer = Phaser.Math.Distance.Between(monster.x, monster.y, this.player.x, this.player.y);
+            this.active = monster.activate(distanzaDaPlayer);
         });
     }
 }

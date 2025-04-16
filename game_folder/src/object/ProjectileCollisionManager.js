@@ -33,7 +33,6 @@ class ProjectileCollisionManager {
 
     addProjectileCollisionBoss(projectilesGroup, boss) {
         this.scene.physics.add.overlap(boss, projectilesGroup, (boss, projectile) => {
-            console.log(boss);
             this.dealDamageBoss(this.scene.boss, projectile);
         });
     }

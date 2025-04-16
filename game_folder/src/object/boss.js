@@ -70,7 +70,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
     // Funzione per sparare i proiettili
     shoot() {
         if (this.bossAttivo) {  // Spara solo se il boss è attivo
-            let proiettile = new Proiettile(this.scene, this.boss, this.scene.player, "proiettile_b1");
+            let proiettile = new Proiettile(this.scene, this.boss, this.scene.player, "proiettile_b1", 5*64);
             this.projectiles.add(proiettile);
         }
     }

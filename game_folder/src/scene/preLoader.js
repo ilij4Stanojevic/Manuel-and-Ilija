@@ -114,6 +114,42 @@ class PreLoader extends Phaser.Scene{
             frameWidth: 128,
             frameHeight: 128
         });
+        this.load.spritesheet("monster1_walkDown", "assets/spritesheets/GoblinBeastDownWalk.png", {
+            frameWidth: 48,
+            frameHeight: 48
+        });
+        this.load.spritesheet("monster1_attackDown", "assets/spritesheets/GoblinBeastDownAttack02.png", {
+            frameWidth: 64,
+            frameHeight: 64
+        });
+        this.load.spritesheet("monster1_idle", "assets/spritesheets/GoblinBeastDownIdle.png", {
+            frameWidth: 48,
+            frameHeight: 48
+        });
+        this.load.spritesheet("monster1_leftAttack", "assets/spritesheets/GoblinBeastLeftAttack02.png", {
+            frameWidth: 48,
+            frameHeight: 48
+        });
+        this.load.spritesheet("monster1_leftWalk", "assets/spritesheets/GoblinBeastLeftWalk.png", {
+            frameWidth: 48,
+            frameHeight: 48
+        });
+        this.load.spritesheet("monster1_rightWalk", "assets/spritesheets/GoblinBeastRightWalk.png", {
+            frameWidth: 48,
+            frameHeight: 48
+        });
+        this.load.spritesheet("monster1_rightAttack", "assets/spritesheets/GoblinBeastRightAttack02.png", {
+            frameWidth: 48,
+            frameHeight: 48
+        });
+        this.load.spritesheet("monster1_upAttack", "assets/spritesheets/GoblinBeastUpAttack02.png", {
+            frameWidth: 64,
+            frameHeight: 64
+        });
+        this.load.spritesheet("monster1_upWalk", "assets/spritesheets/GoblinBeastUpWalk", {
+            frameWidth: 48,
+            frameHeight: 48
+        });
     }
 
     create(){
@@ -262,13 +298,66 @@ class PreLoader extends Phaser.Scene{
             repeat: -1
         });
         this.anims.create({
+            key: "monster1_walkDownAnim",
+            frames: this.anims.generateFrameNumbers("monster1_walkDown", { start: 0, end: 5 }),
+            frameRate: 24,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "monster1_idleAnim",
+            frames: this.anims.generateFrameNumbers("monster1_idle", { start: 0, end: 5 }),
+            frameRate: 6,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "monster1_attackDownAnim",
+            frames: this.anims.generateFrameNumbers("monster1_attackDown", { start: 0, end: 8 }),
+            frameRate: 9,
+            repeat: 0
+        });
+        this.anims.create({
+            key: "monster1_walkRightAnim",
+            frames: this.anims.generateFrameNumbers("monster1_rightWalk", { start: 0, end: 5 }),
+            frameRate: 6,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "monster1_attackRightAnim",
+            frames: this.anims.generateFrameNumbers("monster1_rightAttack", { start: 0, end: 8 }),
+            frameRate: 9,
+            repeat: 0
+        });
+        this.anims.create({
+            key: "monster1_walkLeftAnim",
+            frames: this.anims.generateFrameNumbers("monster1_leftWalk", { start: 0, end: 5 }),
+            frameRate: 6,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "monster1_attackLeftAnim",
+            frames: this.anims.generateFrameNumbers("monster1_leftAttack", { start: 0, end: 8 }),
+            frameRate: 9,
+            repeat: 0
+        });
+        this.anims.create({
+            key: "monster1_walkUpAnim",
+            frames: this.anims.generateFrameNumbers("monster1_upWalk", { start: 0, end: 5 }),
+            frameRate: 6,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "monster1_attackUpAnim",
+            frames: this.anims.generateFrameNumbers("monster1_upAttack", { start: 0, end: 8 }),
+            frameRate: 9,
+            repeat: 0
+        });
+
+        this.anims.create({
             key: "spaceShip_anim",
             frames: this.anims.generateFrameNumbers("spaceShipAnim", { start: 0, end: 0 }),
             frameRate: 1,
             repeat: -1
         });
-        
-
         this.scene.start("Menu");
     }
 }
