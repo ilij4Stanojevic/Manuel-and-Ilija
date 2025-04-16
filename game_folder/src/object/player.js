@@ -58,7 +58,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         scene.overlay.setScrollFactor(0);
         scene.overlay.setVisible(false);
 
-        scene.inventoryContainer = scene.add.container(768/2, 0);
+        scene.inventoryContainer = scene.add.container(768/2 - 30, 0);
         scene.inventoryContainer.setVisible(false);
     
         this.heartLast = 3;
@@ -82,11 +82,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.staminaBar = scene.add.graphics();
         this.hpBar.setDepth(10);
 
+        this.interactionBar = scene.add.graphics();
+        this.interactionBarShowed = false;
+        this.timeSpent = 100;
+        this.colorBar;
+
         // Variabili di interazione
         this.holdTime = 0;  // Tempo di interazione
         this.requiredHoldTime = 50;  // Tempo richiesto per completare l'interazione
-        this.delta = 0;  // Variabile per il delta di aggiornamento
+        this.deltaInteraction = 0;  // Variabile per il delta di aggiornamento
         this.interactionTargets = interactionTargets;  // Oggetti con cui il giocatore può interagire
+
+        this.deltaPowerUp = 0.5;
 
         this.moving = false;  // Flag per determinare se il giocatore si sta muovendo
     }
@@ -138,7 +145,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 let nameMineral;
                 switch(tipo){
                     case 2:
-                        imageMineral = "mineral1";
+                        imageMineral = "powerRel";
                         nameMineral = "PowerRel";
                         break;
                     case 3:
@@ -327,14 +334,41 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.staminaBar.setScrollFactor(0);  // La barra non si muove con la telecamera
     }
 
+    showBarInteraction(scene){
+        let x = this.x-15, y = this.y+23;
+
+        this.timeSpent -= this.deltaPowerUp;
+
+        let progress = Phaser.Math.Clamp(this.timeSpent / 100, 0, 1);  // Calcola la percentuale di interazione
+
+        if(y<0){
+            y = this.y;
+        }
+
+        this.interactionBar.clear();  // Pulisce la barra precedente
+        this.interactionBar.fillStyle(this.colorBar, 1);  // Colore verde
+        this.interactionBar.lineStyle(2, 0x000000);  // Bordo nero
+        this.interactionBar.fillRect(x, y, barProgressWidth * progress, barProgressHeight);
+        this.interactionBar.strokeRect(x, y, barProgressWidth, barProgressHeight);
+
+        // Se il tempo di interazione è sufficiente, esegui l'azione e distruggi l'oggetto
+        if (this.timeSpent <= 0) {
+            this.interactionBar.clear();
+            this.timeSpent = 100;
+            this.interactionBarShowed = false;
+            
+        }
+    }
+
     // Funzione di interazione con oggetti come porte, minerali, ecc.
     crossing(scene, target, delta) {
         if (this.interactionActive) {
+            let x = this.x - 15, y = this.y - 23;
+            
             this.holdTime += delta / 1000;  // Aumenta il tempo di interazione
 
             let progress = Phaser.Math.Clamp(this.holdTime / this.requiredHoldTime, 0, 1);  // Calcola la percentuale di interazione
-            let x = this.x - 15, y = this.y - 23;  // Posizione per la barra di progresso
-
+            
             if(y<0){
                 y = this.y;
             }
@@ -350,7 +384,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.progressBar.clear();
                 this.holdTime = 0;
                 this.delta = 0;
-                if (target.onComplete) target.onComplete(scene);  // Esegui l'azione di completamento
+                if (target.onComplete) target.onComplete(scene);
             } else {
                 this.delta += 16;
             }
@@ -404,6 +438,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.initHearts(scene);
             this.lifeChecked = true;
         }
+
+        if(this.interactionBarShowed){
+            // console.log("this.interactionBarShowed: "+this.interactionBarShowed);
+            // console.log(this.delta);
+            this.crossing(scene, undefined, delta);
+        }
+
         this.showBarHp(scene);
         this.showBarStamina(scene);
         // Aggiorna tutti i proiettili
@@ -422,6 +463,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.shoot();
         }
 
+        if(this.interactionBarShowed){
+            // console.log(this.deltaPowerUp);
+            this.showBarInteraction(scene);
+        }
+
         // Se si tiene premuto il tasto E, interagisci con gli oggetti vicini
         if (this.keyE.isDown) {
             const interactable = this.getNearbyInteractable(scene);  // Trova un oggetto interagibile
@@ -433,18 +479,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.keyQ)) {
-            if(!this.QisPressed){
-                Inventory.showInventory(scene);
-                this.QisPressed = true;
-            }else{
-                Inventory.removeInventory(scene);
-                this.QisPressed = false;
-            }
+            Inventory.showInventory(scene);
         }
 
         // Se non c'è interazione, resetta la barra di progresso
-        this.holdTime = 0;
         this.delta = 0;
+        this.holdTime = 0;
         this.progressBar.clear();
     }
 }

@@ -24,6 +24,8 @@ class Minerals extends Phaser.Physics.Arcade.Sprite {
 
         // Animazione se presente
         if (tipo === 2) {
+            this.setSize(32, 32);
+            this.setScale(0.125);            
             this.play("rock1_anim");
         } else if (tipo === 3) {
             this.play("rock2_anim");

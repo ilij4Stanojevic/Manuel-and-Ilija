@@ -1,18 +1,22 @@
 window.Inventory = {
     inventoryArray: [], 
-    imageArray : [],
-    nameArray : [],    
+    imageInventory : [],
+    nameInventory : [],
 
     showInventory(scene){
-        this.createContainer(scene);
+        if(scene.inventoryContainer.visible){
+            this.removeInventory(scene);
+        }else{
+            this.inventoryContainer = scene.inventoryContainer;
 
-        scene.overlay.setVisible(true);
+            this.createContainer(scene);
 
-        this.inventoryContainer = scene.inventoryContainer;
+            scene.overlay.setVisible(true);
 
-        let nItems = this.inventoryArray.length;
-        
-        this.inventoryContainer.setVisible(true);
+            let nItems = this.inventoryArray.length;
+            
+            this.inventoryContainer.setVisible(true);
+        }
     },
 
     removeInventory(scene){
@@ -32,8 +36,8 @@ window.Inventory = {
 
     addItem(scene, item, imageMineral, nameMineral){
         this.inventoryArray.push(item);
-        this.imageArray.push(imageMineral);
-        this.nameArray.push(nameMineral);
+        this.imageInventory.push(imageMineral);
+        this.nameInventory.push(nameMineral);
 
         if(scene.inventoryContainer.visible){
             this.showInventory(scene);
@@ -51,12 +55,13 @@ window.Inventory = {
 
         this.bgImage = scene.add.image(0, 0, 'bg_inventory');
         this.bgImage.setOrigin(0,0);
+        this.bgImage.setDisplaySize(768/2 + 30, 384);
 
         this.inventoryContainer.add(this.bgImage);
 
         switch(nItems){
             case 0:
-                this.textInit = scene.add.text(20, 20, 'Empty Inventary', { 
+                this.textInit = scene.add.text(20, 20, 'Empty |nventory', { 
                     fontSize: '30px', 
                     fontFamily: "font_tutorial",
                     fill: '0x000000' 
@@ -66,7 +71,7 @@ window.Inventory = {
                     .setDepth(200);
                 break;
             default:
-                this.textInit = scene.add.text(20, 20, 'Inventary:', { 
+                this.textInit = scene.add.text(20, 20, '|nventory:', { 
                     fontSize: '30px', 
                     fontFamily: "font_tutorial",
                     fill: '0x000000' 
@@ -97,54 +102,69 @@ window.Inventory = {
     },
 
     createInventory(scene, x, y, mineral){
-        const width = (768/2) - 20;
+        const width = (768/2) + 10;
         const height = 80;
 
         this.bgCard = scene.add.image(0, 0, 'bg_card');
         this.bgCard.setOrigin(0,0);
         this.bgCard.setDisplaySize(width, height);
 
-        const img = scene.add.image(24 +3, 24 +16, this.selectImage(mineral))
-            .setOrigin(0.5,0.5);
-        img.setDisplaySize(48, 48);
+        let heightImg = 25 / 50;
+        heightImg = height * heightImg;
 
-        const nameText = scene.add.text(70, height/2 -8, this.updateInventoryText(mineral), { 
+        let widthImg = 25 / 345;
+        widthImg = width * widthImg ;
+
+        const img = scene.add.image(widthImg, heightImg, this.selectImage(mineral))
+            .setOrigin(0.5,0.5);
+        img.setDisplaySize(56, 48);
+
+        let heightText = 22 / 50 ;
+        heightText = height * heightText;
+
+        let widthText = 167 / 345;
+        widthText = width * widthText;
+
+        const nameText = scene.add.text(widthText, heightText, this.updateInventoryText(mineral), {
             fontFamily: "font_tutorial",
             fontSize: '16px', 
             fill: '0x000000' 
-        });
+        })
+            .setOrigin(0.5,0.5);
 
-        const button = scene.add.image(width-50, height/2, "use_button")
+        let heightButton = 8 / 50 ;
+        heightButton = height * heightButton;
+
+        let widthButton = 291 / 345;
+        widthButton = width * widthButton;
+
+        const button = scene.add.image(widthButton, heightButton, "use_button")
             .setInteractive({ 
                 useHandCursor: true
             })
-            .setDisplaySize(48,60)
+            .setDisplaySize(64,57)
             .setScrollFactor(0)
-            .setOrigin(0,0.5);
+            .setOrigin(0,0);
 
-        // button.on('pointerdown', () => {
-        //     this.buttonClicked(scene, mineral);
-        // });
+        button.on('pointerdown', () => {
+            this.buttonClicked(scene, mineral);
+        });
 
-        // const buttonText = scene.add.text(width - 120 + (100/2), height / 2 , 'Use', {
-        //     fontSize: '12px',
-        //     fill: '0x000000',
-        // })
-        //     .setOrigin(0.5,0.5);
-
-        const cardContainer = scene.add.container(x, y, [this.bgCard, img, nameText ,button /*, buttonText*/]);
+        const cardContainer = scene.add.container(x, y, [this.bgCard, img, nameText ,button]);
 
         return cardContainer;
     },
     
     buttonClicked(scene, position){
-        let nameMineral = this.nameArray[position];
+        let nameMineral = this.nameInventory[position];
         let typeMineral = this.inventoryArray[position];
-        let nItems = this.nameArray.length;
+        let nItems = this.nameInventory.length;
 
         switch(typeMineral){
             case 2:
-                scene.player.damage = 500;
+                scene.player.damage += 10;
+                scene.player.interactionBarShowed = true;
+                scene.player.colorBar = "0xFF0000";
                 break;
             case 3:
                 scene.player.hp = 100;
@@ -154,10 +174,10 @@ window.Inventory = {
         }
 
         for(let i=nItems-1; i>=0; i--){
-            if(this.nameArray[i] == nameMineral){
+            if(this.nameInventory[i] == nameMineral){
                 this.inventoryArray.splice(i,1);
-                this.nameArray.splice(i,1);
-                this.imageArray.splice(i,1);
+                this.nameInventory.splice(i,1);
+                this.imageInventory.splice(i,1);
                 break;
             }
         }
@@ -172,14 +192,14 @@ window.Inventory = {
     },
 
     updateInventoryText(position){
-        let mineral = this.nameArray[position];
+        let mineral = this.nameInventory[position];
         let updatedText = mineral + " x";
         let nItems = this.inventoryArray.length;
         let qty = 0;
 
         if(nItems > 0){
             for(let i=position; i<nItems; i++){
-                if(mineral == this.nameArray[i]){
+                if(mineral == this.nameInventory[i]){
                     qty += 1;
                 }
             }
@@ -191,14 +211,14 @@ window.Inventory = {
     },
 
     selectImage(position){
-        return this.imageArray[position];
+        return this.imageInventory[position];
     }, 
 
     removeAll(){
         let nItems =this.inventoryArray.length;
 
         this.inventoryArray.length = 0;
-        this.imageArray.length = 0;
-        this.nameArray.length = 0;
+        this.imageInventory.length = 0;
+        this.nameInventory.length = 0;
     }
 };

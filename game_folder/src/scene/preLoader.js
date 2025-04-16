@@ -25,7 +25,7 @@ class PreLoader extends Phaser.Scene{
         this.load.image("exit_button", "assets/images/Exit_button.png");
         this.load.image("heart_life", "assets/images/heart_life.png");
         this.load.image("heart_dead", "assets/images/heart_dead.png");
-        this.load.image("mineral1", "assets/images/mineral1.png");
+        this.load.image("powerRel", "assets/images/powerRel.png");
         this.load.image("mineral2", "assets/images/mineral2.png");
         this.load.image("spaceship", "assets/images/rover.png");
         this.load.image("background_tutorial", "assets/images/tutorial_map.png");
@@ -90,9 +90,9 @@ class PreLoader extends Phaser.Scene{
             frameWidth: 16,
             frameHeight: 16
         });
-        this.load.spritesheet("rock1", "assets/spritesheets/rock 1.png",{
-            frameWidth: 32,
-            frameHeight: 32
+        this.load.spritesheet("rock1", "assets/spritesheets/rock_1.png",{
+            frameWidth: 256,
+            frameHeight: 1024  // CERCARE ONLINE FOTO PER NUOVA ROCCIA
         });
         this.load.spritesheet("rock2", "assets/spritesheets/rock 2.png",{
             frameWidth: 32,
@@ -265,9 +265,9 @@ class PreLoader extends Phaser.Scene{
             key: "rock1_anim",
             frames: this.anims.generateFrameNumbers("rock1",{
                 start: 0,
-                end: 4
+                end: 3
             }),
-            frameRate: 5,
+            frameRate: 2,
             repeat: -1
         });
         this.anims.create({
