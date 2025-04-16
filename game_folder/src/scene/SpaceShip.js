@@ -51,6 +51,21 @@ class SpaceShip extends Phaser.Scene {
                     this.scene.start("PlanetMenu");
                 }
             },
+            {
+                tileX: 17, tileY: 3, onComplete: () => {
+                    Inventory.showInventory(this);
+                }
+            },
+            {
+                tileX: 18, tileY: 3, onComplete: () => {
+                    Inventory.showInventory(this);
+                }
+            },
+            {
+                tileX: 19, tileY: 3, onComplete: () => {
+                    Inventory.showInventory(this);
+                }
+            }
         ];
         // Crea gruppi statici per i muri e i minerali, usati come collisioni statiche
         this.walls = this.physics.add.staticGroup();  // Gruppo per i muri

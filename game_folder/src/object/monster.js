@@ -35,7 +35,7 @@ class Monster extends Phaser.Physics.Arcade.Sprite{
         const speed = 75;  // Velocità di movimento
         const distanzaAttacco = 60;
         if(distanzaDaPlayer < distanzaAttacco){
-            console.log("attacco");
+            // console.log("attacco");
             this.setVelocityX(0);
             this.setVelocityY(0);
         }else{
@@ -58,7 +58,7 @@ class Monster extends Phaser.Physics.Arcade.Sprite{
     }
     update(){
         var distanzaDaPlayer = Phaser.Math.Distance.Between(this.x, this.y, this.scene.player.x, this.scene.player.y);
-        console.log(distanzaDaPlayer);
+        // console.log(distanzaDaPlayer);
         this.activate(distanzaDaPlayer);
         if(this.active){
             this.moveToPlayer(distanzaDaPlayer);
