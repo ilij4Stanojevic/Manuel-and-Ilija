@@ -84,13 +84,13 @@ window.Inventory = {
 
         this.inventoryContainer.add(this.textInit);
 
-        let heighInventory = 1;
+        let heightInventory = 1;
 
         for(let i=0; i<nItems; i++){
             if(this.inventoryArray[i] != -1){
-                const card = this.createInventory(scene, 10, heighInventory * 64, i);
+                const card = this.createInventory(scene, 10, heightInventory * 64, i);
 
-                heighInventory += 1;
+                heightInventory += 1;
 
                 this.inventoryContainer.add(card);
             }
@@ -165,6 +165,7 @@ window.Inventory = {
                 scene.player.damage += 10;
                 scene.player.interactionBarShowed = true;
                 scene.player.colorBar = "0xFF0000";
+
                 break;
             case 3:
                 scene.player.hp = 100;
