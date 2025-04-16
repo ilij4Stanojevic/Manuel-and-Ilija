@@ -106,7 +106,7 @@ class Moon extends Phaser.Scene {
         this.physics.add.collider(this.monsters, this.walls);
         this.physics.add.collider(this.monsters, this.monsters);
         this.active = false;
-        for(var i=0; i < 3; i++){
+        for(var i=0; i < 2; i++){
             var monster = new Monster(this, 2*64 + (20 + 32 + 20) * i, 2*64, 48, 1, 1, 10, undefined);
             this.monsters.add(monster);
         }
