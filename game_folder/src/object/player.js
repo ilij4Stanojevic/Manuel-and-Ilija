@@ -162,7 +162,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         return null;  // Nessun oggetto interagibile trovato
     }
-
+    
     // Gestisce il movimento del giocatore in base ai tasti premuti
     movePlayerManager(delta) {
         var baseSpeed = gameSettings.speedPlayer;
@@ -270,7 +270,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.scene.camera.startFollow(this);
         }
     }
-    
 
     // Funzione per gestire i danni subiti dal giocatore
     gotHitted(scene, damage) {
@@ -396,10 +395,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
     // Metodo di aggiornamento chiamato ad ogni frame
-    update(time, delta, scene){        
+    update(time, delta, scene){    
         if(this.scene.playerCanMove){
             this.movePlayerManager(delta);
         }
+
         if(this.lifeChecked == false){
             this.initHearts(scene);
             this.lifeChecked = true;

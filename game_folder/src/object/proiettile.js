@@ -1,5 +1,5 @@
 class Proiettile extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, danneggiatore, danneggiato, texture_proiettile) {
+    constructor(scene, danneggiatore, danneggiato, texture_proiettile, distanzaMax) {
         // Posizione iniziale del proiettile (boss)
         var x = danneggiatore.x;
         var y = danneggiatore.y;
@@ -13,8 +13,8 @@ class Proiettile extends Phaser.Physics.Arcade.Sprite {
         // Costante per la velocità del proiettile
         const VELOCITA = 500; // Modifica questo valore se necessario
 
-        // Distanza massima percorsa (5 tile * 64 pixel)
-        this.distanzaMax = 5 * 64;
+        // Distanza massima percorsa
+        this.distanzaMax = distanzaMax;
 
         // Salva la posizione iniziale per il controllo della distanza
         this.startX = x;
