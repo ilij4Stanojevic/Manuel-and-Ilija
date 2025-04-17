@@ -103,21 +103,20 @@ class Moon extends Phaser.Scene {
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.walls);
         this.projectileCollisionManager.addProjectileCollisionProjectiles(this.player.projectiles, this.minerals);
         this.projectileCollisionManager.addProjectileCollisionMonsters(this.player.projectiles, this.monsters);
-        this.physics.add.collider(this.monsters, this.walls);
-        this.physics.add.collider(this.monsters, this.monsters);
+        
         this.active = false;
 
-        this.monsterSx = new Monster(this, 2*64 + (20 + 32 + 20) * 0, 2*64, 48, 1, 1, 10, undefined);
+        this.monsterSx = new Monster(this, 12.7*64, 64+20, 48, 1, 1, 10, undefined);
         this.monsters.add(this.monsterSx);
-        this.projectileCollisionManager.addProjectileCollisionPlayer(this.monsterSx.projectiles, this.player, 10);
 
-        this.monsterCen = new Monster(this, 2*64 + (20 + 32 + 20) * 1, 2*64, 48, 1, 1, 10, undefined);
+        this.monsterCen = new Monster(this, 13.5*64, 64+20, 48, 1, 1, 10, undefined);
         this.monsters.add(this.monsterCen);
-        this.projectileCollisionManager.addProjectileCollisionPlayer(this.monsterCen.projectiles, this.player, 10);
         
-        this.monsterDx = new Monster(this, 2*64 + (20 + 32 + 20) * 2, 2*64, 48, 1, 1, 10, undefined);
+        this.monsterDx = new Monster(this, 14.3*64, 64+20, 48, 1, 1, 10, undefined);
         this.monsters.add(this.monsterDx);
-        this.projectileCollisionManager.addProjectileCollisionPlayer(this.monsterDx.projectiles, this.player, 10);
+        
+        this.physics.add.collider(this.monsters, this.walls);
+        this.physics.add.collider(this.monsters, this.monsters);
     }
 
     update(time, delta) {

@@ -84,7 +84,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.interactionBar = scene.add.graphics();
         this.interactionBarShowed = false;
-        this.timeSpent = 100;
+        this.timeSpent = 200;
         this.colorBar;
 
         // Variabili di interazione
@@ -339,7 +339,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.timeSpent -= this.deltaPowerUp;
 
-        let progress = Phaser.Math.Clamp(this.timeSpent / 100, 0, 1);  // Calcola la percentuale di interazione
+        let progress = Phaser.Math.Clamp(this.timeSpent / 200, 0, 1);  // Calcola la percentuale di interazione
 
         if(y<0){
             y = this.y;
