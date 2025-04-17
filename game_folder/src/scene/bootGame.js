@@ -119,6 +119,9 @@ class Moon extends Phaser.Scene {
             this.player.update(time, delta, this);
         }
         this.monsters.children.iterate(monster => {
+            if(monster.hp <= 0){
+                monster.destroy();
+            }
             monster.update(this.active);
             var distanzaDaPlayer = Phaser.Math.Distance.Between(monster.x, monster.y, this.player.x, this.player.y);
             this.active = monster.activate(distanzaDaPlayer);

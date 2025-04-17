@@ -53,17 +53,17 @@ class SpaceShip extends Phaser.Scene {
             },
             {
                 tileX: 17, tileY: 3, onComplete: () => {
-                    Inventory.showInventory(this);
+                    Inventory.showLocker(this);
                 }
             },
             {
                 tileX: 18, tileY: 3, onComplete: () => {
-                    Inventory.showInventory(this);
+                    Inventory.showLocker(this);
                 }
             },
             {
                 tileX: 19, tileY: 3, onComplete: () => {
-                    Inventory.showInventory(this);
+                    Inventory.showLocker(this);
                 }
             }
         ];

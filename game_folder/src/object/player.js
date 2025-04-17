@@ -356,7 +356,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.interactionBar.clear();
             this.timeSpent = 100;
             this.interactionBarShowed = false;
-            
+            let typeMineral = Inventory.lastMineral;
+
+            switch(typeMineral){
+                case 2:
+                    this.damage = 10;
+                    break;
+                case 3:
+                    break;
+            }
         }
     }
 
@@ -429,7 +437,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
     // Metodo di aggiornamento chiamato ad ogni frame
-    update(time, delta, scene){    
+    update(time, delta, scene){
         if(this.scene.playerCanMove){
             this.movePlayerManager(delta);
         }
@@ -478,7 +486,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
-        if (Phaser.Input.Keyboard.JustDown(this.keyQ)) {
+        let currentScene = scene.add.systems.config;
+
+        if (currentScene != "SpaceShip"  && Phaser.Input.Keyboard.JustDown(this.keyQ)) {
             Inventory.showInventory(scene);
         }
 

@@ -3,7 +3,14 @@ window.Inventory = {
     imageInventory : [],
     nameInventory : [],
 
+    lockerArray: [],
+    imageLocker: [],
+    nameLocker: [],
+
+    lastItem: undefined,
+
     showInventory(scene){
+        // console.log(scene.inventoryContainer.visible);
         if(scene.inventoryContainer.visible){
             this.removeInventory(scene);
         }else{
@@ -19,9 +26,13 @@ window.Inventory = {
         }
     },
 
+    showLocker(scene){
+        this.showInventory(scene);
+    },
+
     removeInventory(scene){
         scene.overlay.setVisible(false);
-        this.inventoryContainer.setVisible(false);
+        scene.inventoryContainer.setVisible(false);
     },
 
     checkDuplicateItem(){
@@ -165,7 +176,6 @@ window.Inventory = {
                 scene.player.damage += 10;
                 scene.player.interactionBarShowed = true;
                 scene.player.colorBar = "0xFF0000";
-
                 break;
             case 3:
                 scene.player.hp = 100;
@@ -173,6 +183,8 @@ window.Inventory = {
                 scene.player.lifeChecked = false;
                 break;
         }
+
+        this.lastMineral = typeMineral;
 
         for(let i=nItems-1; i>=0; i--){
             if(this.nameInventory[i] == nameMineral){
@@ -217,6 +229,12 @@ window.Inventory = {
 
     removeAll(){
         let nItems =this.inventoryArray.length;
+
+        for(let i=0; i<nItems; i++){
+            this.lockerArray[i] = this.inventoryArray[i];
+            this.imageLocker[i] = this.imageInventory[i];
+            this.nameLocker[i] = this.nameInventory[i];
+        }
 
         this.inventoryArray.length = 0;
         this.imageInventory.length = 0;
