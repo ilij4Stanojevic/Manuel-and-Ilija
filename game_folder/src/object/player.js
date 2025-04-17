@@ -145,11 +145,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 let nameMineral;
                 switch(tipo){
                     case 2:
-                        imageMineral = "powerRel";
+                        imageMineral = "PowerRel";
                         nameMineral = "PowerRel";
                         break;
                     case 3:
-                        imageMineral = "mineral2";
+                        imageMineral = "HealtRel";
                         nameMineral = "HealtRel";
                         break;
                 }
@@ -489,7 +489,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let currentScene = scene.add.systems.config;
 
         if (currentScene != "SpaceShip"  && Phaser.Input.Keyboard.JustDown(this.keyQ)) {
-            Inventory.showInventory(scene);
+            Inventory.showInventory(scene, Inventory.inventory);
         }
 
         // Se non c'è interazione, resetta la barra di progresso

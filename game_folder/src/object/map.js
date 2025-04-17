@@ -4,7 +4,7 @@
 3 = minerale della salute (riempe la vita al massimo, sia gli hp sia i cuori)
 
 */
-const collisionMap1 = [
+var collisionMap1 = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 2, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 3, 0, 1, 1, 1, 0, 0, 0, 1],
@@ -76,6 +76,9 @@ const collisionMap5 = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
+const collisionMap1BackUp = collisionMap1;
+
+
 class Map{
     constructor(scene, walls, numberMap){
         var collisionMap = null;
@@ -99,6 +102,8 @@ class Map{
                 collisionMap = collisionMap5;
                 break; 
         }
+
+        collisionMap1[10][10] = 3;
 
         for (let row = 0; row < collisionMap.length; row++) {
             for (let col = 0; col < collisionMap[row].length; col++) {

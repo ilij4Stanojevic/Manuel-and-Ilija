@@ -25,8 +25,8 @@ class PreLoader extends Phaser.Scene{
         this.load.image("exit_button", "assets/images/Exit_button.png");
         this.load.image("heart_life", "assets/images/heart_life.png");
         this.load.image("heart_dead", "assets/images/heart_dead.png");
-        this.load.image("powerRel", "assets/images/powerRel.png");
-        this.load.image("mineral2", "assets/images/mineral2.png");
+        this.load.image("PowerRel", "assets/images/powerRel.png");
+        this.load.image("HealtRel", "assets/images/mineral2.png");
         this.load.image("spaceship", "assets/images/rover.png");
         this.load.image("background_tutorial", "assets/images/tutorial_map.png");
         this.load.image("muro", "assets/images/muro.png");
@@ -54,6 +54,7 @@ class PreLoader extends Phaser.Scene{
         this.load.image("bg_inventory", "assets/images/bg_inventory.png");
         this.load.image("bg_card", "assets/images/tile_inventory.png");
         this.load.image("use_button", "assets/images/use_button.png");
+        this.load.image("transfer_button", "assets/images/change_button.png");
         
         document.fonts.load('32px font_tutorial');
 
