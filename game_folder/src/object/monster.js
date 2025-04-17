@@ -17,6 +17,7 @@ class Monster extends Phaser.Physics.Arcade.Sprite{
         this.projectiles.danni = damage;
         this.numeroMostro = numeroMostro;
         this.texture_proiettile = texture_proiettile;
+        this.size = size;
         var time;
         if(this.attack === 1){
             time = 1000;
@@ -25,7 +26,7 @@ class Monster extends Phaser.Physics.Arcade.Sprite{
         }
         this.shootTimer = this.scene.time.addEvent({
             delay: 1500, // Ogni 0.5 secondi
-            callback:   () => this.attackPlayer(tipoAttacco),
+            callback:   () => this.attackPlayer(tipoAttacco, this.size),
             callbackScope: this,
             loop: true,
             paused: true  // Il timer parte in pausa
@@ -89,11 +90,15 @@ class Monster extends Phaser.Physics.Arcade.Sprite{
 
     gotHit(damage){
         this.hp -= damage;
-
+    
         if(this.hp <= 0){
+            if(this.shootTimer) {
+                this.shootTimer.remove();
+            }
             this.destroy();
         }
     }
+    
 
     activate(distanzaDaPlayer){
         const distanzaAttivazione = 160;
@@ -103,38 +108,62 @@ class Monster extends Phaser.Physics.Arcade.Sprite{
             return this.hp === this.vitaMax ? false : true;
         }
     }
-    attackPlayer(tipoAttacco){
+    attackPlayer(tipoAttacco, size){
         this.attacking = true;
         this.alreadyHitted = false;
+        var dirX = this.x - this.scene.player.x;
+        var dirY = this.y - this.scene.player.y;
+
+        // Fallback: se lastAnim è undefined, imposta una animazione di default
+        if (!this.lastAnim) {
+            this.lastAnim = `monster${this.numeroMostro}_walkDownAnim`;
+        }
+    
         switch(tipoAttacco){
             case 1:
-                if(this.lastAnim === `monster${this.numeroMostro}_walkRightAnim`){
-                    this.anims.play(`monster${this.numeroMostro}_attackRightAnim`);
-                } else if(this.lastAnim === `monster${this.numeroMostro}_walkLeftAnim`){
-                    this.anims.play(`monster${this.numeroMostro}_attackLeftAnim`);
-                } else if(this.lastAnim === `monster${this.numeroMostro}_walkUpAnim`){
-                    this.anims.play(`monster${this.numeroMostro}_attackUpAnim`);
-                } else if(this.lastAnim === `monster${this.numeroMostro}_walkDownAnim`){
+                if(Math.abs(dirX) > Math.abs(dirY)){
+                    if(dirX > 0){
+                        this.anims.play(`monster${this.numeroMostro}_attackLeftAnim`);
+                    } else if(dirX < 0){
+                        this.anims.play(`monster${this.numeroMostro}_attackRightAnim`);
+                    }else{
+                        this.anims.play(`monster${this.numeroMostro}_attackRightAnim`);
+                    }
+                } else if(Math.abs(dirX) < Math.abs(dirY)){
+                    if(dirY > 0){
+                        this.anims.play(`monster${this.numeroMostro}_attackUpAnim`);
+                    } else if(dirY < 0){
+                        this.anims.play(`monster${this.numeroMostro}_attackDownAnim`);
+                    }else{
+                        this.anims.play(`monster${this.numeroMostro}_attackRightAnim`);
+                    }
+                } else{
                     this.anims.play(`monster${this.numeroMostro}_attackDownAnim`);
                 }
-                this.on('animationupdate', (anim, frame) => {
-                    if(!this.alreadyHitted){
-                        if (frame.index === 7 && !this.alreadyHitted) {
+    
+                const hitHandler = (anim, frame) => {
+                    if (frame.index === 6 && !this.alreadyHitted) {
+                        if (this.scene && this.scene.player) {
                             this.scene.player.gotHitted(this.scene, this.damage);
-                            this.alreadyHitted = true;
                         }
+                        this.alreadyHitted = true;
                     }
-                });
-                this.on('animationcomplete', (anim, frame) => {
-                    this.attacking = false; // torna libero dopo l’attacco
+                };
+    
+                this.on('animationupdate', hitHandler);
+                this.once('animationcomplete', () => {
+                    this.off('animationupdate', hitHandler);
+                    this.attacking = false;
                 });
                 break;
+    
             case 2:
                 let proiettile = new Proiettile(this.scene, this, this.scene.player, this.texture_proiettile, 1*64);
                 this.projectiles.add(proiettile);
                 break;
         }
     }
+    
     moveToPlayer(distanzaDaPlayer){
         const speed = 75;  // Velocità di movimento
         const distanzaAttacco = 60;
@@ -162,29 +191,32 @@ class Monster extends Phaser.Physics.Arcade.Sprite{
 
     update(active){
         var distanzaDaPlayer;
-        distanzaDaPlayer = Phaser.Math.Distance.Between(this.x, this.y, this.scene.player.x, this.scene.player.y);
+        if(this.scene?.player){
+            distanzaDaPlayer = Phaser.Math.Distance.Between(this.x, this.y, this.scene.player.x, this.scene.player.y);
+            
 
-        if(active){
-            switch(this.attack){
-                case 1:
-                    if(distanzaDaPlayer < 60){
+            if(active){
+                switch(this.attack){
+                    case 1:
+                        if(distanzaDaPlayer < 60){
+                            this.shootTimer.paused = false;
+                        } else{
+                            this.shootTimer.paused = true;
+                        }
+                        break;
+                    case 2:
                         this.shootTimer.paused = false;
-                    } else{
-                        this.shootTimer.paused = true;
-                    }
-                    break;
-                case 2:
-                    this.shootTimer.paused = false;
-                    break;
+                        break;
+                }
+
+                this.moveToPlayer(distanzaDaPlayer);
+
+            }else{
+
+                this.shootTimer.paused = true;
+                this.backToSpawn();
             }
-
-            this.moveToPlayer(distanzaDaPlayer);
-
-        }else{
-
-            this.shootTimer.paused = true;
-            this.backToSpawn();
+            this.getAnimations();
         }
-        this.getAnimations();
     }
 }

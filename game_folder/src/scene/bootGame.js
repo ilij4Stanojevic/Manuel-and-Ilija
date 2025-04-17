@@ -106,25 +106,37 @@ class Moon extends Phaser.Scene {
         this.physics.add.collider(this.monsters, this.walls);
         this.physics.add.collider(this.monsters, this.monsters);
         this.active = false;
-        for(var i=0; i < 2; i++){
-            var monster = new Monster(this, 2*64 + (20 + 32 + 20) * i, 2*64, 48, 1, 1, 10, undefined);
-            this.monsters.add(monster);
-        }
-        this.projectileCollisionManager.addProjectileCollisionPlayer(monster.projectiles, this.player, 10);
+
+        this.monsterSx = new Monster(this, 2*64 + (20 + 32 + 20) * 0, 2*64, 48, 1, 1, 10, undefined);
+        this.monsters.add(this.monsterSx);
+        this.projectileCollisionManager.addProjectileCollisionPlayer(this.monsterSx.projectiles, this.player, 10);
+
+        this.monsterCen = new Monster(this, 2*64 + (20 + 32 + 20) * 1, 2*64, 48, 1, 1, 10, undefined);
+        this.monsters.add(this.monsterCen);
+        this.projectileCollisionManager.addProjectileCollisionPlayer(this.monsterCen.projectiles, this.player, 10);
+        
+        this.monsterDx = new Monster(this, 2*64 + (20 + 32 + 20) * 2, 2*64, 48, 1, 1, 10, undefined);
+        this.monsters.add(this.monsterDx);
+        this.projectileCollisionManager.addProjectileCollisionPlayer(this.monsterDx.projectiles, this.player, 10);
     }
 
     update(time, delta) {
-        // Aggiorna la logica del giocatore (movimento, interazioni, ecc.)
+        // Aggiorna la logica this.del giocatore (movimento, interazioni, ecc.)
         if(this.canUpdate){
             this.player.update(time, delta, this);
         }
-        this.monsters.children.iterate(monster => {
-            if(monster.hp <= 0){
-                monster.destroy();
-            }
-            monster.update(this.active);
-            var distanzaDaPlayer = Phaser.Math.Distance.Between(monster.x, monster.y, this.player.x, this.player.y);
-            this.active = monster.activate(distanzaDaPlayer);
-        });
+
+        this.monsterSx.update(this.active);
+        var distanzaDaPlayer = Phaser.Math.Distance.Between(this.monsterSx.x, this.monsterSx.y, this.player.x, this.player.y);
+        this.active = this.monsterSx.activate(distanzaDaPlayer);
+
+        this.monsterCen.update(this.active);
+        var distanzaDaPlayer = Phaser.Math.Distance.Between(this.monsterCen.x, this.monsterCen.y, this.player.x, this.player.y);
+        this.active = this.monsterCen.activate(distanzaDaPlayer);
+
+        this.monsterDx.update(this.active);
+        var distanzaDaPlayer = Phaser.Math.Distance.Between(this.monsterDx.x, this.monsterDx.y, this.player.x, this.player.y);
+        this.active = this.monsterDx.activate(distanzaDaPlayer);
+        
     }
 }
